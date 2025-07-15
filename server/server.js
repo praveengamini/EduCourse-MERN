@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cookieParser());
 app.use(express.json());
 mongoose.connect(process.env.MONGO_URL).then(() => {console.log('Connected to MongoDB');
-}).catch((err) => console.log(err));
+}).catch((err) => console.log(err+"failed to connect"));
 
 app.use(cors({
     origin: 'http://localhost:5173',

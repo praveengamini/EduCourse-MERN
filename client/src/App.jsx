@@ -1,4 +1,5 @@
 import React from 'react'
+import { Toaster } from "sonner";
 import { Route,Routes } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
@@ -45,6 +46,7 @@ const App = () => {
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
       </Routes>
+            <Toaster richColors position="bottom-right" />
     </div>
   )
 }

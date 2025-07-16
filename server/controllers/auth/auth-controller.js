@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
+const MAX_DEVICES = 3;
+
 const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
 
@@ -66,15 +68,42 @@ const loginUser = async (req, res) => {
       { expiresIn: "60m" }
     );
 
+    const newDevice = {
+      browser: req.useragent.browser,
+      os: req.useragent.os,
+      time: new Date(),
+      token: token
+    };
+
+    let removedDevice = null;
+    let deviceRemovedMessage = "";
+
+    if (checkUser.devices.length >= MAX_DEVICES) {
+      removedDevice = checkUser.devices.shift(); 
+      const deviceName = `${removedDevice.browser} on ${removedDevice.os}`;
+      deviceRemovedMessage = ` Device "${deviceName}" was logged out due to device limit.`;
+    }
+
+    checkUser.devices.push(newDevice);
+    await checkUser.save();
+
     res.cookie("token", token, { httpOnly: true, secure: false }).json({
       success: true,
-      message: "Logged in successfully",
+      message: "Logged in successfully" + deviceRemovedMessage,
       user: {
         email: checkUser.email,
         role: checkUser.role,
         id: checkUser._id,
         userName: checkUser.userName,
       },
+      ...(removedDevice && {
+        deviceRemoved: {
+          browser: removedDevice.browser,
+          os: removedDevice.os,
+          time: removedDevice.time,
+          deviceName: `${removedDevice.browser} on ${removedDevice.os}`
+        }
+      })
     });
   } catch (e) {
     console.log(e);
@@ -84,13 +113,32 @@ const loginUser = async (req, res) => {
     });
   }
 };
+const logoutUser = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    
+    if (token && req.user) {
+      const result = await User.findByIdAndUpdate(
+        req.user.id,
+        { $pull: { devices: { token: token } } },
+        { new: true } 
+      );
+      
+      console.log('Device removal result:', result ? 'Success' : 'Failed');
+      console.log('Remaining devices:', result?.devices?.length || 0);
+    }
 
-
-const logoutUser = (req, res) => {
-  res.clearCookie("token").json({
-    success: true,
-    message: "Logged out successfully!",
-  });
+    res.clearCookie("token").json({
+      success: true,
+      message: "Logged out successfully!",
+    });
+  } catch (e) {
+    console.log('Logout error:', e);
+    res.clearCookie("token").json({
+      success: true,
+      message: "Logged out successfully!",
+    });
+  }
 };
 
 const authMiddleware = async (req, res, next) => {
@@ -103,6 +151,23 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    const deviceExists = user.devices.some(device => device.token === token);
+    if (!deviceExists) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorised user!",
+      });
+    }
+
     req.user = decoded;
     next();
   } catch (error) {

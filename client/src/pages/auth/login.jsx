@@ -12,20 +12,25 @@ const initialState = {
 };
 
 function AuthLogin() {
+  
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  function onSubmit(event) {
-    event.preventDefault();
+function onSubmit(event) {
+  event.preventDefault();
 
-    dispatch(loginUser(formData)).then((data) => {
-      if (data?.payload?.success) {
-        toast.success(data?.payload?.message);
-      } else {
-        toast.error(data?.payload?.message);
+  dispatch(loginUser(formData)).then((data) => {
+    if (data?.payload?.success) {
+      toast.success("Logged in successfully");
+      
+      if (data?.payload?.deviceRemoved) {
+        toast.info(`Device "${data.payload.deviceRemoved.deviceName}" was logged out due to device limit.`);
       }
-    });
-  }
+    } else {
+      toast.error(data?.payload?.message);
+    }
+  });
+}
 
   return (
     <div className="mx-auto w-full max-w-md space-y-14">

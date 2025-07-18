@@ -1,36 +1,24 @@
-const mongoose = require('mongoose');
+import { Schema, model } from "mongoose";
 
-const deviceSchema = new mongoose.Schema({
+const deviceSchema = new Schema({
   browser: String,
   os: String,
-  time: {
-    type: Date,
-    default: Date.now,
-  },
-  token: String, 
+  time: { type: Date, default: Date.now },
+  token: String,
 });
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   userName: {
-    type: String,
-    required: true,
-    unique: true
+    type: String,required: true,unique: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
+  email: {type: String,required: true,unique: true,
   },
-  password: {
-    type: String,
-    required: true
+  password: {type: String,required: true,
   },
-  role: {
-    type: String,
-    default: 'user'
+  role: { type: String,default: "user",
   },
-  devices: [deviceSchema] 
+  devices: [deviceSchema],
 });
 
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+const User = model("User", UserSchema);
+export default User;

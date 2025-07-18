@@ -1,20 +1,20 @@
-const express  = require('express');
-const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const authRouter = require('./routes/auth/auth-routes')
-const dotenv = require('dotenv')
-const useragent = require('express-useragent');
-
-
+import express, { json } from 'express';
+import { connect } from 'mongoose';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import authRouter from './routes/auth/auth-routes.js';
+import dotenv from 'dotenv';
+import { express as _express } from 'express-useragent';
 dotenv.config()
-const app = express();                
-const port = process.env.PORT || 5000;
-app.use(cookieParser());
-app.use(express.json());
-app.use(useragent.express());
 
-mongoose.connect(process.env.MONGO_URL).then(() => {console.log('Connected to MongoDB');
+
+const app = express();                
+const port = process.env.REACT_APP_PORT || 5000;
+app.use(cookieParser());
+app.use(json());
+app.use(_express());
+
+connect(process.env.REACT_APP_MONGO_URL).then(() => {console.log('Connected to MongoDB');
 }).catch((err) => console.log(err+"failed to connect"));
 
 app.use(cors({

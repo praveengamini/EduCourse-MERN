@@ -35,13 +35,13 @@ const App = () => {
         </Route>
         <Route path='/admin' element={<CheckAuth isAuthenticated={isAuthenticated} user={user} >
           <AdminLayout/>
-        </CheckAuth>}>
-           <Route path='dashboard' element={<AdminDashboard/>} />
+          </CheckAuth>}>
+          <Route path='dashboard' element={<AdminDashboard/>} />
         </Route>
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
-        </CheckAuth>} >
-        <Route path='home' element={<StudentHome/>} />
+          </CheckAuth>} >
+          <Route path='Dashboard' element={<StudentHome/>} />
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>

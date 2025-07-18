@@ -11,6 +11,7 @@ import PageNotFound from './pages/page-not-found'
 import StudentHome from './pages/student-view/home'
 import CheckAuth from './components/common/CheckAuth'
 import UnAuthPage from './pages/unauth-page/UnAuthPage'
+import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashboard';
 import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
@@ -41,7 +42,10 @@ const App = () => {
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
-          <Route path='Dashboard' element={<StudentHome/>} />
+          <Route path='home' element={<StudentHome/>} >
+            <Route path='' element={<StudentDashboard/>}/>
+            
+          </Route>
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>

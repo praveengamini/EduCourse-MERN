@@ -9,21 +9,29 @@ import AdminDashboard from './pages/admin-view/dashboard'
 import StudentLayout from './components/student-view/layout'
 import PageNotFound from './pages/page-not-found'
 import CoursesMenu from './pages/student-view/CoursesMenu/CoursesMenu';
-import StudentHome from './pages/student-view/home'
 import CheckAuth from './components/common/CheckAuth'
 import UnAuthPage from './pages/unauth-page/UnAuthPage'
-import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashboard';
 import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import MyCourses from './pages/student-view/MyCourses/MyCourses';
 const App = () => {
-  const { user ,isAuthenticated} = useSelector((state)=>state.auth)
+   const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkAuth1());
+     dispatch(checkAuth1());
   }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center text-lg">
+        Checking authentication...
+      </div>
+    );
+  }
+
   return (
     <div>
       <Routes>
@@ -44,11 +52,8 @@ const App = () => {
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
-          <Route path='home' element= {<StudentHome/>} >
-            <Route index element={<StudentDashboard/>}/>
-            <Route path='courseMenu' element={<CoursesMenu/>}/>
-            {/* <Route path='' element={<StudentDashboard/>}/> */}
-            
+            <Route path='home' element={<CoursesMenu/>}/>
+          <Route path='my-courses' element={<MyCourses/>} >
           </Route>
         </Route>
         <Route path='*' element={<PageNotFound/>} />

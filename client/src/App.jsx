@@ -8,6 +8,7 @@ import AdminLayout from './components/admin-view/layout'
 import AdminDashboard from './pages/admin-view/dashboard'
 import StudentLayout from './components/student-view/layout'
 import PageNotFound from './pages/page-not-found'
+import CoursesMenu from './pages/student-view/CoursesMenu/CoursesMenu';
 import StudentHome from './pages/student-view/home'
 import CheckAuth from './components/common/CheckAuth'
 import UnAuthPage from './pages/unauth-page/UnAuthPage'
@@ -37,13 +38,16 @@ const App = () => {
         <Route path='/admin' element={<CheckAuth isAuthenticated={isAuthenticated} user={user} >
           <AdminLayout/>
           </CheckAuth>}>
-          <Route path='dashboard' element={<AdminDashboard/>} />
+          <Route path='dashboard' element={<AdminDashboard/>}/>
+          <Route path='courseUpload' element={<AdminDashboard/>}/>
         </Route>
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
-          <Route path='home' element={<StudentHome/>} >
-            <Route path='' element={<StudentDashboard/>}/>
+          <Route path='home' element= {<StudentHome/>} >
+            <Route index element={<StudentDashboard/>}/>
+            <Route path='courseMenu' element={<CoursesMenu/>}/>
+            {/* <Route path='' element={<StudentDashboard/>}/> */}
             
           </Route>
         </Route>

@@ -2,6 +2,7 @@ import { AlignJustify, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/auth-slice";
+import { Link } from "react-router-dom";
 
 function AdminHeader({ setOpen }) {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function AdminHeader({ setOpen }) {
           <LogOut />
           Logout
         </Button>
+        <button > <Link to="/student/home/courseMenu">click</Link></button>
       </div>
     </header>
   );

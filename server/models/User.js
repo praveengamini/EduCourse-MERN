@@ -34,8 +34,9 @@
 
 // const User = mongoose.model('User', UserSchema);
 // module.exports = User;
-const mongoose = require('mongoose');
 
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
 const deviceSchema = new Schema({
   browser: String,
   os: String,
@@ -67,4 +68,4 @@ const UserSchema = new Schema({
 });
 
 const User = model("User", UserSchema);
-export default User;
+module.exports = User;

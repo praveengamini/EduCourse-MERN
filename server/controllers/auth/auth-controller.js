@@ -1,6 +1,6 @@
-import { hash, compare } from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../../models/User.js";
+const { hash, compare } = require ("bcryptjs");
+const jwt = require ("jsonwebtoken");
+const User = require ("../../models/User.js");
 
 const { sign, verify } = jwt;
 const MAX_DEVICES = 3;
@@ -185,4 +185,4 @@ const authMiddleware = async (req, res, next) => {
 };
 
 // ✅ Named exports for ESM
-export { registerUser, loginUser, logoutUser, authMiddleware };
+module.exports = { registerUser, loginUser, logoutUser, authMiddleware };

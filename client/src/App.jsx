@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import StudentManagement from './components/StudentManagement/StudentManagement'
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -67,7 +68,9 @@ const App = () => {
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
+      <StudentManagement />
     </div>
+    
   )
 }
 

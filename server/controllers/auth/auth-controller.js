@@ -7,8 +7,7 @@ const MAX_DEVICES = 3;
 
 // REGISTER
 const registerUser = async (req, res) => {
-  const { userName, email, password } = req.body;
-
+  const { userName, email,password } = req.body;
   try {
     const checkUser = await User.findOne({ email });
     if (checkUser) {

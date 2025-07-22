@@ -11,6 +11,10 @@ import PageNotFound from './pages/page-not-found'
 import CoursesMenu from './pages/student-view/CoursesMenu/CoursesMenu';
 import CheckAuth from './components/common/CheckAuth'
 import UnAuthPage from './pages/unauth-page/UnAuthPage'
+import AddCourse from './pages/add-course/AddCourse';
+import AllCourses from './pages/admin-course/AllCourses';
+import CourseDetail from './pages/admin-course/CourseDetail';
+import EnrollCourse from './pages/admin-course/EnrollStudent';
 import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
@@ -58,6 +62,10 @@ const App = () => {
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
+        <Route path="/admin/add-course" element={<AddCourse />} />
+        <Route path="/admin/courses" element={<AllCourses />} />
+        <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
+        <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
     </div>

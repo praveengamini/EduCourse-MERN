@@ -20,6 +20,7 @@ import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import MyCourses from './pages/student-view/MyCourses/MyCourses';
+import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const App = () => {
         <Route path="/admin/add-course" element={<AddCourse />} />
         <Route path="/admin/courses" element={<AllCourses />} />
         <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
+        <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
       </Routes>
             <Toaster richColors position="bottom-right" />

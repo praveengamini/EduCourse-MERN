@@ -21,7 +21,7 @@ function AdminHeader({ setOpen }) {
       </Button>
 
       <div className="hidden lg:flex gap-3 ml-4">
-        <Button variant="ghost" onClick={() => navigate("/admin/courses")}>
+        <Button variant="ghost" onClick={() => navigate("/student/home")}>
           Courses
         </Button>
         <Button variant="ghost" onClick={() => navigate("/admin/your-courses")}>

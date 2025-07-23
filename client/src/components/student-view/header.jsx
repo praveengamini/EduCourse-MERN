@@ -2,10 +2,13 @@ import { AlignJustify, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/auth-slice";
+ 
 import { useNavigate } from "react-router-dom";
+
 function AdminHeader({ setOpen }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   function handleLogout() {
     dispatch(logoutUser());
   }
@@ -16,6 +19,19 @@ function AdminHeader({ setOpen }) {
         <AlignJustify />
         <span className="sr-only">Toggle Menu</span>
       </Button>
+
+      <div className="hidden lg:flex gap-3 ml-4">
+        <Button variant="ghost" onClick={() => navigate("/student/home")}>
+          Courses
+        </Button>
+        <Button variant="ghost" onClick={() => navigate("/admin/your-courses")}>
+          Your Courses
+        </Button>
+        <Button variant="ghost">Button 3</Button>
+        <Button variant="ghost">Button 4</Button>
+        <Button variant="ghost">Button 5</Button>
+      </div>
+
       <div className="flex flex-1 justify-end">
         <Button
           onClick={handleLogout}
@@ -25,8 +41,6 @@ function AdminHeader({ setOpen }) {
           Logout
         </Button>
       </div>
-      <Button onClick={()=>navigate('/student/courseMenu')} >courseMenu</Button>
-      <Button onClick={()=>navigate('/student/home')} >Home</Button>
     </header>
   );
 }

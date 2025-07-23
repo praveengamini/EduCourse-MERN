@@ -1,6 +1,7 @@
 const User = require('../../models/User');
 const EnrolledCourse = require('../../models/EnrolledCourseModel');
 const Course = require('../../models/CourseModel');
+const Progress = require('../../models/ProgressModel');
 
 // Get all students with pagination and filtering
 const getAllStudents = async (req, res) => {
@@ -45,11 +46,22 @@ const getAllStudents = async (req, res) => {
 
     // Get students with pagination
     const students = await User.find(searchQuery)
-      .select('_id userName email createdAt')
+      .select('_id userName email phone createdAt')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum)
       .lean();
+
+    // Get enrolled courses count for each student
+    const studentsWithCourseCount = await Promise.all(
+      students.map(async (student) => {
+        const enrolledCount = await EnrolledCourse.countDocuments({ userId: student._id });
+        return {
+          ...student,
+          enrolledCoursesCount: enrolledCount
+        };
+      })
+    );
 
     // Get total count for pagination
     const totalStudents = await User.countDocuments(searchQuery);
@@ -58,7 +70,7 @@ const getAllStudents = async (req, res) => {
     res.json({
       success: true,
       data: {
-        students,
+        students: studentsWithCourseCount,
         pagination: {
           currentPage: pageNum,
           totalPages,
@@ -85,7 +97,7 @@ const getStudentDetails = async (req, res) => {
 
     // Get student basic info
     const student = await User.findById(studentId)
-      .select('_id userName email createdAt role')
+      .select('_id userName email phone createdAt role')
       .lean();
 
     if (!student) {
@@ -152,7 +164,73 @@ const getStudentDetails = async (req, res) => {
   }
 };
 
+// Unenroll student from a course
+const unenrollStudentFromCourse = async (req, res) => {
+  try {
+    const { studentId, courseId } = req.params;
+
+    console.log('Unenrolling student:', studentId, 'from course:', courseId);
+
+    // Check if student exists
+    const student = await User.findById(studentId);
+    if (!student || student.role !== 'student') {
+      return res.status(404).json({
+        success: false,
+        message: 'Student not found'
+      });
+    }
+
+    // Check if course exists
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
+    }
+
+    // Find the enrollment
+    const enrollment = await EnrolledCourse.findOne({ 
+      userId: studentId, 
+      courseId: courseId 
+    });
+
+    if (!enrollment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Student is not enrolled in this course'
+      });
+    }
+
+    console.log('Found enrollment:', enrollment._id);
+
+    // Delete all progress records for this enrollment
+    if (enrollment.progress && enrollment.progress.length > 0) {
+      console.log('Deleting progress records:', enrollment.progress);
+      await Progress.deleteMany({ _id: { $in: enrollment.progress } });
+    }
+
+    // Delete the enrollment record
+    await EnrolledCourse.findByIdAndDelete(enrollment._id);
+
+    console.log('Successfully unenrolled student');
+
+    res.json({
+      success: true,
+      message: 'Student successfully unenrolled from the course'
+    });
+  } catch (error) {
+    console.error('Error unenrolling student:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error unenrolling student from course',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getAllStudents,
-  getStudentDetails
+  getStudentDetails,
+  unenrollStudentFromCourse
 };

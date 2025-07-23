@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, User, Mail, Calendar, BookOpen, Award, Clock, CheckCircle, CrossIcon as Progress } from 'lucide-react';
+import { ArrowLeft, User, Mail, Calendar, BookOpen, Award, Clock, CheckCircle, CrossIcon as Progress,  Phone, UserMinus} from 'lucide-react';
 import { studentApi } from '../../services/studentApi';
 
 const StudentDetails = ({ studentId, onBack }) => {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [unenrollingCourse, setUnenrollingCourse] = useState(null);
 
   useEffect(() => {
     fetchStudentDetails();
@@ -54,6 +55,28 @@ const StudentDetails = ({ studentId, onBack }) => {
           In Progress
         </span>
       );
+    }
+  };
+
+  const handleUnenrollCourse = async (courseId, courseName) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to unenroll ${studentData.student.userName} from "${courseName}"?\n\nThis action will:\n- Remove the student from the course\n- Delete all progress data\n- Cannot be undone`
+    );
+
+    if (!confirmed) return;
+
+    setUnenrollingCourse(courseId);
+    try {
+      console.log('Attempting to unenroll:', studentId, courseId);
+      await studentApi.unenrollStudentFromCourse(studentId, courseId);
+      // Refresh student details after successful unenrollment
+      await fetchStudentDetails();
+      alert('Student successfully unenrolled from the course');
+    } catch (error) {
+      console.error('Error unenrolling student:', error);
+      alert(`Failed to unenroll student: ${error.message || 'Please try again.'}`);
+    } finally {
+      setUnenrollingCourse(null);
     }
   };
 
@@ -125,6 +148,12 @@ const StudentDetails = ({ studentId, onBack }) => {
                 <Mail className="h-4 w-4 mr-2" />
                 {student.email}
               </div>
+              {student.phone && (
+                <div className="flex items-center text-gray-600">
+                  <Phone className="h-4 w-4 mr-2" />
+                  {student.phone}
+                </div>
+              )}
               <div className="flex items-center text-gray-600">
                 <Calendar className="h-4 w-4 mr-2" />
                 Joined {formatDate(student.createdAt)}
@@ -203,8 +232,25 @@ const StudentDetails = ({ studentId, onBack }) => {
                           {enrollment.courseId.description}
                         </p>
                       </div>
-                      <div className="ml-4 flex-shrink-0">
+                      <div className="ml-4 flex-shrink-0 flex items-center space-x-2">
                         {getStatusBadge(enrollment.status)}
+                        <button
+                          onClick={() => handleUnenrollCourse(enrollment.courseId._id, enrollment.courseId.title)}
+                          disabled={unenrollingCourse === enrollment.courseId._id}
+                          className="inline-flex items-center px-2 py-1 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {unenrollingCourse === enrollment.courseId._id ? (
+                            <>
+                              <div className="animate-spin rounded-full h-3 w-3 border-b border-red-700 mr-1"></div>
+                              Unenrolling...
+                            </>
+                          ) : (
+                            <>
+                              <UserMinus className="h-3 w-3 mr-1" />
+                              Unenroll
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
 

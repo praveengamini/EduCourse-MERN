@@ -54,6 +54,34 @@ export const studentApi = {
       console.error('Error fetching student details:', error);
       throw error;
     }
+  },
+
+  // Unenroll student from a course
+  unenrollStudentFromCourse: async (studentId, courseId) => {
+    try {
+      console.log('API call - Unenrolling:', studentId, courseId);
+      const response = await fetch(`${API_BASE_URL}/students/${studentId}/courses/${courseId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add authorization headers if needed
+          // 'Authorization': `Bearer ${getAuthToken()}`
+        }
+      });
+
+      console.log('Response status:', response.status);
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (!response.ok) {
+        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error unenrolling student:', error);
+      throw error;
+    }
   }
 };
 

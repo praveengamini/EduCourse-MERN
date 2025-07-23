@@ -55,6 +55,10 @@ const UserSchema = new Schema({
   },
   password: {type: String,required: true,
   },
+  phone: {
+    type: String,
+    required: false
+  },
   role: {
     type: String,
     enum: ['student', 'admin'],

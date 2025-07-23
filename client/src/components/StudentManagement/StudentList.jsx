@@ -2,15 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, ChevronLeft, ChevronRight, Users, Eye } from 'lucide-react';
 import { studentApi } from '../../services/studentApi';
 
+// Custom hook for debouncing
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
 const StudentList = ({ onStudentSelect }) => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [filterBy, setFilterBy] = useState('all');
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [totalStudents, setTotalStudents] = useState(0);
+
+  // Debounce search input
+  const debouncedSearchTerm = useDebounce(searchInput, 500);
+
+  // Update searchTerm when debounced value changes
+  useEffect(() => {
+    setSearchTerm(debouncedSearchTerm);
+    setCurrentPage(1);
+  }, [debouncedSearchTerm]);
 
   const fetchStudents = async () => {
     setLoading(true);
@@ -39,8 +66,7 @@ const StudentList = ({ onStudentSelect }) => {
   }, [currentPage, itemsPerPage, searchTerm, filterBy]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
+    setSearchInput(e.target.value);
   };
 
   const handleFilterChange = (e) => {
@@ -121,7 +147,7 @@ const StudentList = ({ onStudentSelect }) => {
             <input
               type="text"
               placeholder="Search students..."
-              value={searchTerm}
+              value={searchInput}
               onChange={handleSearch}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -133,7 +159,7 @@ const StudentList = ({ onStudentSelect }) => {
               onChange={handleFilterChange}
               className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              {/* <option value="all">All Fields</option> */}
+              <option value="all">All Fields</option>
               <option value="name">Name</option>
               <option value="email">Email</option>
               <option value="id">Student ID</option>
@@ -173,6 +199,12 @@ const StudentList = ({ onStudentSelect }) => {
                 Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Phone
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Enrolled Courses
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Joined Date
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -199,6 +231,16 @@ const StudentList = ({ onStudentSelect }) => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-600">
                     {student.email}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">
+                    {student.phone || 'N/A'}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900 font-medium">
+                    {student.enrolledCoursesCount}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

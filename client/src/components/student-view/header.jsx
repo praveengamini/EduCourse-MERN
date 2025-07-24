@@ -24,10 +24,10 @@ function AdminHeader({ setOpen }) {
         <Button variant="ghost" onClick={() => navigate("/student/home")}>
           Courses
         </Button>
-        <Button variant="ghost" onClick={() => navigate("/admin/your-courses")}>
+        <Button variant="ghost" onClick={() => navigate("/student/my-courses")}>
           Your Courses
         </Button>
-        <Button variant="ghost">Button 3</Button>
+        <Button variant="ghost" onClick={()=>navigate("/student/new-course")}>enroll new course</Button>
         <Button variant="ghost">Button 4</Button>
         <Button variant="ghost">Button 5</Button>
       </div>

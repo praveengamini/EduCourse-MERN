@@ -5,11 +5,11 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+
 };
 
 export const registerUser = createAsyncThunk(
   "/auth/register",
-
   async (formData) => {
     const response = await axios.post(
       "http://localhost:5000/api/auth/register",

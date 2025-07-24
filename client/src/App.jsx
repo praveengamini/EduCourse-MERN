@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import MyCourses from './pages/student-view/MyCourses/MyCourses';
 import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
+import NewCourse from './pages/student-view/NewCourse/NewCourse';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -58,8 +59,8 @@ const App = () => {
           <StudentLayout/>
           </CheckAuth>} >
             <Route path='home' element={<CoursesMenu/>}/>
-          <Route path='my-courses' element={<MyCourses/>} >
-          </Route>
+            <Route path='my-courses' element={<MyCourses/>}/>
+            <Route path='new-course' element={<NewCourse/>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>

@@ -19,7 +19,8 @@ import EnrollCourse from './pages/admin-course/EnrollStudent';
 import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import WeeklyStats from './components/admin-view/WeeklyStats';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const App = () => {
         <Route path="/admin/courses" element={<AllCourses />} />
         <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
+        <Route path="/admin/weekly-stats" element={<WeeklyStats />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
     </div>

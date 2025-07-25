@@ -9,7 +9,6 @@ import AdminDashboard from './pages/admin-view/dashboard'
 import StudentLayout from './components/student-view/layout'
 import PageNotFound from './pages/page-not-found'
 import CoursesMenu from './pages/student-view/CoursesMenu/CoursesMenu';
-import StudentHome from './pages/student-view/home'
 import CheckAuth from './components/common/CheckAuth'
 import UnAuthPage from './pages/unauth-page/UnAuthPage'
 import AddCourse from './pages/add-course/AddCourse';
@@ -21,12 +20,15 @@ import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react';
 import WeeklyStats from './components/admin-view/WeeklyStats';
+import MyCourses from './pages/student-view/MyCourses/MyCourses';
+import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
+import NewCourse from './pages/student-view/NewCourse/NewCourse';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkAuth1());
+     dispatch(checkAuth1());
   }, [dispatch]);
 
   if (isLoading) {
@@ -57,14 +59,16 @@ const App = () => {
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
-          <Route path='home' element= {<StudentHome/>} />
-          <Route path='courseMenu' element={<CoursesMenu/>}/>
+            <Route path='home' element={<CoursesMenu/>}/>
+            <Route path='my-courses' element={<MyCourses/>}/>
+            <Route path='new-course' element={<NewCourse/>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
         <Route path="/admin/add-course" element={<AddCourse />} />
         <Route path="/admin/courses" element={<AllCourses />} />
         <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
+        <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
         <Route path="/admin/weekly-stats" element={<WeeklyStats />} />
       </Routes>

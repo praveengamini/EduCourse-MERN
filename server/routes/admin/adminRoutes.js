@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../../middleware/multer');
-const { addCourse } = require('../../controllers/admin/adminController');
+const { addCourse,getStats,getGraphStats,getDetailedAnalytics } = require('../../controllers/admin/adminController');
 const { getAllCourses, getCourseById } = require('../../controllers/admin/courseController');
 const {getAllStudents, getStudentEnrolledCourses,enrollStudent,getStudentById } = require('../../controllers/admin/studentController');
 
@@ -11,6 +11,10 @@ router.get('/students', getAllStudents);
 router.get('/student/enrolledcourses',getStudentEnrolledCourses);
 router.post('/enroll-student',enrollStudent);
 router.get('/student/:id', getStudentById);
+router.get('/stats', getStats);
+router.get('/graph-stats', getGraphStats);
+router.get('/detailed-analytics', getDetailedAnalytics);
+
 router.post('/add-course',
   upload.fields([
     { name: 'coverImage', maxCount: 1 },

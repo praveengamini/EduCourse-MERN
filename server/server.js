@@ -6,6 +6,7 @@ const authRouter = require('./routes/auth/auth-routes')
 const adminRoutes = require('./routes/admin/adminRoutes');
 const dotenv = require('dotenv')
 const useragent = require('express-useragent');
+const studentRoutes = require('./routes/admin/studentRoutes');
 
 dotenv.config()
 const app = express();                
@@ -35,6 +36,7 @@ app.get('/',(req,res)=>{
 
 app.use('/api/auth',authRouter)
 app.use('/api/admin', adminRoutes);
+app.use('/api/students', studentRoutes);
 
 
 app.listen(port,'0.0.0.0',()=>{

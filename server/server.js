@@ -37,7 +37,6 @@ app.use('/api/auth',authRouter)
 app.use('/api/admin', adminRoutes);
 app.use('/api/student',studentRouter);
 
-
 app.listen(port,'0.0.0.0',()=>{
     console.log(`Server is running on port ${port}`);
 })

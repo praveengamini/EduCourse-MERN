@@ -14,22 +14,65 @@ const getAllStudents = async (req, res) => {
 };
 
 const getStudentEnrolledCourses = async (req, res) => {
-  
   try {
     const { studentId } = req.query;
     const user = await UserModel.findById(studentId);
     if (!user) return res.status(404).json({ message: 'Student not found' });
+
     const enrolledCourses = await EnrolledCourseModel.find({ userId: studentId })
-      .populate('courseId');
+      .populate('courseId')
+      .populate('progress'); 
+
     if (!enrolledCourses || enrolledCourses.length === 0) {
       return res.status(200).json({ enrolledCourses: [], message: 'Student not enrolled in any course' });
     }
-    res.status(200).json({ enrolledCourses });
+
+    const enrolledCoursesWithProgress = enrolledCourses.map(course => {
+      const progresses = course.progress || [];
+      let averageProgress = 0;
+
+      if (progresses.length > 0) {
+        const totalPercentage = progresses.reduce((sum, progress) => sum + (progress.percentage || 0), 0);
+        averageProgress = totalPercentage / progresses.length;
+      }
+
+      return {
+        ...course.toObject(),
+        progressPercentage: parseFloat(averageProgress.toFixed(2))
+      };
+    });
+
+    res.status(200).json({ enrolledCourses: enrolledCoursesWithProgress });
   } catch (err) {
     console.error('Get student enrolled courses error:', err);
     res.status(500).json({ message: 'Server error fetching enrolled courses' });
   }
 };
+
+
+const editStudent = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const { userName, phone } = req.body;
+    console.log(id + userName + phone);
+
+    const update = { userName, phone };
+    const updatedUser = await UserModel.findByIdAndUpdate(id, update, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'Student not found' });
+    }
+
+    res.json({
+      success: true,
+      user: updatedUser
+    });
+  } catch (err) {
+    console.error('Edit student error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 
 const getStudentById = async (req, res) => {
   try {
@@ -90,6 +133,7 @@ module.exports = {
   getAllStudents,
   getStudentEnrolledCourses,
   enrollStudent,
-  getStudentById
+  getStudentById,
+  editStudent
 };
 

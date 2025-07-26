@@ -26,6 +26,8 @@ import MyCourses from './pages/student-view/MyCourses/MyCourses';
 import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
 import NewCourse from './pages/student-view/NewCourse/NewCourse';
 import LandingPage from './pages/landingpage/LandingPage';
+import CourseWiseStudentDashboard from './pages/admin-view/CourseWiseStudentDashboard';
+import UserProfile from './pages/student-view/UserProfile/UserProfile';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -71,6 +73,7 @@ const App = () => {
           <Route path="enrollcourse" element={<EnrollCourse />} />
           <Route path="weekly-stats" element={<WeeklyStats />} />
           <Route path="students" element={<StudentManagement />} />
+          <Route path = "coursewisestudent" element = {<CourseWiseStudentDashboard />} />
         </Route>
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
@@ -78,6 +81,7 @@ const App = () => {
             <Route path='home' element={<CoursesMenu/>}/>
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
+            <Route path = 'myprofile' element = {<UserProfile />} />
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>

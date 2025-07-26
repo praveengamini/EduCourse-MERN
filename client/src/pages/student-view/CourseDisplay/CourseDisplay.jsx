@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeftIcon, PlayIcon, DocumentIcon, ClockIcon, CurrencyRupeeIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { useSelector } from 'react-redux';
 
 const CourseDisplay = () => {
   const { courseId } = useParams();
@@ -11,7 +12,8 @@ const CourseDisplay = () => {
   const [selectedPDF, setSelectedPDF] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
-
+  const [courseToStudentExists,setCourseToStudentExists] = useState(false);
+  const user = useSelector((state)=>state.auth.user);
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -19,8 +21,11 @@ const CourseDisplay = () => {
     
         setCourse(res.data.course);
       } catch (err) {
-        console.error("Error fetching course:", err);
-      }
+        console.error("Error fetching course:",err);
+      }      
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/courseToStudent`,{params:{courseId:courseId,userId:user.id}})
+      console.log((response.data.courseToStudentExists));
+      setCourseToStudentExists(response.data.courseToStudentExists);
     };
 
     fetchCourse();
@@ -154,7 +159,7 @@ const CourseDisplay = () => {
                 
                 {course.videos && course.videos.length > 0 ? (
                   <div className="space-y-4">
-                    {course.videos.map((video, index) => (
+                    {(courseToStudentExists ? course.videos : course.videos.slice(0, 1)).map((video, index) => (
                       <div 
                         key={index} 
                         className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-white/50 hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden group"
@@ -192,6 +197,11 @@ const CourseDisplay = () => {
                         </div>
                       </div>
                     ))}
+                    {!courseToStudentExists && course.videos.length > 1 && (
+                    <p className="text-sm text-red-500 mt-4 text-center font-medium">
+                      Subscribe to access all videos in this course.
+                    </p>
+)}
                   </div>
                 ) : (
                   <div className="text-center py-8">
@@ -217,7 +227,7 @@ const CourseDisplay = () => {
                 
                 {course.pdfs && course.pdfs.length > 0 ? (
                   <div className="space-y-3">
-                    {course.pdfs.map((pdf, index) => (
+                    {(courseToStudentExists ? course.pdfs : course.pdfs.slice(0, 1)).map((pdf, index) => (
                       <div 
                         key={index} 
                         className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-white/50 hover:shadow-md hover:bg-white/90 transition-all duration-200 cursor-pointer group"
@@ -236,6 +246,12 @@ const CourseDisplay = () => {
                         </div>
                       </div>
                     ))}
+                    {!courseToStudentExists && course.pdfs.length > 1 && (
+                    <p className="text-sm text-red-500 mt-4 text-center font-medium">
+                      Subscribe to access all study materials.
+                    </p>
+)}
+
                   </div>
                 ) : (
                   <div className="text-center py-8">

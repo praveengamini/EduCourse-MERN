@@ -1,5 +1,6 @@
 import React from 'react'
 import { Toaster } from "sonner";
+import { ToastContainer } from 'react-toastify';
 import { Route,Routes } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
@@ -83,6 +84,13 @@ const App = () => {
         <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
+          <ToastContainer
+  position="bottom-right"
+  autoClose={5000}
+  draggable
+  theme="light"
+/>
+
     </div>
     
   )

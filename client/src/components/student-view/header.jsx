@@ -22,13 +22,12 @@ function AdminHeader({ setOpen }) {
 
       <div className="hidden lg:flex gap-3 ml-4">
         <Button variant="ghost" onClick={() => navigate("/student/home")}>
-          Courses
+          All Courses
         </Button>
         <Button variant="ghost" onClick={() => navigate("/student/my-courses")}>
           Your Courses
         </Button>
         <Button variant="ghost" onClick={()=>navigate("/student/new-course")}>enroll new course</Button>
-        <Button variant="ghost">Button 4</Button>
         <Button variant="ghost">Button 5</Button>
       </div>
 

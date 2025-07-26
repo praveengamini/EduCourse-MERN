@@ -152,26 +152,9 @@ const AllCourses = () => {
                         day: 'numeric' 
                       })}</span>
                     </div>
-
-                      {/* {course.courseRequested ?
-                        course.courseRequestStatus?
-                         <button class="px-4 py-2 cursor-pointer text-violet-600 border border-violet-600  hover:bg-violet-600 hover:text-white transition rounded-2xl">
-                          View Course
-                        </button>
-                        :
-                        <button class="px-5 py-2 border border-gray-500 text-gray-700 rounded-2xl hover:bg-gray-500 hover:text-white transition">
-                          cancel request
-                        </button>
-                      :
-                      <button class="px-4 py-2 mx-2 cursor-pointer border bg-violet-600 text-white transition rounded-2xl">
-                        request access
-                      </button>
-                      }   */}
-                         <button class="px-4 py-2 cursor-pointer text-violet-600 border border-violet-600  hover:bg-violet-600 hover:text-white transition rounded-2xl">
+                         <button onClick={()=>navigate(`/student/courses/${course._id}`)} class="px-4 py-2 cursor-pointer text-violet-600 border border-violet-600  hover:bg-violet-600 hover:text-white transition rounded-2xl">
                   View Course
                 </button>
-                
-
                 
                   </div>
                 </div>

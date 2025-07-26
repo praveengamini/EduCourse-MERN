@@ -1,5 +1,6 @@
 import React from 'react'
 import { Toaster } from "sonner";
+import { ToastContainer } from 'react-toastify';
 import { Route,Routes } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
@@ -19,7 +20,11 @@ import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import StudentManagement from './components/StudentManagement/StudentManagement'
+import WeeklyStats from './components/admin-view/WeeklyStats';
 import MyCourses from './pages/student-view/MyCourses/MyCourses';
+import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
+import NewCourse from './pages/student-view/NewCourse/NewCourse';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -57,18 +62,28 @@ const App = () => {
           <StudentLayout/>
           </CheckAuth>} >
             <Route path='home' element={<CoursesMenu/>}/>
-          <Route path='my-courses' element={<MyCourses/>} >
-          </Route>
+            <Route path='my-courses' element={<MyCourses/>}/>
+            <Route path='new-course' element={<NewCourse/>}/>
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
         <Route path="/admin/add-course" element={<AddCourse />} />
         <Route path="/admin/courses" element={<AllCourses />} />
         <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
+        <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
+        <Route path="/admin/weekly-stats" element={<WeeklyStats />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
+          <ToastContainer
+  position="bottom-right"
+  autoClose={5000}
+  draggable
+  theme="light"
+/>
+
     </div>
+    
   )
 }
 

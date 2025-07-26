@@ -19,14 +19,11 @@ const getStudentEnrolledCourses = async (req, res) => {
     const { studentId } = req.query;
     const user = await UserModel.findById(studentId);
     if (!user) return res.status(404).json({ message: 'Student not found' });
-
     const enrolledCourses = await EnrolledCourseModel.find({ userId: studentId })
       .populate('courseId');
-
     if (!enrolledCourses || enrolledCourses.length === 0) {
       return res.status(200).json({ enrolledCourses: [], message: 'Student not enrolled in any course' });
     }
-
     res.status(200).json({ enrolledCourses });
   } catch (err) {
     console.error('Get student enrolled courses error:', err);

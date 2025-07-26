@@ -3,8 +3,6 @@ import React from 'react'
 export default function NewCourse() {
     function newCourseFormSubmitted(event){
         event.preventDefault();
-        
-
     }
   return (
     <div className="p-4 flex flex-col items-center">

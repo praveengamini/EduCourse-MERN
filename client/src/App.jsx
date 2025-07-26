@@ -24,6 +24,7 @@ import WeeklyStats from './components/admin-view/WeeklyStats';
 import MyCourses from './pages/student-view/MyCourses/MyCourses';
 import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
 import NewCourse from './pages/student-view/NewCourse/NewCourse';
+import LandingPage from './pages/landingpage/LandingPage';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -43,6 +44,14 @@ const App = () => {
   return (
     <div>
       <Routes>
+        <Route
+          path="/"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <LandingPage isAuthenticated={isAuthenticated} />
+            </CheckAuth>
+          }
+        />
         <Route path='/auth' element={
           <CheckAuth isAuthenticated={isAuthenticated} user={user}>
             <AuthLayout/>
@@ -55,7 +64,12 @@ const App = () => {
           <AdminLayout/>
           </CheckAuth>}>
           <Route path='dashboard' element={<AdminDashboard/>}/>
-          <Route path='courseUpload' element={<AdminDashboard/>}/>
+          <Route path='add-course' element={<AddCourse/>}/>
+          <Route path="courses" element={<AllCourses />} />
+          <Route path="courses/:courseId" element={<CourseDetail />} />
+          <Route path="enrollcourse" element={<EnrollCourse />} />
+          <Route path="weekly-stats" element={<WeeklyStats />} />
+          <Route path="students" element={<StudentManagement />} />
         </Route>
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
@@ -66,15 +80,9 @@ const App = () => {
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
-        <Route path="/admin/add-course" element={<AddCourse />} />
-        <Route path="/admin/courses" element={<AllCourses />} />
-        <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
         <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
-        <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
-        <Route path="/admin/weekly-stats" element={<WeeklyStats />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
-      <StudentManagement />
     </div>
     
   )

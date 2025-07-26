@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlusIcon, ArrowLeftIcon, MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/solid';
 import { UsersIcon, CalendarDaysIcon, CurrencyRupeeIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 
-const AllCourses = () => {
+const AllCourses = ({ isLanding = false }) => {
   const [courses, setCourses] = useState([]);
   const [filters, setFilters] = useState({ title: '', cost: '', studentCount: '' });
   const navigate = useNavigate();
@@ -140,7 +140,13 @@ const AllCourses = () => {
               <div
                 key={course._id}
                 className="group bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-white/20 hover:scale-105"
-                onClick={() => navigate(`/admin/courses/${course._id}`)}
+                onClick={() => {
+                  if (isLanding) {
+                    navigate("/auth/login");
+                  } else {
+                    navigate(`/admin/courses/${course._id}`);
+                  }
+                }}
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -195,7 +201,14 @@ const AllCourses = () => {
 
         {/* Floating Action Button */}
         <button
-          onClick={() => navigate('/admin/add-course')}
+          // onClick={() => navigate('/admin/add-course')}
+          onClick={() => {
+            if (isLanding) {
+              navigate("/auth/login");
+            } else {
+              navigate(`/admin/add-course`);
+            }
+          }}
           className="fixed bottom-8 right-8 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group hover:scale-110"
         >
           <PlusIcon className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />

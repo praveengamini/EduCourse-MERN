@@ -14,9 +14,9 @@ const getAllStudents = async (req, res) => {
 };
 
 const getStudentEnrolledCourses = async (req, res) => {
+  
   try {
     const { studentId } = req.query;
-
     const user = await UserModel.findById(studentId);
     if (!user) return res.status(404).json({ message: 'Student not found' });
 

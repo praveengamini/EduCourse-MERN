@@ -9,11 +9,11 @@ router.get('/courses', getAllCourses);
 router.get('/course/:id', getCourseById);
 router.get('/students', getAllStudents);
 router.get('/student/enrolledcourses',getStudentEnrolledCourses);
-router.post('/enroll-student',enrollStudent);
 router.get('/student/:id', getStudentById);
 router.get('/stats', getStats);
 router.get('/graph-stats', getGraphStats);
 router.get('/detailed-analytics', getDetailedAnalytics);
+router.post('/enroll-student',enrollStudent);
 
 router.post('/add-course',
   upload.fields([

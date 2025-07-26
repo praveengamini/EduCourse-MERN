@@ -19,6 +19,8 @@ import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import StudentManagement from './components/StudentManagement/StudentManagement'
+import WeeklyStats from './components/admin-view/WeeklyStats';
 import MyCourses from './pages/student-view/MyCourses/MyCourses';
 import CourseDisplay from './pages/student-view/CourseDisplay/CourseDisplay';
 import NewCourse from './pages/student-view/NewCourse/NewCourse';
@@ -69,9 +71,12 @@ const App = () => {
         <Route path="/admin/courses/:courseId" element={<CourseDetail />} />
         <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
         <Route path="/admin/enrollcourse" element={<EnrollCourse />} />
+        <Route path="/admin/weekly-stats" element={<WeeklyStats />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
+      <StudentManagement />
     </div>
+    
   )
 }
 

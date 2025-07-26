@@ -93,7 +93,6 @@ export default function MyCourses() {
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/10 to-purple-500/10"></div>
                 </div>
               </div>
-            
             }
         )
       }

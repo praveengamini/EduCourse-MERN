@@ -8,7 +8,7 @@ const enrolledCourseSchema = new mongoose.Schema({
   certificateIssued: { type: Boolean, default: false },
   certificateId: { type: mongoose.Schema.Types.ObjectId, ref: 'Certificate' },
   enrolledAt: { type: Date, default: Date.now },
-  completedAt: { type: Date, default : null }
+  completedAt: { type: Date, default: null }
 });
 
 module.exports = mongoose.model('EnrolledCourse', enrolledCourseSchema);

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeftIcon, PlayIcon, DocumentIcon, ClockIcon, CurrencyRupeeIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useSelector } from 'react-redux';
 
 const CourseDisplay = () => {
+  const videoRef = useRef(null);
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
@@ -12,24 +13,87 @@ const CourseDisplay = () => {
   const [selectedPDF, setSelectedPDF] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
-  const [courseToStudentExists,setCourseToStudentExists] = useState(false);
-  const user = useSelector((state)=>state.auth.user);
+  const [courseToStudentExists, setCourseToStudentExists] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+  const [completedVideos, setCompletedVideos] = useState([]);
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/course/${courseId}`);
-    
         setCourse(res.data.course);
       } catch (err) {
-        console.error("Error fetching course:",err);
-      }      
-      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/courseToStudent`,{params:{courseId:courseId,userId:user.id}})
-      console.log((response.data.courseToStudentExists));
+        console.error("Error fetching course:", err);
+      }
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/courseToStudent`, {
+        params: { courseId: courseId, userId: user.id }
+      });
       setCourseToStudentExists(response.data.courseToStudentExists);
     };
-
     fetchCourse();
+    const fetchCompleted = async () => {
+    const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/progress/completed`, {
+      params: { userId: user.id, courseId }
+    });
+    setCompletedVideos(res.data.completedVideoIds);
+  };
+
+  fetchCompleted();
   }, [courseId]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    const handleTimeUpdate = async () => {
+      const watched = Math.floor(video.currentTime);
+      const total = Math.floor(video.duration);
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/progress`, {
+        userId: user.id,
+        courseId,
+        videoId: selectedVideo._id,
+        watchedDuration: watched,
+        totalDuration: total
+      });
+    };
+
+    const handleEnded = async () => {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/complete`, {
+        userId: user.id,
+        courseId,
+        videoId: selectedVideo._id
+      });
+    };
+
+    if (video) {
+      video.addEventListener('timeupdate', handleTimeUpdate);
+      video.addEventListener('ended', handleEnded);
+    }
+
+    return () => {
+      if (video) {
+        video.removeEventListener('timeupdate', handleTimeUpdate);
+        video.removeEventListener('ended', handleEnded);
+      }
+    };
+  }, [selectedVideo]);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/progress`, {
+        params: {
+          userId: user.id,
+          courseId,
+          videoId: selectedVideo._id
+        }
+      });
+      const lastTime = res.data?.watchedDuration || 0;
+      if (videoRef.current) {
+        videoRef.current.currentTime = lastTime;
+      }
+    };
+
+    if (selectedVideo) fetchProgress();
+  }, [selectedVideo]);
 
   const openVideoModal = (video) => {
     setSelectedVideo(video);
@@ -51,23 +115,20 @@ const CourseDisplay = () => {
     setSelectedPDF(null);
   };
 
-  // Helper function to format duration
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
- const getVideoThumbnail = (videoUrl) => {
+  const getVideoThumbnail = (videoUrl) => {
     if (videoUrl && videoUrl.includes('cloudinary.com')) {
       try {
         const urlParts = videoUrl.match(/https:\/\/res\.cloudinary\.com\/([^\/]+)\/video\/upload\/(?:v\d+\/)?(.+)\.(mp4|mov|avi|mkv|webm)/);
-        
         if (urlParts) {
           const cloudName = urlParts[1];
           const publicId = urlParts[2];
           const thumbnailUrl = `https://res.cloudinary.com/${cloudName}/video/upload/so_2.0,w_320,h_180,c_fill/${publicId}.jpg`;
-
           return thumbnailUrl;
         }
       } catch (error) {
@@ -150,6 +211,12 @@ const CourseDisplay = () => {
                     <PlayIcon className="h-6 w-6 text-indigo-600" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-800">Video Lectures</h2>
+                  {courseToStudentExists && (
+                    <p className="text-sm text-gray-500 ml-3">
+                      {completedVideos.length} / {course.videos.length} videos completed
+                    </p>
+                  )}
+
                   {course.videos && course.videos.length > 0 && (
                     <span className="ml-auto bg-indigo-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                       {course.videos.length} videos
@@ -186,9 +253,17 @@ const CourseDisplay = () => {
                           
                           {/* Video Info */}
                           <div className="flex-1 p-3 flex flex-col justify-between">
-                            <h3 className="font-medium text-gray-800 text-sm line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">
-                              {video.title}
-                            </h3>
+                            <div className="flex items-center justify-between">
+                              <h3 className="font-medium text-gray-800 text-sm line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">
+                                {video.title}
+                              </h3>
+                              {completedVideos.includes(video._id) && (
+                                <span className="ml-2 bg-green-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                                  Completed
+                                </span>
+                              )}
+                            </div>
+
                             <div className="flex items-center text-gray-500 text-xs mt-1">
                               <ClockIcon className="h-3 w-3 mr-1" />
                               <span>{formatDuration(video.duration)}</span>
@@ -280,7 +355,8 @@ const CourseDisplay = () => {
             </div>
             <div className="p-4">
               <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                <video
+               <video
+                  ref={videoRef}
                   controls
                   className="w-full h-full"
                   src={selectedVideo.url}
@@ -288,6 +364,7 @@ const CourseDisplay = () => {
                 >
                   Your browser does not support the video tag.
                 </video>
+
               </div>
               <div className="mt-3 flex items-center text-gray-600 text-sm">
                 <ClockIcon className="h-4 w-4 mr-1" />

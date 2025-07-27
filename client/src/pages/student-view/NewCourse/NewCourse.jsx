@@ -113,7 +113,7 @@ export default function NewCourse() {
                                 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
                         required
                     >
-                        <option value="no courses selected">-- Select a Course --</option>
+                        <option value="no courses selected">--recommend a course--</option>
                         {courses ? courses.map((individual, index) => (
                         <option key={index} value={individual.title}>
                             {individual.title}

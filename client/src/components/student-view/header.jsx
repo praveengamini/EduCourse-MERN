@@ -28,7 +28,7 @@ function AdminHeader({ setOpen }) {
           Your Courses
         </Button>
         <Button variant="ghost" onClick={()=>navigate("/student/new-course")}>enroll new course</Button>
-        <Button variant="ghost">Button 5</Button>
+        <Button variant="ghost" onClick={()=>navigate("/admin/enrollcourse")}>Button 5</Button>
       </div>
 
       <div className="flex flex-1 justify-end">

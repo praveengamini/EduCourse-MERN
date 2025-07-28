@@ -85,8 +85,9 @@ const App = () => {
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
             <Route path = 'myprofile' element = {<UserProfile />} />
+            <Route path="validator" element={<CertificateValidator />} />
+
         </Route>
-        <Route path="/validator" element={<CertificateValidator />} />
         <Route path="/generate" element={<CertificateGeneratorPanel />} />
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>

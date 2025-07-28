@@ -61,6 +61,8 @@ const loginUser = async (req, res) => {
         role: checkUser.role,
         email: checkUser.email,
         userName: checkUser.userName,
+        phone: checkUser.phone,
+        createdAt : checkUser.createdAt
       },
       "CLIENT_SECRET_KEY", // Ideally from process.env.JWT_SECRET
       { expiresIn: "60m" }

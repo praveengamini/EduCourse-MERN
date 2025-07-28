@@ -95,7 +95,65 @@ const getCourseById = async (req, res) => {
     res.status(500).json({ message: "Server error fetching course" });
   }
 };
+const getEnrolledStudentsForCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    
+    console.log('Fetching enrollments for courseId:', courseId);
+    
+    const enrollments = await EnrolledCourseModel.find({ courseId })
+      .populate('userId', 'userName email phone')
+      .populate('certificateId', '_id')
+      .populate('progress') // Populate progress to calculate percentage
+      .select('-__v');
+
+    if (enrollments.length === 0) {
+      return res.status(200).json({ 
+        message: 'No students enrolled in this course.', 
+        data: [] 
+      });
+    }
+
+    const formatted = enrollments.map(enroll => {
+      // Calculate progress percentage from progress array
+      let progressPercentage = 0;
+      if (enroll.progress && enroll.progress.length > 0) {
+        const totalProgress = enroll.progress.reduce((sum, prog) => sum + (prog.percentage || 0), 0);
+        progressPercentage = Math.round(totalProgress / enroll.progress.length);
+      }
+
+      return {
+        studentId: enroll.userId._id,
+        name: enroll.userId.userName,
+        email: enroll.userId.email,
+        phone: enroll.userId.phone || '',
+        progress: enroll.progress, // Keep original progress array for detailed view
+        progressPercentage, // Add calculated percentage
+        isCompleted: enroll.isCompleted,
+        certificateIssued: enroll.certificateIssued,
+        certificateId: enroll.certificateId?._id || null,
+        enrolledAt: enroll.enrolledAt,
+        completedAt: enroll.completedAt,
+      };
+    });
+
+    res.status(200).json({ 
+      message: 'Students fetched successfully',
+      data: formatted 
+    });
+
+  } catch (error) {
+    console.error('Error fetching enrollments:', error);
+    res.status(500).json({ 
+      error: 'Server error while fetching enrolled students.',
+      details: error.message 
+    });
+  }
+};
+
+
 module.exports = {
   getAllCourses,
-  getCourseById
+  getCourseById,
+  getEnrolledStudentsForCourse 
 };

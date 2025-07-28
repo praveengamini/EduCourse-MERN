@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Filter, ChevronLeft, ChevronRight, Users, Eye } from 'lucide-react';
 import { studentApi } from '../../services/studentApi';
 
@@ -11,9 +11,7 @@ const useDebounce = (value, delay) => {
       setDebouncedValue(value);
     }, delay);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [value, delay]);
 
   return debouncedValue;
@@ -30,10 +28,12 @@ const StudentList = ({ onStudentSelect }) => {
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [totalStudents, setTotalStudents] = useState(0);
 
-  // Debounce search input
+  // Ref for search input
+  const searchInputRef = useRef(null);
+
+  // Debounced search input
   const debouncedSearchTerm = useDebounce(searchInput, 500);
 
-  // Update searchTerm when debounced value changes
   useEffect(() => {
     setSearchTerm(debouncedSearchTerm);
     setCurrentPage(1);
@@ -58,6 +58,11 @@ const StudentList = ({ onStudentSelect }) => {
       console.error('Error fetching students:', error);
     } finally {
       setLoading(false);
+      setTimeout(() => {
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }, 100); // slight delay ensures render complete
     }
   };
 
@@ -65,34 +70,29 @@ const StudentList = ({ onStudentSelect }) => {
     fetchStudents();
   }, [currentPage, itemsPerPage, searchTerm, filterBy]);
 
-  const handleSearch = (e) => {
-    setSearchInput(e.target.value);
-  };
+  const handleSearch = (e) => setSearchInput(e.target.value);
 
   const handleFilterChange = (e) => {
     setFilterBy(e.target.value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
     });
-  };
 
   const renderPaginationButtons = () => {
     const buttons = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -116,14 +116,6 @@ const StudentList = ({ onStudentSelect }) => {
     return buttons;
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
@@ -131,7 +123,7 @@ const StudentList = ({ onStudentSelect }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Users className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl font-semibold text-gray-900">Students Management</h2>
+            <h2 className="text-xl font-semibold text-gray-900">All Students</h2>
           </div>
           <div className="text-sm text-gray-500">
             Total: {totalStudents} students
@@ -145,6 +137,7 @@ const StudentList = ({ onStudentSelect }) => {
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
+              ref={searchInputRef}
               type="text"
               placeholder="Search students..."
               value={searchInput}
@@ -189,64 +182,32 @@ const StudentList = ({ onStudentSelect }) => {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Student ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Phone
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Enrolled Courses
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Joined Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enrolled Courses</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {students.map((student, index) => (
-              <tr 
-                key={student._id} 
-                className={`hover:bg-gray-50 transition-colors ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-25'
-                }`}
+              <tr
+                key={student._id}
+                className={`hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">
-                  {student._id}
-                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">{student._id}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {student.userName}
-                  </div>
+                  <div className="text-sm font-medium text-gray-900">{student.userName}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">
-                    {student.email}
-                  </div>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.phone || 'N/A'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {student.enrolledCoursesCount}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">
-                    {student.phone || 'N/A'}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 font-medium">
-                    {student.enrolledCoursesCount}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {formatDate(student.createdAt)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{formatDate(student.createdAt)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button
                     onClick={() => onStudentSelect(student._id)}
                     className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
@@ -284,26 +245,18 @@ const StudentList = ({ onStudentSelect }) => {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  currentPage === 1
-                    ? 'text-gray-400 cursor-not-allowed'
-                    : 'text-gray-700 hover:bg-gray-100 border border-gray-300'
+                  currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100 border border-gray-300'
                 }`}
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Previous
               </button>
-              
-              <div className="flex space-x-1">
-                {renderPaginationButtons()}
-              </div>
-              
+              <div className="flex space-x-1">{renderPaginationButtons()}</div>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  currentPage === totalPages
-                    ? 'text-gray-400 cursor-not-allowed'
-                    : 'text-gray-700 hover:bg-gray-100 border border-gray-300'
+                  currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100 border border-gray-300'
                 }`}
               >
                 Next

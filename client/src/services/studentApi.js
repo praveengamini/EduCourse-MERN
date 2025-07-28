@@ -11,7 +11,7 @@ export const studentApi = {
         filterBy
       });
 
-      const response = await fetch(`${API_BASE_URL}/students?${queryParams}`, {
+      const response = await fetch(`${API_BASE_URL}/adminStudent?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const studentApi = {
   // Get student details with enrolled courses
   getStudentDetails: async (studentId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/students/${studentId}`, {
+      const response = await fetch(`${API_BASE_URL}/adminStudent/${studentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const studentApi = {
   unenrollStudentFromCourse: async (studentId, courseId) => {
     try {
       console.log('API call - Unenrolling:', studentId, courseId);
-      const response = await fetch(`${API_BASE_URL}/students/${studentId}/courses/${courseId}`, {
+      const response = await fetch(`${API_BASE_URL}/adminStudent/${studentId}/courses/${courseId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

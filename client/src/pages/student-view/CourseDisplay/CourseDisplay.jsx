@@ -201,6 +201,24 @@ const CourseDisplay = () => {
                 {course.description}
               </p>
             </div>
+            {courseToStudentExists && (
+                <div className="my-3 text-center">
+                  {completedVideos.length === course.videos.length ? (
+                    <a
+                      href={`/your-certificate-download-endpoint?userId=${user.id}&courseId=${courseId}`}
+                      className="inline-block bg-violet-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 transition"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                       Download Certificate
+                    </a>
+                  ) : (
+                    <p className="text-yellow-700 font-medium bg-yellow-100 border border-yellow-300 px-5 py-3 rounded-lg inline-block">
+                      Complete all videos to unlock your certificate.
+                    </p>
+                  )}
+                </div>
+              )}
 
             {/* Course Materials Grid */}
             <div className="grid lg:grid-cols-2 gap-8">

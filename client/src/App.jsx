@@ -28,6 +28,9 @@ import NewCourse from './pages/student-view/NewCourse/NewCourse';
 import LandingPage from './pages/landingpage/LandingPage';
 import CourseWiseStudentDashboard from './pages/admin-view/CourseWiseStudentDashboard';
 import UserProfile from './pages/student-view/UserProfile/UserProfile';
+import CertificateValidator from './components/CertificateValidator';
+import CertificateGeneratorPanel from './components/CertificateGeneratorPanel';
+
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -82,7 +85,10 @@ const App = () => {
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
             <Route path = 'myprofile' element = {<UserProfile />} />
+            <Route path="validator" element={<CertificateValidator />} />
+
         </Route>
+        <Route path="/generate" element={<CertificateGeneratorPanel />} />
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
         <Route path="/student/courses/:courseId" element={<CourseDisplay />} />

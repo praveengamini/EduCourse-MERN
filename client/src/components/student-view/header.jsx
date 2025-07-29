@@ -24,12 +24,12 @@ function AdminHeader({ setOpen }) {
           All Courses
         </Button>
         <Button variant="ghost" onClick={() => navigate("/student/my-courses")}>
-          Your Courses
+          My Courses
         </Button>
         <Button variant="ghost" onClick={() => navigate("/student/new-course")}>
           Enroll New Course
         </Button>
-        <Button variant="ghost">Button 5</Button>
+        <Button variant="ghost" onClick={() => navigate("/student/validator")}>Button 5</Button>
       </div>
 
       <div className="flex items-center gap-2">

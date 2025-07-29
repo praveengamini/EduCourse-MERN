@@ -11,13 +11,26 @@ const CertificateGeneratorPanel = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [showPreview, setShowPreview] = useState(false);
-  const certificateRef = useRef(null);
-
+  const certificateRef   = useRef(null);
+  const [searchParams] = useSearchParams();
+  const autoUser = searchParams.get('userId');
+  const autoCourse = searchParams.get('courseId');
   useEffect(() => {
     fetchStudents();
     fetchCourses();
   }, []);
+  useEffect(() => {
+  if (autoUser && autoCourse) {
+    setSelectedStudent(autoUser);
+    setSelectedCourse(autoCourse);
+    setShowPreview(true);
 
+    // Wait for canvas to load and then trigger generation
+    setTimeout(() => {
+      handleGenerateAndStore();
+    }, 1000);
+  }
+}, [autoUser, autoCourse]);
   const fetchStudents = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/generator/students');
@@ -59,11 +72,15 @@ const CertificateGeneratorPanel = () => {
     try {
       // Get the canvas data URL from the certificate generator
       const canvas = document.querySelector('canvas');
-      if (!canvas) {
+      if (!canvas) { 
         throw new Error('Certificate preview not generated');
       }
       
       const imageDataUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = imageDataUrl;
+        link.download = `certificate-${selectedStudent}-${selectedCourse}.png`;
+        link.click();
 
       const response = await axios.post('http://localhost:5000/api/generator/generate-certificate', {
         studentId: selectedStudent,

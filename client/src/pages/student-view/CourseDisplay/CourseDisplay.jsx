@@ -204,14 +204,13 @@ const CourseDisplay = () => {
             {courseToStudentExists && (
                 <div className="my-3 text-center">
                   {completedVideos.length === course.videos.length ? (
-                    <a
-                      href={`/your-certificate-download-endpoint?userId=${user.id}&courseId=${courseId}`}
+                   <a
+                      href={`/generate?userId=${user.id}&courseId=${courseId}`}
                       className="inline-block bg-violet-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 transition"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
-                       Download Certificate
+                      Get Certificate
                     </a>
+
                   ) : (
                     <p className="text-yellow-700 font-medium bg-yellow-100 border border-yellow-300 px-5 py-3 rounded-lg inline-block">
                       Complete all videos to unlock your certificate.
@@ -373,15 +372,17 @@ const CourseDisplay = () => {
             </div>
             <div className="p-4">
               <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-               <video
-                  ref={videoRef}
-                  controls
-                  className="w-full h-full"
-                  src={selectedVideo.url}
-                  poster={getVideoThumbnail(selectedVideo.url)}
-                >
-                  Your browser does not support the video tag.
-                </video>
+              <video
+              ref={videoRef}
+              controls
+              controlsList="nodownload"
+              onContextMenu={(e) => e.preventDefault()}
+              className="w-full h-full"
+              src={selectedVideo.url}
+              poster={getVideoThumbnail(selectedVideo.url)}
+            >
+              Your browser does not support the video tag.
+            </video>
 
               </div>
               <div className="mt-3 flex items-center text-gray-600 text-sm">

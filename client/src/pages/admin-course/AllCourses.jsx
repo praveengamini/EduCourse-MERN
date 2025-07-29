@@ -31,14 +31,6 @@ const AllCourses = ({ isLanding = false }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Back button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="group flex items-center text-indigo-600 hover:text-indigo-800 mb-8 transition-all duration-200 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl"
-        >
-          <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
-          <span className="font-medium">Back</span>
-        </button>
 
         {/* Header Section */}
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-8 border border-white/20">

@@ -16,6 +16,11 @@ function AdminHeader({ setOpen }) {
         <AlignJustify />
         <span className="sr-only">Toggle Menu</span>
       </Button>
+      <div className="flex-1 flex justify-center">
+      <span className="text-lg md:text-xl font-bold tracking-tight text-primary whitespace-nowrap">
+        SKILL HUB <span className="font-normal text-muted-foreground ml-1">(Admin Portal)</span>
+      </span>
+    </div>
       <div className="flex flex-1 justify-end">
         <Button
           onClick={handleLogout}

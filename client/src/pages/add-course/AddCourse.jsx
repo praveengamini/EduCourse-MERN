@@ -233,7 +233,7 @@ const AddCourse = () => {
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 flex items-center">
                   <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-                  Duration
+                  Duration (In Weeks)
                 </label>
                 <input
                   type="text"
@@ -264,7 +264,7 @@ const AddCourse = () => {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 flex items-center">
                 <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-                Course Price (USD)
+                Course Price (Rupees)
               </label>
               <input
                 type="number"

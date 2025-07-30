@@ -80,6 +80,8 @@ const CourseDisplay = () => {
     }
     return prev;
   });
+
+    
 };
 
 

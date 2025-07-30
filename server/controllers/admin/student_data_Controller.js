@@ -168,10 +168,6 @@ const getStudentDetails = async (req, res) => {
 const unenrollStudentFromCourse = async (req, res) => {
   try {
     const { studentId, courseId } = req.params;
-
-    console.log('Unenrolling student:', studentId, 'from course:', courseId);
-
-    // Check if student exists
     const student = await User.findById(studentId);
     if (!student || student.role !== 'student') {
       return res.status(404).json({
@@ -179,8 +175,6 @@ const unenrollStudentFromCourse = async (req, res) => {
         message: 'Student not found'
       });
     }
-
-    // Check if course exists
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({
@@ -188,33 +182,18 @@ const unenrollStudentFromCourse = async (req, res) => {
         message: 'Course not found'
       });
     }
-
-    // Find the enrollment
     const enrollment = await EnrolledCourse.findOne({ 
       userId: studentId, 
       courseId: courseId 
     });
-
     if (!enrollment) {
       return res.status(404).json({
         success: false,
         message: 'Student is not enrolled in this course'
       });
     }
-
-    console.log('Found enrollment:', enrollment._id);
-
-    // Delete all progress records for this enrollment
-    if (enrollment.progress && enrollment.progress.length > 0) {
-      console.log('Deleting progress records:', enrollment.progress);
-      await Progress.deleteMany({ _id: { $in: enrollment.progress } });
-    }
-
-    // Delete the enrollment record
+    await Progress.deleteMany({ userId : studentId, courseId : courseId });
     await EnrolledCourse.findByIdAndDelete(enrollment._id);
-
-    console.log('Successfully unenrolled student');
-
     res.json({
       success: true,
       message: 'Student successfully unenrolled from the course'

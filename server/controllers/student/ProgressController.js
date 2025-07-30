@@ -42,6 +42,7 @@ const progressController = async (req, res) => {
   if (allCompleted && !enrolled.isCompleted) {
     enrolled.isCompleted = true;
     enrolled.completedAt = new Date();
+    enrolled.certificateIssued = true;
   }
 
   await enrolled.save();
@@ -88,6 +89,7 @@ const courseCompletedProgress = async (req, res) => {
     if (allCompleted && !enrolled.isCompleted) {
       enrolled.isCompleted = true;
       enrolled.completedAt = new Date();
+      enrolled.certificateIssued = true;
     }
 
     await enrolled.save();

@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeftIcon, PlayIcon, DocumentIcon, ClockIcon, CurrencyRupeeIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { generateCertificateCanvas } from "../../../utils/certificateUtils";
+import { Loader2 } from "lucide-react";
 
 const CourseDisplay = () => {
   const videoRef = useRef(null);
@@ -16,8 +19,16 @@ const CourseDisplay = () => {
   const [courseToStudentExists, setCourseToStudentExists] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const [completedVideos, setCompletedVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+ useEffect(() => {
+  if (course?.videos && completedVideos.length === course.videos.length && course.videos.length > 0) {
+    toast.success("Certificate unlocked! You can now download it.");
+  }
+}, [completedVideos, course]);
 
   useEffect(() => {
+    
     const fetchCourse = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/course/${courseId}`);
@@ -57,12 +68,20 @@ const CourseDisplay = () => {
     };
 
     const handleEnded = async () => {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/complete`, {
-        userId: user.id,
-        courseId,
-        videoId: selectedVideo._id
-      });
-    };
+  await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/complete`, {
+    userId: user.id,
+    courseId,
+    videoId: selectedVideo._id
+  });
+
+  setCompletedVideos((prev) => {
+    if (!prev.includes(selectedVideo._id)) {
+      return [...prev, selectedVideo._id];
+    }
+    return prev;
+  });
+};
+
 
     if (video) {
       video.addEventListener('timeupdate', handleTimeUpdate);
@@ -148,6 +167,35 @@ const CourseDisplay = () => {
     );
   }
 
+const handleCertificateDownload = async () => {
+  const username = user?.userName;
+  const courseName = course?.title;
+  const imageSrc = "/certificate.png";
+
+  if (!username || !courseName) {
+    toast.error("Missing user or course info!");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const imageDataUrl = await generateCertificateCanvas({ username, courseName, imageSrc });
+
+    const link = document.createElement("a");
+    link.download = `${username}_certificate.png`;
+    link.href = imageDataUrl;
+    link.click();
+
+    toast.success("🎉 Certificate downloaded successfully!");
+  } catch (error) {
+    console.error("Error generating certificate:", error);
+    toast.error("❌ Failed to generate certificate. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -189,10 +237,7 @@ const CourseDisplay = () => {
               </div>
             </div>
           </div>
-
-          {/* Course Content */}
           <div className="p-8">
-            {/* Description Section */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
                 Course Description
@@ -204,12 +249,23 @@ const CourseDisplay = () => {
             {courseToStudentExists && (
                 <div className="my-3 text-center">
                   {completedVideos.length === course.videos.length ? (
-                   <a
-                      href={`/generate?userId=${user.id}&courseId=${courseId}`}
-                      className="inline-block bg-violet-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-indigo-700 transition"
-                    >
-                      Get Certificate
-                    </a>
+                 <button
+                    onClick={handleCertificateDownload}
+                    disabled={loading}
+                    className={`px-6 py-3 rounded-xl flex items-center justify-center gap-2 bg-violet-600 text-white hover:bg-violet-700 transition ${
+                      loading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="animate-spin w-5 h-5" />
+                        Generating...
+                      </>
+                    ) : (
+                      "Get Certificate"
+                    )}
+                </button>
+
 
                   ) : (
                     <p className="text-yellow-700 font-medium bg-yellow-100 border border-yellow-300 px-5 py-3 rounded-lg inline-block">

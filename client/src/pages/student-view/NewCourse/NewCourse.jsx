@@ -29,7 +29,7 @@ export default function NewCourse() {
         const response = await axios.post(import.meta.env.VITE_SERVER_URL+"/api/student/sendEmail",data);
         console.log(response);
         if(response.data.messageSent){
-            toast.success("email send successfully",{theme:"dark"});
+            toast.success("email send successfully");
         }
         else{
             toast.error("error occured in sending mail");

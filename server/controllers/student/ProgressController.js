@@ -1,33 +1,52 @@
 const Progress = require('../../models/ProgressModel');
 const EnrolledCourse = require('../../models/EnrolledCourseModel');
 const CourseVideo = require('../../models/CourseVideoModel');
-const Certificate = require('../../models/CertificateModel');
+const Course = require('../../models/CourseModel');
 
 const progressController = async (req, res) => {
   const { userId, courseId, videoId, watchedDuration, totalDuration } = req.body;
+  if (!userId || !courseId || !videoId || watchedDuration == null || totalDuration == null) {
+    return res.status(400).json({ success: false, message: 'Missing required fields' });
+  }
 
   const percentage = Math.min((watchedDuration / totalDuration) * 100, 100);
-
   let progress = await Progress.findOne({ userId, courseId, videoId });
 
   if (!progress) {
     progress = new Progress({ userId, courseId, videoId, watchedDuration, totalDuration, percentage });
   } else {
-    progress.watchedDuration = watchedDuration;
+    progress.watchedDuration = Math.max(progress.watchedDuration, watchedDuration);
+    progress.percentage = Math.max(progress.percentage, percentage);
     progress.totalDuration = totalDuration;
-    progress.percentage = percentage;
     progress.updatedAt = Date.now();
   }
 
   await progress.save();
 
   const enrolled = await EnrolledCourse.findOne({ userId, courseId });
-  if (enrolled && !enrolled.progress.includes(progress._id)) {
+  if (!enrolled) return res.status(404).json({ success: false, message: "Enrollment not found" });
+
+  const alreadyIncluded = enrolled.progress.some(id => id.toString() === progress._id.toString());
+  if (progress.percentage >= 95 && !alreadyIncluded) {
     enrolled.progress.push(progress._id);
-    await enrolled.save();
   }
 
-  res.json({ success: true, percentage });
+  const course = await Course.findById(courseId).populate('videos');
+  const allVideos = course.videos;
+  const completedProgress = await Progress.find({ userId, courseId, percentage: { $gte: 95 } });
+  const completedVideoIds = completedProgress.map(p => p.videoId.toString());
+  const allVideoIds = allVideos.map(v => v._id.toString());
+
+  const allCompleted = allVideoIds.every(id => completedVideoIds.includes(id));
+
+  if (allCompleted && !enrolled.isCompleted) {
+    enrolled.isCompleted = true;
+    enrolled.completedAt = new Date();
+  }
+
+  await enrolled.save();
+
+  res.json({ success: true, percentage: progress.percentage });
 };
 
 const courseCompletedProgress = async (req, res) => {
@@ -39,43 +58,43 @@ const courseCompletedProgress = async (req, res) => {
 
     const totalDuration = video.duration;
 
-    await Progress.findOneAndUpdate(
+    const progress = await Progress.findOneAndUpdate(
       { userId, courseId, videoId },
       {
         percentage: 100,
         watchedDuration: totalDuration,
+        totalDuration,
         updatedAt: Date.now()
       },
-      { new: true }
+      { new: true, upsert: true }
     );
 
-    const allVideos = await CourseVideo.find({ courseId });
-    const completed = await Progress.find({
-      userId,
-      courseId,
-      percentage: { $gte: 95 }
-    });
+    const enrolled = await EnrolledCourse.findOne({ userId, courseId });
+    if (!enrolled) return res.status(404).json({ message: "Enrollment not found" });
 
-    const allCompleted = allVideos.length > 0 && completed.length === allVideos.length;
-
-    if (allCompleted) {
-      const enrolled = await EnrolledCourse.findOne({ userId, courseId });
-
-      if (enrolled && !enrolled.isCompleted) {
-        // Find certificate
-        const certificate = await Certificate.findOne({ studentId: userId, courseId });
-
-        enrolled.isCompleted = true;
-        enrolled.completedAt = new Date();
-        enrolled.certificateIssued = true;
-        enrolled.certificateId = certificate ? certificate._id : null;
-        await enrolled.save();
-      }
+    const alreadyIncluded = enrolled.progress.some(id => id.toString() === progress._id.toString());
+    if (!alreadyIncluded) {
+      enrolled.progress.push(progress._id);
     }
+
+    const course = await Course.findById(courseId).populate('videos');
+    const allVideos = course.videos;
+    const completedProgress = await Progress.find({ userId, courseId, percentage: { $gte: 95 } });
+    const completedVideoIds = completedProgress.map(p => p.videoId.toString());
+    const allVideoIds = allVideos.map(v => v._id.toString());
+
+    const allCompleted = allVideoIds.every(id => completedVideoIds.includes(id));
+
+    if (allCompleted && !enrolled.isCompleted) {
+      enrolled.isCompleted = true;
+      enrolled.completedAt = new Date();
+    }
+
+    await enrolled.save();
 
     res.status(200).json({
       message: 'Progress marked as complete',
-      certificateIssued: allCompleted
+      isCompleted: allCompleted
     });
   } catch (err) {
     console.error(err);

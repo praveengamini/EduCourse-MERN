@@ -126,6 +126,15 @@ const CourseDisplay = () => {
         setIsVideoModalOpen(false);
         setSelectedVideo(null);
     };
+  setCompletedVideos((prev) => {
+    if (!prev.includes(selectedVideo._id)) {
+      return [...prev, selectedVideo._id];
+    }
+    return prev;
+  });
+
+    
+};
 
     const openPDFModal = (pdf) => {
         setSelectedPDF(pdf);

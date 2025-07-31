@@ -13,7 +13,7 @@ const deviceSchema = new Schema({
 
 const UserSchema = new Schema({
   userName: {
-    type: String,required: true,unique: true,
+    type: String,required: true,
   },
   email: {type: String,required: true,unique: true,
   },

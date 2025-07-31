@@ -8,7 +8,7 @@ const dotenv = require('dotenv')
 const useragent = require('express-useragent');
 const studentRouter = require('./routes/student/student-routes')
 const adminStudentRouter = require('./routes/admin/studentRoutes')
-const connectDB = require('./config/database');
+// const connectDB = require('./config/database');
 dotenv.config()
 const app = express();                
 const port = process.env.PORT || 5000;

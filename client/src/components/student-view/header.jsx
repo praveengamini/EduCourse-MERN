@@ -30,7 +30,6 @@ function AdminHeader({ setOpen }) {
           Enroll New Course
         </Button>
         <Button variant="ghost" onClick={() => navigate("/student/validator")}>Validate your certificate</Button>
-        <Button variant="ghost" onClick={() => navigate("/student/generate")}>Validate your certificate</Button>
       </div>
 
       <div className="flex items-center gap-2">

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { PlayCircle, GraduationCap, Clock, DollarSign, ArrowLeft, X, Loader2, FileText, Lock } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { generateCertificateCanvas } from "../../../utils/certificateUtils"; // Assuming this utility is in a separate file
+import { generateCertificateCanvas } from "../../../utils/certificateUtils";
 
 const CourseDisplay = () => {
     const videoRef = useRef(null);
@@ -21,14 +21,12 @@ const CourseDisplay = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Show success toast when all videos are completed
         if (course?.videos && completedVideos.length === course.videos.length && course.videos.length > 0) {
             toast.success("Certificate unlocked! You can now download it.");
         }
     }, [completedVideos, course]);
 
     useEffect(() => {
-        // Fetch course details and check user enrollment status
         const fetchData = async () => {
             try {
                 const courseRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/course/${courseId}`);
@@ -51,7 +49,6 @@ const CourseDisplay = () => {
         fetchData();
     }, [courseId, user]);
 
-    // Effect for video playback and progress tracking
     useEffect(() => {
         const video = videoRef.current;
 
@@ -97,7 +94,6 @@ const CourseDisplay = () => {
         };
     }, [selectedVideo, courseId, user]);
 
-    // Effect to set video playback position from saved progress
     useEffect(() => {
         const fetchProgress = async () => {
             if (!selectedVideo || !user) return;
@@ -192,7 +188,15 @@ const CourseDisplay = () => {
         }
     };
     
-  
+    const handleEnrollment = () => {
+      if (course) {
+        toast.info("Enrolling in course...");
+        setTimeout(() => {
+          setCourseToStudentExists(true);
+          toast.success("Enrollment successful!");
+        }, 1500);
+      }
+    };
 
     const getRandomRating = () => {
         const rating = (Math.random() * (4.8 - 4.0) + 4.0).toFixed(1);
@@ -211,11 +215,9 @@ const CourseDisplay = () => {
         );
     }
     
-    // Render the appropriate view based on enrollment status
     return (
         <div className="min-h-screen bg-black text-gray-100 relative overflow-hidden" style={{ fontFamily: "Bai Jamjuree, sans-serif" }}>
             
-            {/* Background blobs for visual appeal */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-800 rounded-full blur-3xl opacity-40 animate-blob"></div>
             <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
             <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-pink-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
@@ -236,7 +238,6 @@ const CourseDisplay = () => {
             </style>
             
             <div className="relative z-10">
-                {/* Header Section */}
                 <div className="flex justify-between items-center px-8 py-4 bg-zinc-950/70 backdrop-blur-md">
                     <div className="text-2xl font-bold text-white">EduQuest logo</div>
                     <div className="flex items-center space-x-8">
@@ -247,13 +248,8 @@ const CourseDisplay = () => {
                     </div>
                 </div>
 
-                {/* Conditional rendering based on enrollment status */}
                 {courseToStudentExists ? (
-                    // ===============================================
-                    // ENROLLED USER DASHBOARD VIEW
-                    // ===============================================
                     <div className="container mx-auto px-4 py-8 max-w-6xl">
-                         {/* Dashboard Header */}
                          <div className="flex items-center justify-between mb-8">
                             <h1 className="text-3xl md:text-4xl font-bold text-violet-400">{course.title}</h1>
                             <button
@@ -265,7 +261,6 @@ const CourseDisplay = () => {
                             </button>
                         </div>
 
-                        {/* Info Cards */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
                             <div className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 shadow-xl flex flex-col items-start space-y-2">
                                 <h3 className="text-2xl font-bold text-violet-400">{course.videos?.length || 0}</h3>
@@ -281,9 +276,7 @@ const CourseDisplay = () => {
                             </div>
                         </div>
 
-                        {/* Course Content and Certificate */}
                         <div className="grid lg:grid-cols-2 gap-8">
-                            {/* Videos Section */}
                             <div className="bg-zinc-950 p-6 rounded-xl shadow-lg border border-zinc-800">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-2xl font-bold text-white">Course Content</h2>
@@ -328,7 +321,6 @@ const CourseDisplay = () => {
                                 </div>
                             </div>
                             
-                            {/* PDFs Section and Certificate */}
                             <div className="flex flex-col gap-8">
                                 <div className="bg-zinc-950 p-6 rounded-xl shadow-lg border border-zinc-800">
                                     <div className="flex items-center justify-between mb-6">
@@ -367,7 +359,6 @@ const CourseDisplay = () => {
                                     </div>
                                 </div>
 
-                                {/* Certificate Section */}
                                 <div className="bg-zinc-950 p-6 rounded-xl shadow-lg border border-zinc-800 text-center">
                                     <h3 className="text-2xl font-bold text-violet-400 mb-4">Your Certificate</h3>
                                     {completedVideos.length === course.videos.length && course.videos.length > 0 ? (
@@ -397,15 +388,10 @@ const CourseDisplay = () => {
                         </div>
                     </div>
                 ) : (
-                    // ===============================================
-                    // UNENROLLED USER LANDING PAGE VIEW
-                    // ===============================================
                     <div className="relative w-full overflow-hidden">
-                        {/* Course Header and Preview Card */}
                         <div className="w-full bg-zinc-950/70 backdrop-blur-md overflow-hidden">
                             <div className="relative min-h-[450px] py-12 flex items-center">
                                 <div className="container mx-auto px-8 max-w-6xl grid md:grid-cols-2 gap-12 items-start">
-                                    {/* Left side: Course Info */}
                                     <div className="flex-1 space-y-6 text-center md:text-left">
                                         <div className="flex items-center justify-center md:justify-start">
                                             <button
@@ -442,7 +428,6 @@ const CourseDisplay = () => {
                                         </div>
                                     </div>
                                     
-                                    {/* Right side: Preview Card */}
                                     <div className="w-full relative bg-zinc-900 border border-zinc-800 rounded-xl shadow-lg overflow-hidden flex-shrink-0 max-w-sm mx-auto md:mx-0">
                                         <div className="relative aspect-video">
                                             <img src={course.coverImage} alt="Course Preview" className="w-full h-full object-cover"/>
@@ -455,7 +440,7 @@ const CourseDisplay = () => {
                                         <div className="p-6 text-center">
                                             <h3 className="text-xl font-bold text-white mb-4">Preview the course</h3>
                                             <button
-                                                onClick={()=>{navigate("/student/new-course")}}
+                                                onClick={handleEnrollment}
                                                 className="w-full py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors"
                                             >
                                                 Enroll to Course
@@ -466,11 +451,10 @@ const CourseDisplay = () => {
                             </div>
                         </div>
 
-                        {/* About Section */}
                         <div className="container mx-auto px-8 py-16 max-w-6xl">
                             <div className="grid lg:grid-cols-2 gap-12">
-                                {/* What you'll learn */}
                                 <div>
+                                    <h2 className="text-3xl font-bold text-violet-400 mb-6">What you'll learn</h2>
                                     <ul className="space-y-4 text-gray-300">
                                         {course.whatYoullLearn?.map((item, index) => (
                                             <li key={index} className="flex items-start gap-3">
@@ -480,9 +464,9 @@ const CourseDisplay = () => {
                                         ))}
                                     </ul>
                                 </div>
-                                {/* Skills you'll gain */}
                                 <div>
-                                      <div className="flex flex-wrap gap-3">
+                                    <h2 className="text-3xl font-bold text-violet-400 mb-6">Skills you'll gain</h2>
+                                    <div className="flex flex-wrap gap-3">
                                         {course.skills?.map((skill, index) => (
                                             <span key={index} className="bg-zinc-800 text-gray-200 px-4 py-2 rounded-full text-sm font-medium">
                                                 {skill}
@@ -496,7 +480,6 @@ const CourseDisplay = () => {
                 )}
             </div>
 
-            {/* Video Modal - Shared between both views */}
             {isVideoModalOpen && selectedVideo && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
@@ -525,7 +508,6 @@ const CourseDisplay = () => {
                 </div>
             )}
             
-            {/* PDF Modal - Shared between both views */}
             {isPDFModalOpen && selectedPDF && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden">

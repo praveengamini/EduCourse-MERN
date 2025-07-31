@@ -98,7 +98,7 @@ const App = () => {
   position="bottom-right"
   autoClose={5000}
   draggable
-  theme="colored"
+  theme="dark"
 />
 
     </div>

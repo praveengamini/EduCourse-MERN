@@ -126,15 +126,6 @@ const CourseDisplay = () => {
         setIsVideoModalOpen(false);
         setSelectedVideo(null);
     };
-  setCompletedVideos((prev) => {
-    if (!prev.includes(selectedVideo._id)) {
-      return [...prev, selectedVideo._id];
-    }
-    return prev;
-  });
-
-    
-};
 
     const openPDFModal = (pdf) => {
         setSelectedPDF(pdf);
@@ -199,11 +190,9 @@ const CourseDisplay = () => {
     
     const handleEnrollment = () => {
       if (course) {
-        toast.info("Enrolling in course...");
-        setTimeout(() => {
-          setCourseToStudentExists(true);
-          toast.success("Enrollment successful!");
-        }, 1500);
+        toast.info("enroll course here");
+        navigate("/student/new-course")
+        
       }
     };
 
@@ -247,15 +236,7 @@ const CourseDisplay = () => {
             </style>
             
             <div className="relative z-10">
-                <div className="flex justify-between items-center px-8 py-4 bg-zinc-950/70 backdrop-blur-md">
-                    <div className="text-2xl font-bold text-white">EduQuest logo</div>
-                    <div className="flex items-center space-x-8">
-                        <span className="text-white text-lg font-semibold">Courses</span>
-                        <div className="px-4 py-2 bg-violet-600 text-white rounded-md cursor-pointer">
-                            Logout
-                        </div>
-                    </div>
-                </div>
+                
 
                 {courseToStudentExists ? (
                     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -462,33 +443,12 @@ const CourseDisplay = () => {
 
                         <div className="container mx-auto px-8 py-16 max-w-6xl">
                             <div className="grid lg:grid-cols-2 gap-12">
-                                <div>
-                                    <h2 className="text-3xl font-bold text-violet-400 mb-6">What you'll learn</h2>
-                                    <ul className="space-y-4 text-gray-300">
-                                        {course.whatYoullLearn?.map((item, index) => (
-                                            <li key={index} className="flex items-start gap-3">
-                                                <span className="flex-shrink-0 text-violet-400">&#10003;</span>
-                                                <p>{item}</p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h2 className="text-3xl font-bold text-violet-400 mb-6">Skills you'll gain</h2>
-                                    <div className="flex flex-wrap gap-3">
-                                        {course.skills?.map((skill, index) => (
-                                            <span key={index} className="bg-zinc-800 text-gray-200 px-4 py-2 rounded-full text-sm font-medium">
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
                 )}
             </div>
-
             {isVideoModalOpen && selectedVideo && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">

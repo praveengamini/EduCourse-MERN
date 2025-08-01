@@ -10,4 +10,5 @@ router.post("/progress",progressController);
 router.get("/progress",getProgress);
 router.post("/complete",courseCompletedProgress);
 router.get("/progress/completed",completedVideos);
+
 module.exports = router;

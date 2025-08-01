@@ -1,27 +1,42 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import AllCourses from "../admin-course/AllCourses"; // adjust path if needed
+import Header from "../../components/landingPage/Header";
+import Hero from "../../components/landingPage/Hero";
+import StatsSection from "../../components/landingPage/StatsSection";
+import CoursesSection from "../../components/landingPage/CoursesSection";
+import CTASection from "../../components/landingPage/CTASection";
+import StatsCards from "../../components/landingPage/StatsCards";
+import FAQSection from "../../components/landingPage/FAQSection";
+import Footer from "../../components/landingPage/Footer";
 
 const LandingPage = ({ isAuthenticated }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="flex justify-between items-center px-6 py-4 bg-white/80 shadow backdrop-blur-md">
-        <h1 className="text-xl font-bold text-indigo-600">CourseHub</h1>
-        {!isAuthenticated && (
-          <button
-            onClick={() => navigate("/auth/login")}
-            className="text-white bg-indigo-600 px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
-          >
-            Login
-          </button>
-        )}
-      </div>
+    <div className="min-h-screen bg-black">
+      <Header
+        rightButton={
+          !isAuthenticated && (
+            <button
+              onClick={() => navigate('/auth/login')}
+              className="text-white bg-indigo-600 px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+            >
+              Login
+            </button>
+          )
+        }
+      />
 
-      <div className="p-4 md:p-8">
-        <AllCourses isLanding={true} />
-      </div>
+      <main>
+        <Hero/>
+        <StatsSection />
+        <CoursesSection />
+        <CTASection/>
+        <StatsCards />
+        <FAQSection />
+      </main>
+
+      <Footer />
     </div>
   );
 };

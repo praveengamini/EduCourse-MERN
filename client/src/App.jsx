@@ -53,9 +53,7 @@ const App = () => {
         <Route
           path="/"
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <LandingPage isAuthenticated={isAuthenticated} />
-            </CheckAuth>
           }
         />
         <Route path='/auth' element={
@@ -81,17 +79,16 @@ const App = () => {
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
-            <Route path='home' element={<CoursesMenu/>}/>
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
             <Route path = 'myprofile' element = {<UserProfile />} />
-            <Route path="validator" element={<CertificateValidator />} />
             <Route path="generate" element={<CertificateGeneratorPanel />} />
-
+            <Route path="all-courses" element={<CoursesMenu/>}/>
+            <Route path="validator" element={<CertificateValidator />} />
+            <Route path="courses/:courseId" element={<CourseDisplay />} />
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
-        <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
       </Routes>
             <Toaster richColors position="bottom-right" />
           <ToastContainer

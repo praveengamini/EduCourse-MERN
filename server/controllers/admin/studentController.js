@@ -54,7 +54,6 @@ const editStudent = async (req, res) => {
   try {
     const { id } = req.query;
     const { userName, phone } = req.body;
-    console.log(id + userName + phone);
 
     const update = { userName, phone };
     const updatedUser = await UserModel.findByIdAndUpdate(id, update, { new: true });

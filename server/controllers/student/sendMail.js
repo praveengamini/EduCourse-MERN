@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer");
 
 const sendEmail = async (req, res) => {
-  console.log(req.body);
   
   const { name, email, contactNumber, courseName,userID,description } = req.body;
 

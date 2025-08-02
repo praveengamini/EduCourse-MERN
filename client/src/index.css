@@ -98,3 +98,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* For WebKit browsers (Chrome, Safari) */
+
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

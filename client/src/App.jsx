@@ -1,7 +1,7 @@
 import React from 'react'
 import { Toaster } from "sonner";
 import { ToastContainer } from 'react-toastify';
-import { Route,Routes } from 'react-router-dom'
+import { Route,Routes, useNavigate } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
 import AuthRegister from './pages/auth/register'
@@ -30,6 +30,7 @@ import CourseWiseStudentDashboard from './pages/admin-view/CourseWiseStudentDash
 import UserProfile from './pages/student-view/UserProfile/UserProfile';
 import CertificateValidator from './components/CertificateValidator';
 import CertificateGeneratorPanel from './components/CertificateGeneratorPanel';
+import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashboard';
 
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
@@ -81,17 +82,18 @@ const App = () => {
         <Route path='/student' element={<CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <StudentLayout/>
           </CheckAuth>} >
+             <Route path="" element={<StudentDashboard />} />
             <Route path='home' element={<CoursesMenu/>}/>
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
             <Route path = 'myprofile' element = {<UserProfile />} />
             <Route path="validator" element={<CertificateValidator />} />
             <Route path="generate" element={<CertificateGeneratorPanel />} />
-
+            <Route path="courses/:courseId" element={<CourseDisplay />} />
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
-        <Route path="/student/courses/:courseId" element={<CourseDisplay />} />
+       
       </Routes>
             <Toaster richColors position="bottom-right" />
           <ToastContainer

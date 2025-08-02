@@ -456,14 +456,15 @@ const AddCourse = () => {
                     )}
                   </div>
                 </div>
-                
+                {!video.isProcessing ?
                 <button
                   type="button"
                   onClick={() => handleRemoveVideo(index)}
                   className="text-red-500 hover:text-red-700 p-1"
+                  disabled = {video.isProcessing}
                 >
                   <TrashIcon className="h-4 w-4" />
-                </button>
+                </button> : <></>}
               </div>
             </div>
           ))}

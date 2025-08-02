@@ -2,14 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 export default function NewCourse() {
     const [courses, setCourses] = useState(null);
-    const [loading, setLoading] = useState(false); // New state for loading status
+    const [loading, setLoading] = useState(false); 
     const user = useSelector((state) => state.auth.user);
     console.log(user);
-
-    // Fetch courses from the server on component mount
     useEffect(() => {
         async function getCourses() {
             try {
@@ -22,13 +19,9 @@ export default function NewCourse() {
         }
         getCourses();
     }, [])
-
-    // Handle form submission and send email
-    async function newCourseFormSubmitted(e) {
+    async function newCourseFormSubmitted(e){
         e.preventDefault();
-        setLoading(true); // Set loading to true when form is submitted
-
-        // Construct the data payload from form inputs and user state
+        setLoading(true); 
         const data = {
             name: e.target.name.value,
             userID: user.id,
@@ -39,10 +32,7 @@ export default function NewCourse() {
         };
 
         try {
-            // Post the data to the server endpoint
             const response = await axios.post(import.meta.env.VITE_SERVER_URL + "/api/student/sendEmail", data);
-
-            // Show toast notification based on server response
             if (response.data.messageSent) {
                 toast.success("email send successfully");
             } else {
@@ -52,26 +42,19 @@ export default function NewCourse() {
             console.error("Error sending email:", error);
             toast.error("An error occurred. Please try again.");
         } finally {
-            setLoading(false); // Set loading to false after the API call is complete
+            setLoading(false);
         }
     }
 
     return (
-        // Main container with a black background, animated background shapes, and a new texture layer
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-black text-gray-100 p-4 overflow-hidden" style={{ fontFamily: "Inter, sans-serif" }}>
-            
-            {/* New background pattern layer */}
             <div className="absolute inset-0 z-0 bg-repeat opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
-
-            {/* Animated background elements with improved visibility */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-800 rounded-full blur-3xl opacity-40 animate-blob"></div>
             <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
             <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-pink-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
-
             <style>
                 {`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-                
                 @keyframes blob {
                     0% {
                         transform: translate(0, 0) scale(1);
@@ -118,24 +101,17 @@ export default function NewCourse() {
                 }
                 `}
             </style>
-            
             <div className="relative z-10 w-full max-w-lg">
-                {/* Form title */}
                 <div className="text-center font-bold text-violet-400 text-2xl mb-2">
                     Submit form to request course access
                 </div>
-                {/* Decorative separator */}
                 <div className="w-24 h-1 bg-violet-600 mx-auto mb-6 rounded-full"></div>
-            
-                {/* Important notice */}
                 <div className='text-red-400 mb-3 text-sm text-center'>
                     * Please ensure the name entered below is accurate and correctly formatted, as it will appear on your official course completion certificate.
                 </div>
-            
-                {/* Form container with enhanced styling */}
+    
                 <div className='w-full bg-zinc-950 p-8 rounded-xl shadow-lg border border-zinc-800 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/50 relative overflow-hidden'>
                     <form onSubmit={newCourseFormSubmitted} className="space-y-6" action="">
-                        {/* Name Input */}
                         <div className="relative">
                             <input required
                                 type="text"
@@ -154,7 +130,6 @@ export default function NewCourse() {
                             </label>
                         </div>
             
-                        {/* Email Input */}
                         <div className="relative">
                             <input readOnly
                                 type="email"
@@ -174,7 +149,6 @@ export default function NewCourse() {
                             </label>
                         </div>
             
-                        {/* Contact Number Input */}
                         <div className="relative">
                             <input required
                                 type="tel"
@@ -193,7 +167,6 @@ export default function NewCourse() {
                             </label>
                         </div>
             
-                        {/* Course Select */}
                         <div className="relative">
                             <label htmlFor="courseName" className="block mb-1 text-sm text-gray-300">
                                 Select Course
@@ -214,7 +187,6 @@ export default function NewCourse() {
                             </select>
                         </div>
             
-                        {/* Description Textarea */}
                         <div className="relative">
                             <textarea  style={{ height: "200px" }}
                                 type="text"
@@ -232,8 +204,6 @@ export default function NewCourse() {
                                 any special requests
                             </label>
                         </div>
-            
-                        {/* Submit Button */}
                         <input
                             type="submit"
                             value={loading ? "Submitting..." : "Submit"}

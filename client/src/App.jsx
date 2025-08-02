@@ -54,9 +54,7 @@ const App = () => {
         <Route
           path="/"
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <LandingPage isAuthenticated={isAuthenticated} />
-            </CheckAuth>
           }
         />
         <Route path='/auth' element={
@@ -87,8 +85,9 @@ const App = () => {
             <Route path='my-courses' element={<MyCourses/>}/>
             <Route path='new-course' element={<NewCourse/>}/>
             <Route path = 'myprofile' element = {<UserProfile />} />
-            <Route path="validator" element={<CertificateValidator />} />
             <Route path="generate" element={<CertificateGeneratorPanel />} />
+            <Route path="all-courses" element={<CoursesMenu/>}/>
+            <Route path="validator" element={<CertificateValidator />} />
             <Route path="courses/:courseId" element={<CourseDisplay />} />
         </Route>
         <Route path='*' element={<PageNotFound/>} />
@@ -100,7 +99,7 @@ const App = () => {
   position="bottom-right"
   autoClose={5000}
   draggable
-  theme="colored"
+  theme="dark"
 />
 
     </div>

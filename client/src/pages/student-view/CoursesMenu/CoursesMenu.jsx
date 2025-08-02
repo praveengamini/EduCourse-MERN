@@ -30,7 +30,6 @@ const AllCourses = () => {
 
     return (
         <div className="min-h-screen bg-black text-gray-100 p-8 relative overflow-hidden">
-             {/* Background blobs for visual appeal */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-800 rounded-full blur-3xl opacity-40 animate-blob"></div>
             <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
             <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-pink-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
@@ -88,19 +87,19 @@ const AllCourses = () => {
                             
                             <div className="flex items-center gap-2 bg-zinc-800/80 backdrop-blur-sm rounded-xl p-1 border border-zinc-700">
                                 <FunnelIcon className="h-4 w-4 text-gray-500 ml-2" />
-                                <select
+                               <select
                                     name="cost"
                                     value={filters.cost}
                                     onChange={handleFilterChange}
-                                    className="bg-transparent border-0 px-3 py-2 focus:outline-none text-sm font-medium text-gray-300"
-                                >
-                                    <option value="">All Prices</option>
-                                    <option value=">1000">{'> ₹1000'}</option>
-                                    <option value="<2000">{'< ₹2000'}</option>
-                                    <option value=">1000 and <2000">{'₹1000 - ₹2000'}</option>
-                                    <option value=">1000 and <3000">{'₹1000 - ₹3000'}</option>
-                                    <option value=">4000">{'> ₹4000'}</option>
-                                </select>
+                                    className="bg-zinc-900 border border-zinc-700 rounded-md px-3 py-2 text-sm font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                                    >
+                                    <option className='bg-zinc-900' value="">All Prices</option>
+                                    <option className='bg-zinc-900' value=">1000">{'> ₹1000'}</option>
+                                    <option className='bg-zinc-900' value="<2000">{'< ₹2000'}</option>
+                                    <option className='bg-zinc-900' value=">1000 and <2000">{'₹1000 - ₹2000'}</option>
+                                    <option className='bg-zinc-900' value=">1000 and <3000">{'₹1000 - ₹3000'}</option>
+                                    <option className='bg-zinc-900' value=">4000">{'> ₹4000'}</option>
+                                    </select>
                             </div>
                         </div>
                     </div>

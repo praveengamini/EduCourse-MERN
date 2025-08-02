@@ -8,7 +8,7 @@ const HeadingBlock = () => {
   const navigate = useNavigate();
 
   const handleBrowseAll = () => {
-    navigate('/all-courses');
+    navigate('student/all-courses');
   };
 
 

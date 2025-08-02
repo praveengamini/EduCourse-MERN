@@ -29,7 +29,7 @@ const AllCourses = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black text-gray-100 p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-black text-gray-100 p-8 relative overflow-hidden">
              {/* Background blobs for visual appeal */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-800 rounded-full blur-3xl opacity-40 animate-blob"></div>
             <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>

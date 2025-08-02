@@ -72,7 +72,6 @@ const UserProfile = () => {
         setMessage({ type: "success", text: "Profile updated successfully!" });
         setIsEditing(false);
         
-        // Clear message after 3 seconds
         setTimeout(() => setMessage({ type: '', text: '' }), 3000);
       } else {
         throw new Error("Invalid response from server");
@@ -108,15 +107,13 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4">
+    <div className="pt-20 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">My Profile</h1>
           <p className="text-gray-600">Manage your account and track your learning progress</p>
         </div>
 
-        {/* Message Alert */}
         {message.text && (
           <div className={`mb-6 p-4 rounded-lg border-l-4 ${
             message.type === 'success' 
@@ -139,9 +136,7 @@ const UserProfile = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Info */}
           <div className="lg:col-span-1">
-            {/* Profile Card */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-8 text-center">
                 <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
@@ -155,7 +150,6 @@ const UserProfile = () => {
 
               <div className="p-6">
                 <div className="space-y-6">
-                  {/* Username */}
                   <div className="flex items-start space-x-3">
                     <User className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -176,8 +170,6 @@ const UserProfile = () => {
                       )}
                     </div>
                   </div>
-
-                  {/* Email (Non-editable) */}
                   <div className="flex items-start space-x-3">
                     <Mail className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -191,7 +183,6 @@ const UserProfile = () => {
                     </div>
                   </div>
 
-                  {/* Phone */}
                   <div className="flex items-start space-x-3">
                     <Phone className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -214,7 +205,6 @@ const UserProfile = () => {
                   </div>
 
                   
-                  {/* Member Since */}
                   <div className="flex items-start space-x-3">
                     <Calendar className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -230,7 +220,6 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
@@ -273,7 +262,6 @@ const UserProfile = () => {
               </div>
             </div>
 
-            {/* Stats Card */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -302,7 +290,6 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Right Column - Enrolled Courses */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="px-6 py-6 bg-gradient-to-r from-indigo-600 to-purple-600">
@@ -340,7 +327,6 @@ const UserProfile = () => {
                             />
                           </div>
 
-                          {/* Course Details */}
                           <div className="flex-1">
                             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                               <div className="flex-1">
@@ -352,7 +338,6 @@ const UserProfile = () => {
                                 </p>
                               </div>
 
-                              {/* Status Badges */}
                               <div className="flex flex-col items-end space-y-2 mt-2 md:mt-0">
                                 <span className={`inline-flex px-4 py-2 rounded-full text-sm font-bold ${
                                   course.isCompleted
@@ -371,7 +356,6 @@ const UserProfile = () => {
                               </div>
                             </div>
 
-                            {/* Progress Section */}
                             <div className="mb-4">
                               <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm font-semibold text-gray-700">Course Progress</span>

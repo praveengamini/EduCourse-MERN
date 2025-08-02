@@ -6,7 +6,7 @@ export default function NewCourse() {
     const [courses, setCourses] = useState(null);
     const [loading, setLoading] = useState(false); 
     const user = useSelector((state) => state.auth.user);
-    console.log(user);
+
     useEffect(() => {
         async function getCourses() {
             try {
@@ -19,6 +19,7 @@ export default function NewCourse() {
         }
         getCourses();
     }, [])
+
     async function newCourseFormSubmitted(e){
         e.preventDefault();
         setLoading(true); 
@@ -35,6 +36,8 @@ export default function NewCourse() {
             const response = await axios.post(import.meta.env.VITE_SERVER_URL + "/api/student/sendEmail", data);
             if (response.data.messageSent) {
                 toast.success("email send successfully");
+                // Clear the form fields after successful submission
+                e.target.reset();
             } else {
                 toast.error("Error occured in sending mail");
             }
@@ -111,7 +114,7 @@ export default function NewCourse() {
                 </div>
     
                 <div className='w-full bg-zinc-950 p-8 rounded-xl shadow-lg border border-zinc-800 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/50 relative overflow-hidden'>
-                    <form onSubmit={newCourseFormSubmitted} className="space-y-6" action="">
+                    <form onSubmit={newCourseFormSubmitted} className="space-y-6">
                         <div className="relative">
                             <input required
                                 type="text"
@@ -123,8 +126,8 @@ export default function NewCourse() {
                             <label
                                 htmlFor="name"
                                 className="absolute left-3 top-2 text-gray-400 text-sm transition-all
-                                peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
-                                peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
+                                    peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
+                                    peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
                             >
                                 Enter name (name will be displayed in the certificate)
                             </label>
@@ -142,8 +145,8 @@ export default function NewCourse() {
                             <label
                                 htmlFor="email"
                                 className="absolute left-3 top-2 text-gray-400 text-sm transition-all
-                                peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
-                                peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
+                                    peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
+                                    peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
                             >
                                 Enter mail
                             </label>
@@ -160,8 +163,8 @@ export default function NewCourse() {
                             <label
                                 htmlFor="tel"
                                 className="absolute left-3 top-2 text-gray-400 text-sm transition-all
-                                peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
-                                peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
+                                    peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
+                                    peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
                             >
                                 Enter contact number
                             </label>
@@ -175,7 +178,7 @@ export default function NewCourse() {
                                 id="courseName"
                                 name="courseName"
                                 className="w-full border border-zinc-700 rounded-md px-3 py-2 text-sm bg-zinc-900 text-white
-                                     focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                                    focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
                                 required
                             >
                                 <option value="course suggestion opted" className="bg-zinc-900 text-white">-- Suggest a Course --</option>
@@ -198,8 +201,8 @@ export default function NewCourse() {
                             <label
                                 htmlFor="description"
                                 className="absolute left-3 top-2 text-gray-400 text-sm transition-all
-                                peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
-                                peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
+                                    peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
+                                    peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-400"
                             >
                                 any special requests
                             </label>

@@ -8,31 +8,26 @@ function AdminHeader({ setOpen }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Function to handle the user logout process.
-  // It dispatches the logout action and navigates to the home page.
+
   function handleLogout() {
     dispatch(logoutUser());
     navigate("/");
   }
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-black text-white rounded-b-lg shadow-xl">
-      {/* Container for the logo and mobile menu toggle */}
+    <header className="flex items-center justify-between px-6 py-4 bg-black text-white shadow-xl">
       <div className="flex items-center gap-4">
         <Button onClick={() => setOpen(true)} className="lg:hidden text-white hover:bg-gray-700 transition-colors">
           <AlignJustify />
           <span className="sr-only">Toggle Menu</span>
         </Button>
 
-        {/* The main logo/brand name for the application */}
         <div className="text-2xl font-extrabold text-purple-600">
           EduQuest
         </div>
       </div>
 
-      {/* Container for user-related actions on the right */}
       <div className="flex items-center gap-19">
-        {/* This div contains the navigation links that are only visible on larger screens */}
         <div className="hidden lg:flex gap-9">
           <span className="text-white hover:text-purple-600 transition-colors duration-200 cursor-pointer" onClick={() => navigate("/student/")}>
             Dashboard

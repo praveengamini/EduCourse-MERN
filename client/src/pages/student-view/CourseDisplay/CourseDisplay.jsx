@@ -164,21 +164,17 @@ const CourseDisplay = () => {
         const username = user?.userName;
         const courseName = course?.title;
         const imageSrc = "/certificate.png";
-
         if (!username || !courseName) {
             toast.error("Missing user or course info!");
             return;
         }
-
         setLoading(true);
         try {
             const imageDataUrl = await generateCertificateCanvas({ username, courseName, imageSrc });
-
             const link = document.createElement("a");
             link.download = `${username}_certificate.png`;
             link.href = imageDataUrl;
             link.click();
-
             toast.success("🎉 Certificate downloaded successfully!");
         } catch (error) {
             console.error("Error generating certificate:", error);
@@ -189,11 +185,10 @@ const CourseDisplay = () => {
     };
     
     const handleEnrollment = () => {
-      if (course) {
-        toast.info("enroll course here");
-        navigate("/student/new-course")
-        
-      }
+        if (course) {
+            toast.info("enroll course here");
+            navigate("/student/new-course")
+        }
     };
 
     const getRandomRating = () => {
@@ -232,16 +227,22 @@ const CourseDisplay = () => {
                 .animate-blob { animation: blob 7s infinite ease-in-out; }
                 .animation-delay-2000 { animation-delay: 2s; }
                 .animation-delay-4000 { animation-delay: 4s; }
+                
+                /* This is the missing CSS to hide the scrollbar */
+                .hide-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .hide-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
                 `}
             </style>
-            
             <div className="relative z-10">
-                
-
                 {courseToStudentExists ? (
-                    <div className="container mx-auto px-4 py-8 max-w-6xl">
+                    <div className="mt-20 container mx-auto px-4 py-15 max-w-6xl">
                          <div className="flex items-center justify-between mb-8">
-                            <h1 className="text-3xl md:text-4xl font-bold text-violet-400">{course.title}</h1>
+                            <h1 className="flex-1 text-3xl md:text-4xl font-bold text-violet-400 break-words">{course.title.toUpperCase()}</h1>
                             <button
                                 onClick={() => navigate(-1)}
                                 className="group flex items-center text-gray-400 hover:text-violet-400 transition-colors px-4 py-2 rounded-full"
@@ -250,7 +251,6 @@ const CourseDisplay = () => {
                                 <span className="font-medium">Back to Courses</span>
                             </button>
                         </div>
-
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
                             <div className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 shadow-xl flex flex-col items-start space-y-2">
                                 <h3 className="text-2xl font-bold text-violet-400">{course.videos?.length || 0}</h3>
@@ -369,7 +369,7 @@ const CourseDisplay = () => {
                                             )}
                                         </button>
                                     ) : (
-                                        <div className="text-yellow-400 font-medium bg-yellow-900/40 border border-yellow-800 px-5 py-3 rounded-lg inline-block">
+                                        <div className=" text-yellow-400 font-medium bg-yellow-900/40 border border-yellow-800 px-5 py-3 rounded-lg inline-block">
                                             Complete all videos to unlock your certificate.
                                         </div>
                                     )}
@@ -378,7 +378,7 @@ const CourseDisplay = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="relative w-full overflow-hidden">
+                    <div className="mt-20 relative w-full overflow-hidden">
                         <div className="w-full bg-zinc-950/70 backdrop-blur-md overflow-hidden">
                             <div className="relative min-h-[450px] py-12 flex items-center">
                                 <div className="container mx-auto px-8 max-w-6xl grid md:grid-cols-2 gap-12 items-start">
@@ -392,10 +392,10 @@ const CourseDisplay = () => {
                                                 <span className="font-medium">Back to Courses</span>
                                             </button>
                                         </div>
-                                        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg">
-                                            <span className="text-violet-400">{course.title}</span>
+                                        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg break-words">
+                                            <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
-                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0">
+                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0 h-52 break-words hide-scrollbar overflow-y-scroll">
                                             {course.description}
                                         </p>
                                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm text-gray-300">
@@ -453,7 +453,7 @@ const CourseDisplay = () => {
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
                         <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-                            <h3 className="text-lg font-semibold text-gray-100">{selectedVideo.title}</h3>
+                            <h3 className="text-lg font-semibold text-gray-100 break-words">{selectedVideo.title}</h3>
                             <button onClick={closeVideoModal} className="text-gray-400 hover:text-white p-1">
                                 <X className="h-6 w-6" />
                             </button>

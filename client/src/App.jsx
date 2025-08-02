@@ -16,6 +16,7 @@ import AddCourse from './pages/add-course/AddCourse';
 import AllCourses from './pages/admin-course/AllCourses';
 import CourseDetail from './pages/admin-course/CourseDetail';
 import EnrollCourse from './pages/admin-course/EnrollStudent';
+import LandingPageValidator from "./components/LandingPageValidator"
 import { useSelector } from 'react-redux'
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
@@ -87,9 +88,10 @@ const App = () => {
             <Route path = 'myprofile' element = {<UserProfile />} />
             <Route path="generate" element={<CertificateGeneratorPanel />} />
             <Route path="all-courses" element={<CoursesMenu/>}/>
-            <Route path="validator" element={<CertificateValidator />} />
             <Route path="courses/:courseId" element={<CourseDisplay />} />
+            <Route path="validator" element={<CertificateValidator />} />
         </Route>
+          <Route path="/validator" element={<LandingPageValidator />} />
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
       </Routes>

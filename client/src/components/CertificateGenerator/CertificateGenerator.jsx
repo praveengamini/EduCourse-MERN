@@ -14,8 +14,7 @@
       const ctx = canvas.getContext("2d");
 
       const image = new Image();
-      image.src = "/certificate.png"; // <- Place your image in /public and name it like this
-
+      image.src = "/certificate.png";
       image.onload = () => {
     canvas.width = image.width;
     canvas.height = image.height;

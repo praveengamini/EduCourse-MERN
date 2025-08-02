@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -28,6 +27,31 @@ const StudentDashboard = () => {
   const [allCourses, setAllCourses] = useState([]);
   const [certificates, setCertificates] = useState([]);
   const [profile, setProfile] = useState({});
+
+ const handleDownload = async (url, fileName = 'certificate.png') => {
+      try {
+        const response = await fetch(url, { method: 'GET' });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = fileName;
+        document.body.appendChild(a); 
+        a.click();
+        a.remove(); 
+        window.URL.revokeObjectURL(downloadUrl);
+      } catch (error) {
+        console.error('Download failed', error);
+      }
+    };
+
+
 
   useEffect(() => {
     if (user?.id) {
@@ -142,7 +166,10 @@ const StudentDashboard = () => {
                 <ExternalLink size={16} />
                 <span>View Certificate</span>
               </a>
-              <button className="flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+              <button
+                onClick={() => handleDownload(cert.certificateUrl,`certificate-${cert.certificateNumber}.png`)}
+                className="flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer"
+              >
                 <Download size={16} />
                 <span>Download</span>
               </button>
@@ -266,7 +293,7 @@ const StudentDashboard = () => {
           >
             My Courses
           </button>
-          <button
+          {/* <button
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'allCourses'
                 ? 'bg-white text-gray-900'
@@ -275,7 +302,7 @@ const StudentDashboard = () => {
             onClick={() => setActiveTab('allCourses')}
           >
             All Courses
-          </button>
+          </button> */}
           <button
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'certifications'
@@ -286,7 +313,7 @@ const StudentDashboard = () => {
           >
             Certifications
           </button>
-          <button
+          {/* <button
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'certificateValidator'
                 ? 'bg-white text-gray-900'
@@ -295,7 +322,7 @@ const StudentDashboard = () => {
             onClick={() => navigate("/student/validator")}
           >
             Certificate Validator
-          </button>
+          </button> */}
         </div>
 
         {/* Tab Content */}

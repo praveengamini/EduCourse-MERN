@@ -11,7 +11,6 @@ import Footer from "../../components/landingPage/Footer";
 
 const LandingPage = ({ isAuthenticated }) => {
   const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-black">
       <Header

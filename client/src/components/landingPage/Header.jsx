@@ -23,7 +23,7 @@ const Header = () => {
             <a href="#home" className="text-gray-300 hover:text-white transition-colors">Home</a>
             <a href="#courses" className="text-gray-300 hover:text-white transition-colors">Courses</a>
             <a href="#faqsection" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
-            <a onClick={() => navigate('/validator')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Verify Certificate</a>
+            <a onClick={() => navigate('student/validator')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Verify Certificate</a>
           </nav>
 
           {/* Desktop Login Button Only */}

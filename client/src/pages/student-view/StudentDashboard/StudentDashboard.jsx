@@ -74,7 +74,8 @@ const StudentDashboard = () => {
                 <p className="text-gray-400 mb-6 leading-relaxed">
                   It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
                 </p>
-                <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-purple-500/25">
+                <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-purple-500/25"
+                    onClick={navigate('/student/home')}>
                   Start Now!
                 </button>
               </div>
@@ -259,7 +260,7 @@ const StudentDashboard = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'myCourses'
                 ? 'bg-white text-gray-900'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50 cursor-pointer'
             }`}
             onClick={() => setActiveTab('myCourses')}
           >
@@ -269,7 +270,7 @@ const StudentDashboard = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'allCourses'
                 ? 'bg-white text-gray-900'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50 cursor-pointer'
             }`}
             onClick={() => setActiveTab('allCourses')}
           >
@@ -279,7 +280,7 @@ const StudentDashboard = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'certifications'
                 ? 'bg-white text-gray-900'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50 cursor-pointer'
             }`}
             onClick={() => setActiveTab('certifications')}
           >
@@ -289,9 +290,9 @@ const StudentDashboard = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               activeTab === 'certificateValidator'
                 ? 'bg-white text-gray-900'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50 cursor-pointer'
             }`}
-            onClick={() => setActiveTab('certificateValidator')}
+            onClick={() => navigate("/student/validator")}
           >
             Certificate Validator
           </button>

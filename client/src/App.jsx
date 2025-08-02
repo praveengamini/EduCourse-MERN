@@ -92,15 +92,14 @@ const App = () => {
         </Route>
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
-       
       </Routes>
-            <Toaster richColors position="bottom-right" />
+          <Toaster richColors position="bottom-right" />
           <ToastContainer
-  position="bottom-right"
-  autoClose={5000}
-  draggable
-  theme="dark"
-/>
+            position="bottom-right"
+            autoClose={5000}
+            draggable
+            theme="dark"
+          />
 
     </div>
     

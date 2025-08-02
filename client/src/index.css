@@ -1,7 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
-
 @plugin "tailwindcss-animate";
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -98,6 +97,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  font-family: 'Bai Jamjuree', sans-serif;
+}
+
 
 /* For WebKit browsers (Chrome, Safari) */
 

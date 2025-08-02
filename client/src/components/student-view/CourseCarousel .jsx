@@ -71,8 +71,8 @@ const CourseCarousel = ({ courses }) => {
                     </div>
 
                     <p className="text-gray-400 text-sm">
-                        {course.description?.length > 30
-                            ? course.description.substring(0, 30) + '...'
+                        {course.description?.length > 26
+                            ? course.description.substring(0, 26) + '...'
                             : course.description}
                         </p>
 

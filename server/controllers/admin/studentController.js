@@ -61,7 +61,7 @@ const editStudent = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ success: false, message: 'Student not found' });
     }
-
+    console.log(updatedUser)
     res.json({
       success: true,
       user: updatedUser

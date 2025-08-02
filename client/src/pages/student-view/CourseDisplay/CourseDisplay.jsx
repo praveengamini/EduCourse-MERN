@@ -185,11 +185,10 @@ const CourseDisplay = () => {
     };
     
     const handleEnrollment = () => {
-      if (course) {
-        toast.info("enroll course here");
-        navigate("/student/new-course")
-        
-      }
+        if (course) {
+            toast.info("enroll course here");
+            navigate("/student/new-course")
+        }
     };
 
     const getRandomRating = () => {
@@ -228,13 +227,22 @@ const CourseDisplay = () => {
                 .animate-blob { animation: blob 7s infinite ease-in-out; }
                 .animation-delay-2000 { animation-delay: 2s; }
                 .animation-delay-4000 { animation-delay: 4s; }
+                
+                /* This is the missing CSS to hide the scrollbar */
+                .hide-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .hide-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
                 `}
             </style>
             <div className="relative z-10">
                 {courseToStudentExists ? (
                     <div className="mt-20 container mx-auto px-4 py-15 max-w-6xl">
                          <div className="flex items-center justify-between mb-8">
-                            <h1 className="text-3xl md:text-4xl font-bold text-violet-400">{course.title.toUpperCase()}</h1>
+                            <h1 className="flex-1 text-3xl md:text-4xl font-bold text-violet-400 break-words">{course.title.toUpperCase()}</h1>
                             <button
                                 onClick={() => navigate(-1)}
                                 className="group flex items-center text-gray-400 hover:text-violet-400 transition-colors px-4 py-2 rounded-full"
@@ -384,10 +392,10 @@ const CourseDisplay = () => {
                                                 <span className="font-medium">Back to Courses</span>
                                             </button>
                                         </div>
-                                        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg">
+                                        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg break-words">
                                             <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
-                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0">
+                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0 h-52 break-words hide-scrollbar overflow-y-scroll">
                                             {course.description}
                                         </p>
                                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm text-gray-300">
@@ -445,7 +453,7 @@ const CourseDisplay = () => {
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
                         <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-                            <h3 className="text-lg font-semibold text-gray-100">{selectedVideo.title}</h3>
+                            <h3 className="text-lg font-semibold text-gray-100 break-words">{selectedVideo.title}</h3>
                             <button onClick={closeVideoModal} className="text-gray-400 hover:text-white p-1">
                                 <X className="h-6 w-6" />
                             </button>

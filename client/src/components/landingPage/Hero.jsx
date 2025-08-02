@@ -9,13 +9,12 @@ const Hero = ({ onGetStartedClick }) => {
   ];
 
   return (
-    <section id="home" className="pt-16 min-h-screen bg-black relative overflow-hidden">
-      {/* Background decorative elements */}
+    <section id="home" className="pt-16  bg-black relative overflow-hidden">
       <div className="absolute top-20 left-10 w-32 h-32 border border-gray-700 rounded-full opacity-30"></div>
       <div className="absolute top-40 right-20 w-24 h-24 border border-gray-700 rounded-full opacity-20"></div>
-      <div className="absolute bottom-40 left-1/4 w-16 h-16 border border-gray-700 rounded-full opacity-25"></div>
+      <div className="absolute bottom-20 left-1/4 w-16 h-16 border border-gray-700 rounded-full opacity-25"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-6">

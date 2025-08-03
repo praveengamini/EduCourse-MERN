@@ -33,7 +33,7 @@ import UserProfile from './pages/student-view/UserProfile/UserProfile';
 import CertificateValidator from './components/CertificateValidator';
 import CertificateGeneratorPanel from './components/CertificateGeneratorPanel';
 import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashboard';
-
+import AllCoursesPage from './components/landingPage/AllCoursesPage';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ const App = () => {
           <Route path="/validator" element={<LandingPageValidator />} />
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/unauth-page'   element={<UnAuthPage/>}/>
-        <Route path="/all-courses" element={<LandingPageAllCourses/>}/>
+        <Route path="/landing/courses" element={<AllCoursesPage />} />
       </Routes>
           <Toaster richColors position="bottom-right" />
           <ToastContainer

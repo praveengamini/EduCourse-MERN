@@ -8,7 +8,7 @@ const HeadingBlock = () => {
   const navigate = useNavigate();
 
   const handleBrowseAll = () => {
-    navigate('student/all-courses');
+    navigate('landing/courses');
   };
 
 
@@ -107,7 +107,7 @@ const CoursesSection = () => {
             ))}
           </div>
         ) : (
-          <div className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide">
+          <div className="flex space-x-6 overflow-x-auto pb-4 no-scrollbar" >
             {courses.map(course => (
               <CourseCard
                 key={course._id}

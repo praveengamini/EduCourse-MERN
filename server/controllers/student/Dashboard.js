@@ -10,7 +10,8 @@ const getDashBoardStats = async (req, res) => {
     const { userId } = req.params;
 
     const enrolled = await EnrolledCourse.find({ userId }).populate('courseId');
-    const certificates = await Certificate.find({ studentId: userId });
+    // const certificates = await Certificate.find({ studentId: userId });
+    const certificates = await Certificate.find({ studentId: userId }).populate('courseId', 'title');
     const profile = await User.findById(userId);
     const allCourses = await Course.find();
 
@@ -73,7 +74,10 @@ const getDashBoardStats = async (req, res) => {
         duration: course.duration || 0,
         description: course.description?.substring(0, 50) || ""
       })),
-      certificates,
+      certificates: certificates.map(cert => ({
+        ...cert._doc,
+        courseTitle: cert.courseId?.title || "Untitled Course"
+      })),
       profile
     };
 

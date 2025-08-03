@@ -142,13 +142,15 @@ const StudentDashboard = () => {
               <Award size={32} className="text-white" />
             </div>
             <div className="mb-4 flex-1">
-              
+              <p className="text-purple-700 text-lg font-bold mb-1">
+                {cert.courseTitle}
+              </p>
               <p className="text-gray-400 text-sm mb-1">
                 Certificate #{cert.certificateNumber}
               </p>
               <p className="text-gray-400 text-sm">
                 Earned on{' '}
-                {new Date(cert.createdAt).toLocaleDateString(undefined, {
+                {new Date(cert.issuedAt).toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',

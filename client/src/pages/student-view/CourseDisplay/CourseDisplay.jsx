@@ -169,21 +169,16 @@ const CourseDisplay = () => {
             toast.error("Missing user or course info!");
             return;
         }
-        
+    
         setLoading(true);
-
         try {
-            // Generate the certificate as an image data URL
             const imageDataUrl = await generateCertificateCanvas({ username, courseName, imageSrc });
-            
-            // Send the certificate data to the server to be stored
+
             await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/generator/generate-certificate`, {
                 studentId: user.id,
                 courseId: course._id,
                 imageDataUrl: imageDataUrl,
             });
-
-            // Create a download link for the user
             const link = document.createElement("a");
             link.download = `${username}_certificate.png`;
             link.href = imageDataUrl;

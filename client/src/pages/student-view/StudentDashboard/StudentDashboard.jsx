@@ -148,7 +148,7 @@ const StudentDashboard = () => {
               </p>
               <p className="text-gray-400 text-sm">
                 Earned on{' '}
-                {new Date(cert.createdAt).toLocaleDateString(undefined, {
+                {new Date(cert.issuedAt).toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',

@@ -365,10 +365,14 @@ const UserProfile = () => {
                             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                               <div className="flex-1">
                                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-200">
-                                  {course.courseId.title}
+                                    {course.courseId.title.length <= 30
+                                    ? course.courseId.title
+                                    : course.courseId.title.slice(0, 30) + '...'}
                                 </h3>
                                 <p className="text-gray-400 mb-3 line-clamp-2">
-                                  {course.courseId.description}
+                                  {course.courseId.description.length <= 30
+                                      ? course.courseId.description
+                                      : course.courseId.description.slice(0, 30) + '...'}
                                 </p>
                               </div>
 

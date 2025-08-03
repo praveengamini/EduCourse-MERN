@@ -68,24 +68,19 @@ const CertificateGeneratorPanel = () => {
       setMessageType('error');
       return;
     }
-
     setLoading(true);
     setMessage('');
-
     try {
       const canvas = certificateRef.current?.querySelector('canvas');
       if (!canvas) {
         throw new Error('Certificate preview not generated');
       }
-
       const imageDataUrl = canvas.toDataURL('image/png');
-
       const response = await axios.post('http://localhost:5000/api/generator/generate-certificate', {
         studentId: selectedStudent,
         courseId: selectedCourse,
         imageDataUrl: imageDataUrl
       });
-
       const link = document.createElement('a');
       link.href = imageDataUrl;
       link.download = `certificate-${selectedStudent}-${selectedCourse}.png`;

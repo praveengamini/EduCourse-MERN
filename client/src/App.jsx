@@ -18,7 +18,6 @@ import CourseDetail from './pages/admin-course/CourseDetail';
 import EnrollCourse from './pages/admin-course/EnrollStudent';
 import LandingPageValidator from "./components/LandingPageValidator"
 import { useSelector } from 'react-redux'
-import LandingPageAllCourses from "./pages/landingpage/LandingPageAllCourses"
 import { checkAuth1 } from "./store/auth-slice";
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'

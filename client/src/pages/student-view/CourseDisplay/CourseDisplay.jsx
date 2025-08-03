@@ -274,6 +274,7 @@ const CourseDisplay = () => {
                                         {completedVideos.length} / {course.videos?.length || 0} completed
                                     </div>
                                 </div>
+
                                 <div className="space-y-4">
                                     {course.videos && course.videos.length > 0 ? (
                                         course.videos.map((video, index) => (
@@ -283,8 +284,15 @@ const CourseDisplay = () => {
                                                 onClick={() => openVideoModal(video)}
                                             >
                                                 <div className="flex items-center space-x-4">
-                                                    <div className="w-12 h-12 flex-shrink-0 bg-violet-600 rounded-full flex items-center justify-center text-white">
-                                                        <PlayCircle className="w-6 h-6" />
+                                                    <div className="relative w-16 h-12 flex-shrink-0 rounded-md overflow-hidden">
+                                                        <img 
+                                                            src={getVideoThumbnail(video.url)} 
+                                                            alt={`Thumbnail for ${video.title}`}
+                                                            className="w-full h-full object-cover" 
+                                                        />
+                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-colors">
+                                                            <PlayCircle className="w-8 h-8 text-white" />
+                                                        </div>
                                                     </div>
                                                     <div className="flex-1">
                                                         <p className="text-white font-semibold">{video.title}</p>
@@ -309,8 +317,7 @@ const CourseDisplay = () => {
                                         </div>
                                     )}
                                 </div>
-                            </div>
-                            
+                            </div>              
                             <div className="flex flex-col gap-8">
                                 <div className="bg-zinc-950 p-6 rounded-xl shadow-lg border border-zinc-800">
                                     <div className="flex items-center justify-between mb-6">

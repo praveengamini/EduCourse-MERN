@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlusIcon, ArrowLeftIcon, MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/solid';
 import { UsersIcon, CalendarDaysIcon, CurrencyRupeeIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 
-const AllCourses = () => {
+const LandingPageAllCourses = () => {
     const [courses, setCourses] = useState([]);
     const [filters, setFilters] = useState({ title: '', cost: '', studentCount: '' });
     const navigate = useNavigate();
@@ -184,4 +184,4 @@ const AllCourses = () => {
     );
 };
 
-export default AllCourses;
+export default LandingPageAllCourses;

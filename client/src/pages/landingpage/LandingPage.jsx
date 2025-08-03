@@ -25,7 +25,6 @@ const LandingPage = ({ isAuthenticated }) => {
           )
         }
       />
-
       <main>
         <Hero/>
         <StatsSection />

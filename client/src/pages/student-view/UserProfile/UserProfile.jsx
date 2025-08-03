@@ -109,7 +109,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen bg-black py-18 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

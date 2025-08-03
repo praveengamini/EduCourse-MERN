@@ -103,7 +103,6 @@ body {
 }
 
 
-/* For WebKit browsers (Chrome, Safari) */
 
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */

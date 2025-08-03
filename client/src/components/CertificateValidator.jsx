@@ -63,7 +63,7 @@ const CertificateValidator = () => {
                 .animation-delay-4000 { animation-delay: 4s; }
                 `}
             </style>
-            <div className="max-w-4xl mx-auto py-12 px-4 relative z-10">
+            <div className="max-w-4xl mx-auto py-20 px-4 relative z-10">
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold text-violet-400 mb-2">Certificate Validator</h1>
                     <p className="text-lg text-gray-400">Enter a certificate number to validate and view certificate details</p>

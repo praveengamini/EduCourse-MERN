@@ -5,14 +5,20 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-row col-12 justify-between lg:grid-cols-4 gap-8">
+        <div className="flex flex-row flex-wrap col-12 justify-between lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4 ">
             <h3 className="text-xl font-bold">EduGuest</h3>
             <p className="text-gray-400 leading-relaxed">
               We are passionate to build a top of expert instructors,<br/> tutors & mentoring experience.<br/> Start your online learning experience today.
             </p>
-            
+            <div className='text-lg font-semibold'>Credits:</div>
+            <div className='flex flex-col gap-1'>
+              <a className='text-gray-400 hover:text-white' href="https://github.com/sathishsara1"><div>S V S Sathish</div></a>
+              <a className="text-gray-400 hover:text-white" href="https://github.com/ballaSAISAMPATH"><div>Sai Sampath</div></a>
+              <a className='text-gray-400 hover:text-white' href="https://github.com/vamsikrishnaperuri"><div>Peruri Vamsi Krishna</div></a>    
+              <a className='text-gray-400 hover:text-white' href="https://github.com/praveengamini"><div>Praveen Gamini</div></a>
+              </div>
           </div>
 
           {/* About */}
@@ -56,6 +62,7 @@ const Footer = () => {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Youtube className="h-5 w-5" />
               </a>
+              
             </div>
               
             </div>

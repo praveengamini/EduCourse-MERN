@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import CertificateGenerator from './CertificateGenerator';
 
@@ -12,11 +13,26 @@ const CertificateGeneratorPanel = () => {
   const [messageType, setMessageType] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const certificateRef = useRef(null);
+  const [searchParams] = useSearchParams();
+  const autoUser = searchParams.get('userId');
+  const autoCourse = searchParams.get('courseId');
 
   useEffect(() => {
     fetchStudents();
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    if (autoUser && autoCourse) {
+      setSelectedStudent(autoUser);
+      setSelectedCourse(autoCourse);
+      setShowPreview(true);
+
+      setTimeout(() => {
+        handleGenerateAndStore();
+      }, 1000);
+    }
+  }, [autoUser, autoCourse]);
 
   const fetchStudents = async () => {
     try {
@@ -52,26 +68,25 @@ const CertificateGeneratorPanel = () => {
       setMessageType('error');
       return;
     }
-
     setLoading(true);
     setMessage('');
-
     try {
-      // Get the canvas data URL from the certificate generator
-      const canvas = document.querySelector('canvas');
+      const canvas = certificateRef.current?.querySelector('canvas');
       if (!canvas) {
         throw new Error('Certificate preview not generated');
       }
-      
       const imageDataUrl = canvas.toDataURL('image/png');
-
       const response = await axios.post('http://localhost:5000/api/generator/generate-certificate', {
         studentId: selectedStudent,
         courseId: selectedCourse,
         imageDataUrl: imageDataUrl
       });
+      const link = document.createElement('a');
+      link.href = imageDataUrl;
+      link.download = `certificate-${selectedStudent}-${selectedCourse}.png`;
+      link.click();
 
-      setMessage(`Certificate generated successfully! Certificate Number: ${response.data.certificate.certificateNumber}`);
+      setMessage(`Certificate generated successfully!`);
       setMessageType('success');
       setShowPreview(false);
       setSelectedStudent('');
@@ -183,11 +198,12 @@ const CertificateGeneratorPanel = () => {
           {showPreview && selectedStudentData && selectedCourseData && (
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Certificate Preview</h3>
-              <CertificateGenerator 
-                ref={certificateRef}
-                username={selectedStudentData.userName}
-                courseName={selectedCourseData.title}
-              />
+              <div ref={certificateRef}>
+                <CertificateGenerator 
+                  username={selectedStudentData.userName}
+                  courseName={selectedCourseData.title}
+                />
+              </div>
             </div>
           )}
         </div>

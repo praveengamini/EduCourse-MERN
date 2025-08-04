@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
       message: "Registration successful",
     });
   } catch (e) {
-    console.error("Registration error:", e);
+    // console.error("Registration error:", e);
     res.status(500).json({
       success: false,
       message: "Some error occurred during registration",
@@ -109,7 +109,7 @@ const loginUser = async (req, res) => {
         }),
       });
   } catch (e) {
-    console.error("Login error:", e);
+    // console.error("Login error:", e);
     res.status(500).json({
       success: false,
       message: "Some error occurred during login",
@@ -129,8 +129,8 @@ const logoutUser = async (req, res) => {
         { new: true }
       );
 
-      console.log("Device removal result:", result ? "Success" : "Failed");
-      console.log("Remaining devices:", result?.devices?.length || 0);
+      // console.log("Device removal result:", result ? "Success" : "Failed");
+      // console.log("Remaining devices:", result?.devices?.length || 0);
     }
 
     res.clearCookie("token").json({
@@ -138,7 +138,7 @@ const logoutUser = async (req, res) => {
       message: "Logged out successfully!",
     });
   } catch (e) {
-    console.error("Logout error:", e);
+    // console.error("Logout error:", e);
     res.clearCookie("token").json({
       success: true,
       message: "Logged out with error fallback",
@@ -178,7 +178,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error("Auth error:", error);
+    // console.error("Auth error:", error);
     return res.status(401).json({
       success: false,
       message: "Unauthorised user!",

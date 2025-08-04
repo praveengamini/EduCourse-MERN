@@ -54,7 +54,6 @@ const editStudent = async (req, res) => {
   try {
     const { id } = req.query;
     const { userName, phone } = req.body;
-    console.log(id + userName + phone);
 
     const update = { userName, phone };
     const updatedUser = await UserModel.findByIdAndUpdate(id, update, { new: true });
@@ -62,7 +61,7 @@ const editStudent = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ success: false, message: 'Student not found' });
     }
-
+    console.log(updatedUser)
     res.json({
       success: true,
       user: updatedUser
@@ -88,7 +87,7 @@ const getStudentById = async (req, res) => {
 const enrollStudent = async (req, res) => {
   try {
     const { studentId, courseId } = req.body;
-
+    // console.log("got ids");
     const student = await UserModel.findById(studentId);
     if (!student) return res.status(404).json({ message: 'Student not found' });
 
@@ -103,6 +102,8 @@ const enrollStudent = async (req, res) => {
     const progressEntries = await Promise.all(
       course.videos.map(video =>
         ProgressModel.create({
+          userId: studentId,
+          courseId: courseId,
           videoId: video._id,
           watchedDuration: 0,
           totalDuration: video.duration,

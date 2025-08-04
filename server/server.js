@@ -8,7 +8,8 @@ const dotenv = require('dotenv')
 const useragent = require('express-useragent');
 const studentRouter = require('./routes/student/student-routes')
 const adminStudentRouter = require('./routes/admin/studentRoutes')
-const connectDB = require('./config/database');
+const dashboardRoutes = require("./routes/student/dashboardRoutes");
+// const connectDB = require('./config/database');
 dotenv.config()
 const app = express();                
 const port = process.env.PORT || 5000;
@@ -45,6 +46,7 @@ app.use('/api/student',studentRouter);
 // app.use('/api/certificates', certificateRoutes);
 app.use('/api/certificates', require('./routes/certificates'));
 app.use('/api/generator', require('./routes/generator'));
+app.use('/api/dashboard', dashboardRoutes);
 
 app.listen(port,'0.0.0.0',()=>{
     console.log(`Server is running on port ${port}`);

@@ -99,8 +99,6 @@ const getEnrolledStudentsForCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
     
-    console.log('Fetching enrollments for courseId:', courseId);
-    
     const enrollments = await EnrolledCourseModel.find({ courseId })
       .populate('userId', 'userName email phone')
       .populate('certificateId', '_id')

@@ -81,6 +81,190 @@ const addCourse = async (req, res) => {
   }
 };
 
+
+const editCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { title, description, duration, cost, videos } = req.body;
+    
+    // Find existing course
+    const existingCourse = await CourseModel.findById(courseId).populate('videos');
+    if (!existingCourse) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    // Parse videos data (sent as JSON string)
+    let parsedVideos = [];
+    if (videos) {
+      try {
+        parsedVideos = JSON.parse(videos);
+      } catch (error) {
+        return res.status(400).json({ message: 'Invalid videos data format' });
+      }
+    }
+
+    const existingVideoIds = existingCourse.videos.map(v => v._id.toString());
+    
+    const finalVideoIds = [];
+    const newVideosToCreate = [];
+
+    // Process videos
+    for (const video of parsedVideos) {
+      if (video._id) {
+        finalVideoIds.push(video._id);
+      } else {
+        newVideosToCreate.push({
+          title: video.title,
+          url: video.url,
+          duration: video.duration
+        });
+      }
+    }
+
+    // Create new videos
+    let createdVideos = [];
+    if (newVideosToCreate.length > 0) {
+      createdVideos = await CourseVideoModel.insertMany(newVideosToCreate);
+      finalVideoIds.push(...createdVideos.map(v => v._id));
+    }
+
+    // Find removed videos
+    const removedVideoIds = existingVideoIds.filter(id => 
+      !finalVideoIds.includes(id)
+    );
+
+    // Delete removed videos and their progress data
+    if (removedVideoIds.length > 0) {
+      await Progress.deleteMany({
+        videoId: { $in: removedVideoIds }
+      });
+
+      await CourseVideoModel.deleteMany({
+        _id: { $in: removedVideoIds }
+      });
+
+      await EnrolledCourse.updateMany(
+        { courseId: courseId },
+        { $pull: { progress: { $in: removedVideoIds } } }
+      );
+    }
+
+    // Handle Cover Image Upload
+    let coverImageUrl = existingCourse.coverImage; // Keep existing by default
+    
+    if (req.files && req.files.coverImage && req.files.coverImage[0]) {
+      try {
+        const coverImageFile = req.files.coverImage[0];
+        const uploaded = await uploadToCloudinary(coverImageFile.buffer, {
+          resource_type: 'image',
+          folder: 'courses/covers'
+        });
+        coverImageUrl = uploaded.secure_url;
+      } catch (error) {
+        console.error('Cover image upload error:', error);
+        return res.status(500).json({ 
+          message: 'Failed to upload cover image',
+          error: error.message 
+        });
+      }
+    }
+
+    // Handle PDF Files Upload
+    let pdfUrls = existingCourse.pdfs; // Keep existing by default
+    
+    if (req.files && req.files.pdfs && req.files.pdfs.length > 0) {
+      try {
+        // Replace all existing PDFs with new ones
+        pdfUrls = [];
+        for (const pdfFile of req.files.pdfs) {
+          const uploaded = await uploadToCloudinary(pdfFile.buffer, {
+            resource_type: 'raw',
+            folder: 'courses/pdfs'
+          });
+          pdfUrls.push(uploaded.secure_url);
+        }
+      } catch (error) {
+        console.error('PDF upload error:', error);
+        return res.status(500).json({ 
+          message: 'Failed to upload PDF files',
+          error: error.message 
+        });
+      }
+    }
+
+    // Prepare update data
+    const updateData = {
+      title,
+      description,
+      duration,
+      cost: parseFloat(cost) || 0,
+      coverImage: coverImageUrl,
+      pdfs: pdfUrls,
+      videos: finalVideoIds
+    };
+
+    // Update the course
+    const updatedCourse = await CourseModel.findByIdAndUpdate(
+      courseId,
+      updateData,
+      { new: true }
+    ).populate('videos');
+
+    // Create progress records for new videos for enrolled students
+    if (createdVideos.length > 0) {
+      const enrolledCourses = await EnrolledCourse.find({ courseId: courseId });
+      const progressRecords = [];
+      
+      for (const enrollment of enrolledCourses) {
+        for (const newVideo of createdVideos) {
+          progressRecords.push({
+            userId: enrollment.userId,
+            courseId: courseId,
+            videoId: newVideo._id,
+            watchedDuration: 0,
+            totalDuration: newVideo.duration,
+            percentage: 0
+          });
+        }
+      }
+      
+      if (progressRecords.length > 0) {
+        const createdProgress = await Progress.insertMany(progressRecords);
+        const progressByUser = {};
+        
+        createdProgress.forEach(progress => {
+          if (!progressByUser[progress.userId]) {
+            progressByUser[progress.userId] = [];
+          }
+          progressByUser[progress.userId].push(progress._id);
+        });
+        
+        for (const [userId, progressIds] of Object.entries(progressByUser)) {
+          await EnrolledCourse.updateOne(
+            { userId: userId, courseId: courseId },
+            { $push: { progress: { $each: progressIds } } }
+          );
+        }
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Course updated successfully',
+      course: updatedCourse
+    });
+
+  } catch (error) {
+    console.error('Error updating course:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update course',
+      error: error.message
+    });
+  }
+};
+
+
 const getDateRange = (period) => {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -418,5 +602,6 @@ module.exports = {
   addCourse,
   getStats,
   getGraphStats,
-  getDetailedAnalytics
+  getDetailedAnalytics,
+  editCourse
 };

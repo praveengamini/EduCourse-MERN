@@ -81,14 +81,13 @@ const EnrollCourse = () => {
 
     setLoading(true);
     try {
+      // console.log(selectedStudent._id , selectedCourse._id)
       const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/admin/enroll-student`, {
         studentId: selectedStudent._id,
         courseId: selectedCourse._id
       });
 
       toast.success("Student enrolled successfully!");
-
-      // Refresh enrolled courses
       const enrolledRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/student/enrolledcourses?studentId=${selectedStudent._id}`);
       setEnrolledCourses(enrolledRes.data.enrolledCourses);
     } catch (err) {

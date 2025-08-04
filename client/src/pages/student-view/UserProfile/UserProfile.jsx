@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
-import { setUser } from '@/store/auth-slice';
 import { useSelector } from 'react-redux';
 import {
   User, Mail, Phone, Calendar, BookOpen, Award, Edit2, Save, X
@@ -10,21 +9,25 @@ import {
   CheckCircle,
   Clock,
 } from 'lucide-react';
-import { toast } from "react-toastify"; // Using sonner for toasts
+import { toast } from "react-toastify";
+// Import the new thunk from your auth-slice
+import { updateUserProfile } from '@/store/auth-slice'; 
 
 const UserProfile = () => {
   const dispatch = useDispatch();
+  // Get user data from Redux store. This is the single source of truth.
   const { user, isLoading } = useSelector((state) => state.auth);
+
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  // Local state for the form, initialized from the Redux user object.
   const [editForm, setEditForm] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [userDetails,setUserDetails] = useState(user);
+  // Use a dedicated loading state for the save button to avoid confusion with the initial global loading
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
-    console.log(userDetails);
-    console.log(user);
-    
-    
+    // This effect runs on component mount and whenever the Redux 'user' object changes.
+    // It's responsible for fetching enrolled courses and initializing the form state.
     if (user?.id) {
       fetchEnrolledCourses(user.id);
       setEditForm({
@@ -32,7 +35,7 @@ const UserProfile = () => {
         phone: user.phone || '',
       });
     }
-  }, [user]);
+  }, [user]); // The dependency on 'user' is correct and crucial.
 
   const fetchEnrolledCourses = async (studentId) => {
     try {
@@ -45,6 +48,7 @@ const UserProfile = () => {
   };
 
   const handleEditToggle = () => {
+    // When toggling to 'not editing', reset the form state to match the Redux user object.
     if (isEditing) {
       setEditForm({
         userName: user.userName || '',
@@ -60,32 +64,28 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
+    setIsSaving(true);
     try {
       const updatePayload = {
         userName: editForm.userName,
         phone: editForm.phone,
       };
 
-      const res = await axios.put(
-        `${import.meta.env.VITE_SERVER_URL}/api/admin/student?id=${user.id}`,
-        updatePayload
-      );
-      
-      if (res.data?.success && res.data?.user) {
-        // This is the crucial line. If this doesn't work, the issue is in auth-slice.js
-        dispatch(setUser(res.data.user));
-        setUserDetails(res.data.user);
+      // Dispatch the new thunk with the user ID and payload
+      const resultAction = await dispatch(updateUserProfile({ id: user.id, updatePayload }));
+
+      if (updateUserProfile.fulfilled.match(resultAction)) {
         toast.success("Profile updated successfully!");
         setIsEditing(false);
       } else {
-        throw new Error("Invalid response from server");
+        // Handle rejection from the thunk
+        toast.error("Failed to update profile. " + resultAction.payload?.message || resultAction.error.message);
       }
     } catch (err) {
       toast.error("Failed to update profile. Please try again.");
       console.error("Update failed:", err);
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -100,6 +100,7 @@ const UserProfile = () => {
   const totalProgress = enrolledCourses.reduce((sum, course) => sum + course.progressPercentage, 0);
   const averageProgress = enrolledCourses.length > 0 ? Math.round(totalProgress / enrolledCourses.length) : 0;
 
+  // The `user` object from Redux is used directly here and throughout the JSX.
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
@@ -190,9 +191,7 @@ const UserProfile = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Info */}
           <div className="lg:col-span-1">
-            {/* Profile Card */}
             <div className="bg-gray-900 rounded-xl shadow-lg overflow-hidden mb-6 border border-gray-700">
               <div className="bg-purple-700 px-6 py-8 text-center">
                 <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border border-gray-700">
@@ -270,22 +269,22 @@ const UserProfile = () => {
                     <div className="flex-1">
                       <label className="block text-sm font-semibold text-gray-400 mb-2">Member Since</label>
                       <p className="text-gray-200 font-medium bg-gray-800 px-4 py-3 rounded-lg border border-gray-700">
-                        {new Date(user.createdAt).toLocaleDateString('en-US', {
+                        {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric'
-                        })}
+                        }) : 'Not available'}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                {/* <div className="mt-8 space-y-3">
+                <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
                       onClick={handleEditToggle}
-                      className="w-full bg-purple-700 text-white px-6 py-3 rounded-lg hover:from-purple-800 hover:to-pink-600 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                      className="w-full bg-purple-700 text-white px-6 py-3 rounded-lg hover:bg-purple-800 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                     >
                       <Edit2 className="w-5 h-5" />
                       <span>Edit Profile</span>
@@ -294,10 +293,10 @@ const UserProfile = () => {
                     <div className="flex space-x-3">
                       <button
                         onClick={handleSave}
-                        disabled={loading}
+                        disabled={isSaving}
                         className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                       >
-                        {loading ? (
+                        {isSaving ? (
                           <>
                             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                             <span>Saving...</span>
@@ -311,7 +310,7 @@ const UserProfile = () => {
                       </button>
                       <button
                         onClick={handleEditToggle}
-                        disabled={loading}
+                        disabled={isSaving}
                         className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                       >
                         <X className="w-5 h-5" />
@@ -319,10 +318,9 @@ const UserProfile = () => {
                       </button>
                     </div>
                   )}
-                </div> */}
+                </div>
               </div>
             </div>
-
           </div>
 
           {/* Right Column - Enrolled Courses */}
@@ -342,7 +340,7 @@ const UserProfile = () => {
                     <div className="text-gray-600 text-8xl mb-6">📚</div>
                     <h3 className="text-2xl font-bold text-gray-300 mb-2">No courses enrolled yet</h3>
                     <p className="text-gray-400 mb-6">Start your learning journey by enrolling in a course</p>
-                    <button className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-800 hover:to-pink-600 transition-all duration-200 shadow-lg">
+                    <button className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg">
                       Browse Courses
                     </button>
                   </div>
@@ -368,14 +366,14 @@ const UserProfile = () => {
                             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                               <div className="flex-1">
                                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-200">
-                                    {course.courseId.title.length <= 30
+                                  {course.courseId.title.length <= 30
                                     ? course.courseId.title
                                     : course.courseId.title.slice(0, 30) + '...'}
                                 </h3>
                                 <p className="text-gray-400 mb-3 line-clamp-2">
                                   {course.courseId.description.length <= 30
-                                      ? course.courseId.description
-                                      : course.courseId.description.slice(0, 30) + '...'}
+                                    ? course.courseId.description
+                                    : course.courseId.description.slice(0, 30) + '...'}
                                 </p>
                               </div>
 
@@ -443,4 +441,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-

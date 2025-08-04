@@ -1,5 +1,5 @@
 import CommonForm from "@/components/common/form";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { loginFormControls } from "../../config";
 import { loginUser } from "../../store/auth-slice/index";
 import { useState } from "react";

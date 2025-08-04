@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { PlayCircle, GraduationCap, Clock, DollarSign, ArrowLeft, X, Loader2, FileText, Lock } from 'lucide-react';
+import { PlayCircle, GraduationCap, Clock, ArrowLeft, X, Loader2, FileText } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { generateCertificateCanvas } from "../../../utils/certificateUtils";
@@ -164,21 +164,35 @@ const CourseDisplay = () => {
         const username = user?.userName;
         const courseName = course?.title;
         const imageSrc = "/certificate.png";
+        
         if (!username || !courseName) {
             toast.error("Missing user or course info!");
             return;
         }
+        
         setLoading(true);
+
         try {
+            // Generate the certificate as an image data URL
             const imageDataUrl = await generateCertificateCanvas({ username, courseName, imageSrc });
+            
+            // Send the certificate data to the server to be stored
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/generator/generate-certificate`, {
+                studentId: user.id,
+                courseId: course._id,
+                imageDataUrl: imageDataUrl,
+            });
+
+            // Create a download link for the user
             const link = document.createElement("a");
             link.download = `${username}_certificate.png`;
             link.href = imageDataUrl;
             link.click();
-            toast.success("🎉 Certificate downloaded successfully!");
+            
+            toast.success("🎉 Certificate downloaded and stored successfully!");
         } catch (error) {
             console.error("Error generating certificate:", error);
-            toast.error("❌ Failed to generate certificate. Try again.");
+            toast.error("❌ Failed to generate or store certificate. Try again.");
         } finally {
             setLoading(false);
         }
@@ -228,7 +242,6 @@ const CourseDisplay = () => {
                 .animation-delay-2000 { animation-delay: 2s; }
                 .animation-delay-4000 { animation-delay: 4s; }
                 
-                /* This is the missing CSS to hide the scrollbar */
                 .hide-scrollbar::-webkit-scrollbar {
                     display: none;
                 }
@@ -240,8 +253,8 @@ const CourseDisplay = () => {
             </style>
             <div className="relative z-10">
                 {courseToStudentExists ? (
-                    <div className="mt-20 container mx-auto px-4 py-15 max-w-6xl">
-                         <div className="flex items-center justify-between mb-8">
+                    <div className="mt-20 container mx-auto px-4 py-12 max-w-6xl">
+                        <div className="flex items-center justify-between mb-8">
                             <h1 className="flex-1 text-3xl md:text-4xl font-bold text-violet-400 break-words">{course.title.toUpperCase()}</h1>
                             <button
                                 onClick={() => navigate(-1)}
@@ -283,8 +296,15 @@ const CourseDisplay = () => {
                                                 onClick={() => openVideoModal(video)}
                                             >
                                                 <div className="flex items-center space-x-4">
-                                                    <div className="w-12 h-12 flex-shrink-0 bg-violet-600 rounded-full flex items-center justify-center text-white">
-                                                        <PlayCircle className="w-6 h-6" />
+                                                    <div className="relative w-16 h-12 flex-shrink-0 rounded-md overflow-hidden">
+                                                        <img 
+                                                            src={getVideoThumbnail(video.url)} 
+                                                            alt={`Thumbnail for ${video.title}`}
+                                                            className="w-full h-full object-cover" 
+                                                        />
+                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-colors">
+                                                            <PlayCircle className="w-8 h-8 text-white" />
+                                                        </div>
                                                     </div>
                                                     <div className="flex-1">
                                                         <p className="text-white font-semibold">{video.title}</p>
@@ -309,8 +329,7 @@ const CourseDisplay = () => {
                                         </div>
                                     )}
                                 </div>
-                            </div>
-                            
+                            </div> 
                             <div className="flex flex-col gap-8">
                                 <div className="bg-zinc-950 p-6 rounded-xl shadow-lg border border-zinc-800">
                                     <div className="flex items-center justify-between mb-6">
@@ -395,7 +414,7 @@ const CourseDisplay = () => {
                                         <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg break-words">
                                             <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
-                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0 h-52 break-words hide-scrollbar overflow-y-scroll">
+                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0 break-words hide-scrollbar overflow-y-scroll">
                                             {course.description}
                                         </p>
                                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm text-gray-300">
@@ -438,12 +457,6 @@ const CourseDisplay = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="container mx-auto px-8 py-16 max-w-6xl">
-                            <div className="grid lg:grid-cols-2 gap-12">
-                               
                             </div>
                         </div>
                     </div>

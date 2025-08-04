@@ -44,7 +44,8 @@ const CourseCard = ({ course }) => {
   const rating = (Math.random() * (5 - 4) + 4).toFixed(1); // 4.0 - 5.0
 
   return (
-    <div className="bg-[#0f0f0f] border border-gray-700 rounded-lg p-5 w-[320px] text-white font-sans">
+    <div className="bg-[#0f0f0f] border border-gray-700 rounded-lg p-5 w-15rem h-15rem text-white font-sans" >
+
       {/* Top Info */}
       <div className="flex justify-between text-sm text-gray-300 mb-4">
         <div>
@@ -61,15 +62,23 @@ const CourseCard = ({ course }) => {
         </div>
       </div>
 
-      {/* Title + Description */}
+      {/* Title  */}
       <div className="flex items-start space-x-4 mb-3">
         <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center text-2xl">
           {getCourseIcon(course.title)}
         </div>
         <div className="flex-1">
-          <h2 className="text-lg font-semibold text-white mb-1">{course.title}</h2>
-          <p className="text-sm text-gray-400">
-            Enroll in our {course.title} course and master the art of creating intuitive, user-friendly designs.
+          <h2 className="text-lg font-semibold text-white mb-1 overflow-hidden text-ellipsis whitespace-nowrap" style={{ whiteSpace: 'pre' }}>
+            {course.title.length <= 30
+              ? course.title.padEnd(33, ' ')
+              : course.title.slice(0, 30) + '...'}
+          </h2>
+
+
+          <p className="text-sm text-gray-400 line-clamp-2 overflow-hidden">
+            Enroll in our {course.title.length <= 30
+              ? course.title.padEnd(33, ' ')
+              : course.title.slice(0, 30) + '...'} course and master the art of creating intuitive, user-friendly designs.
           </p>
         </div>
       </div>
@@ -91,4 +100,6 @@ const CourseCard = ({ course }) => {
   );
 };
 
+
 export default CourseCard;
+

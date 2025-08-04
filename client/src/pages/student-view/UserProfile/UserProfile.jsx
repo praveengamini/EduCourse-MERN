@@ -10,7 +10,7 @@ import {
   CheckCircle,
   Clock,
 } from 'lucide-react';
-import { toast } from "sonner"; // Using sonner for toasts
+import { toast } from "react-toastify"; // Using sonner for toasts
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -19,10 +19,12 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [loading, setLoading] = useState(false);
-  
-  // This useEffect ensures the local editForm state is always in sync with the Redux user state
-  // It will re-run whenever the 'user' object in Redux changes.
+  const [userDetails,setUserDetails] = useState(user);
   useEffect(() => {
+    console.log(userDetails);
+    console.log(user);
+    
+    
     if (user?.id) {
       fetchEnrolledCourses(user.id);
       setEditForm({
@@ -69,10 +71,11 @@ const UserProfile = () => {
         `${import.meta.env.VITE_SERVER_URL}/api/admin/student?id=${user.id}`,
         updatePayload
       );
-
+      
       if (res.data?.success && res.data?.user) {
         // This is the crucial line. If this doesn't work, the issue is in auth-slice.js
         dispatch(setUser(res.data.user));
+        setUserDetails(res.data.user);
         toast.success("Profile updated successfully!");
         setIsEditing(false);
       } else {
@@ -278,7 +281,7 @@ const UserProfile = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="mt-8 space-y-3">
+                {/* <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
                       onClick={handleEditToggle}
@@ -316,7 +319,7 @@ const UserProfile = () => {
                       </button>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -436,3 +439,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+

@@ -14,10 +14,10 @@ const Footer = () => {
             </p>
             <div className='text-lg font-semibold'>Credits:</div>
             <div className='flex flex-col gap-1'>
-              <a className='text-gray-400 hover:text-white' href="https://github.com/sathishsara1"><div>S V S Sathish</div></a>
-              <a className="text-gray-400 hover:text-white" href="https://github.com/ballaSAISAMPATH"><div>Sai Sampath</div></a>
-              <a className='text-gray-400 hover:text-white' href="https://github.com/vamsikrishnaperuri"><div>Peruri Vamsi Krishna</div></a>    
-              <a className='text-gray-400 hover:text-white' href="https://github.com/praveengamini"><div>Praveen Gamini</div></a>
+              <a className='text-gray-400 hover:text-white' href="https://github.com/sathishsara1" target='_blank'><div>S V S Sathish</div></a>
+              <a className="text-gray-400 hover:text-white" href="https://github.com/ballaSAISAMPATH" target='_blank'><div>Sai Sampath</div></a>
+              <a className='text-gray-400 hover:text-white' href="https://github.com/vamsikrishnaperuri" target='_blank'><div>Peruri Vamsi Krishna</div></a>    
+              <a className='text-gray-400 hover:text-white' href="https://github.com/praveengamini" target='_blank'><div>Praveen Gamini</div></a>
               </div>
           </div>
 

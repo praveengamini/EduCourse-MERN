@@ -10,24 +10,18 @@ import {
   Clock,
 } from 'lucide-react';
 import { toast } from "react-toastify";
-// Import the new thunk from your auth-slice
 import { updateUserProfile } from '@/store/auth-slice'; 
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  // Get user data from Redux store. This is the single source of truth.
   const { user, isLoading } = useSelector((state) => state.auth);
 
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  // Local state for the form, initialized from the Redux user object.
   const [editForm, setEditForm] = useState({});
-  // Use a dedicated loading state for the save button to avoid confusion with the initial global loading
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    // This effect runs on component mount and whenever the Redux 'user' object changes.
-    // It's responsible for fetching enrolled courses and initializing the form state.
     if (user?.id) {
       fetchEnrolledCourses(user.id);
       setEditForm({
@@ -35,7 +29,7 @@ const UserProfile = () => {
         phone: user.phone || '',
       });
     }
-  }, [user]); // The dependency on 'user' is correct and crucial.
+  }, [user]); 
 
   const fetchEnrolledCourses = async (studentId) => {
     try {
@@ -48,7 +42,6 @@ const UserProfile = () => {
   };
 
   const handleEditToggle = () => {
-    // When toggling to 'not editing', reset the form state to match the Redux user object.
     if (isEditing) {
       setEditForm({
         userName: user.userName || '',
@@ -71,14 +64,12 @@ const UserProfile = () => {
         phone: editForm.phone,
       };
 
-      // Dispatch the new thunk with the user ID and payload
       const resultAction = await dispatch(updateUserProfile({ id: user.id, updatePayload }));
 
       if (updateUserProfile.fulfilled.match(resultAction)) {
         toast.success("Profile updated successfully!");
         setIsEditing(false);
       } else {
-        // Handle rejection from the thunk
         toast.error("Failed to update profile. " + resultAction.payload?.message || resultAction.error.message);
       }
     } catch (err) {
@@ -100,7 +91,6 @@ const UserProfile = () => {
   const totalProgress = enrolledCourses.reduce((sum, course) => sum + course.progressPercentage, 0);
   const averageProgress = enrolledCourses.length > 0 ? Math.round(totalProgress / enrolledCourses.length) : 0;
 
-  // The `user` object from Redux is used directly here and throughout the JSX.
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
@@ -113,7 +103,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen bg-black pt-20 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

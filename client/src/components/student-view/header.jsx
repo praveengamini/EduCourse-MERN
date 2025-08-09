@@ -20,7 +20,7 @@ function AdminHeader() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-zinc-950 text-white shadow-xl border-b border-zinc-800">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 bg-zinc-950 text-white shadow-xl border-b border-zinc-800">
       <div className="flex items-center gap-4">
         <Button 
           onClick={toggleNavbar}
@@ -29,9 +29,8 @@ function AdminHeader() {
           <AlignJustify />
           <span className="sr-only">Toggle Menu</span>
         </Button>
-        <div className="text-2xl font-extrabold text-violet-400">
-          EduQuest
-        </div>
+          <div className="text-2xl font-bold p-0 text-white"><img  width="80px" src="/CyberLink.png"/></div>
+
       </div>
       
       {/* Mobile Navigation Menu - Overlay */}
@@ -45,9 +44,8 @@ function AdminHeader() {
       {/* Mobile Navigation Menu - Sidebar */}
       <nav className={`fixed top-0 left-0 h-full w-64 bg-zinc-950 z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
-          <div className="text-xl font-extrabold text-violet-400">
-            EduQuest
-          </div>
+          <div className="text-2xl font-bold text-white p-0"><img  width="80px" height="50px" src="/CyberLink.png"/></div>
+
           <Button onClick={toggleNavbar} className="text-white hover:bg-zinc-800 transition-colors p-2 rounded-full">
             <X />
             <span className="sr-only">Close Menu</span>

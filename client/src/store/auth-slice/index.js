@@ -1,75 +1,76 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Define the base URL from environment variables
+const BASE_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
+
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
-
 };
 
-export const registerUser = createAsyncThunk(
-  "/auth/register",
-  async (formData) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
+// =======================================================
+// NEW: Asynchronous Thunk for updating user profile
+// =======================================================
+export const updateUserProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async ({ id, updatePayload }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/admin/student?id=${id}`,
+        updatePayload,
+        { withCredentials: true }
+      );
+      // The backend should return the full, updated user object
+      return response.data;
+    } catch (error) {
+      // Use rejectWithValue to pass the error message to the component
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+// =======================================================
 
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async (formData) => {
+    const response = await axios.post(`${BASE_URL}/api/auth/register`, formData, {
+      withCredentials: true,
+    });
     return response.data;
   }
 );
 
 export const loginUser = createAsyncThunk(
-  "/auth/login",
-
+  "auth/login",
   async (formData) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
-
+    const response = await axios.post(`${BASE_URL}/api/auth/login`, formData, {
+      withCredentials: true,
+    });
     return response.data;
   }
 );
 
 export const logoutUser = createAsyncThunk(
-  "/auth/logout",
-
+  "auth/logout",
   async () => {
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/logout",
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-
+    const response = await axios.post(`${BASE_URL}/api/auth/logout`, {}, {
+      withCredentials: true,
+    });
     return response.data;
   }
 );
 
 export const checkAuth1 = createAsyncThunk(
-  "/auth/checkauth",
-
+  "auth/checkauth",
   async () => {
-    const response = await axios.get(
-      "http://localhost:5000/api/auth/check-auth",
-      {
-        withCredentials: true,
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      }
-    );
-
+    const response = await axios.get(`${BASE_URL}/api/auth/check-auth`, {
+      withCredentials: true,
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
+    });
     return response.data;
   }
 );
@@ -79,8 +80,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
+      // This is a direct reducer for setting user, good for initial hydration or local updates.
       state.user = action.payload;
-      console.log(action.payload);
       state.isAuthenticated = !!action.payload;
     },
   },
@@ -141,10 +142,22 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
+      })
+
+      .addCase(updateUserProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (action.payload?.success) {
+          state.user = action.payload.user;
+        }
+      })
+      .addCase(updateUserProfile.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });
-
 
 export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -15,7 +15,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-white">EduQuest</span>
+            <div className="text-2xl font-bold text-white"><img  width="120px" src="/CyberLink.png" className='pt-5'/></div>
           </div>
 
           {/* Desktop Navigation */}

@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../../middleware/multer');
 const { addCourse,getStats,getGraphStats,getDetailedAnalytics, editCourse } = require('../../controllers/admin/adminController');
-const { getAllCourses, getCourseById, getEnrolledStudentsForCourse } = require('../../controllers/admin/courseController');
+const { getAllCourses, getCourseById, getEnrolledStudentsForCourse,deleteCourse } = require('../../controllers/admin/courseController');
 const {getAllStudents, getStudentEnrolledCourses,enrollStudent,getStudentById,editStudent } = require('../../controllers/admin/studentController');
 
 router.get('/courses', getAllCourses);
 router.get('/course/:id', getCourseById);
 router.put("/student",editStudent);
+router.delete('/courses/:id', deleteCourse);
 // router.put('/course/:courseId', editCourse);
 router.get('/students', getAllStudents);
 router.get('/student/enrolledcourses',getStudentEnrolledCourses);

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+
 export default function NewCourse() {
     const [courses, setCourses] = useState(null);
     const [loading, setLoading] = useState(false); 
@@ -25,7 +26,7 @@ export default function NewCourse() {
         setLoading(true); 
         const data = {
             name: e.target.name.value,
-            userID: user.id,
+            userID: user?.id || null,
             email: e.target.email.value,
             contactNumber: e.target.tel.value,
             courseName: e.target.courseName.value,
@@ -134,10 +135,11 @@ export default function NewCourse() {
                         </div>
             
                         <div className="relative">
-                            <input readOnly
+                            <input 
                                 type="email"
                                 id="email"
-                                value={user.email}
+                                defaultValue={user?.email || ""}
+                                readOnly={!!user}
                                 placeholder=" "
                                 className="peer w-full border border-zinc-700 rounded-md px-3 pt-6 pb-2 text-sm bg-zinc-900 text-white
                                     focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 focus:ring-offset-zinc-950"

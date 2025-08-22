@@ -25,6 +25,7 @@ const CourseDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: '', type: '' });
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -52,6 +53,16 @@ const CourseDetail = () => {
     fetchCourse();
     getUserRole();
   }, [courseId]);
+
+  // Auto-hide toast after 4 seconds
+  useEffect(() => {
+    if (toast.show) {
+      const timer = setTimeout(() => {
+        setToast({ show: false, message: '', type: '' });
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast.show]);
 
   const openVideoModal = (video) => {
     setSelectedVideo(video);
@@ -99,12 +110,14 @@ const CourseDetail = () => {
         }
       });
       
-      // Show success message and redirect
-      alert('Course deleted successfully!');
-      navigate('/admin/courses'); // Redirect to courses list
+      // Show success toast and redirect
+      setToast({ show: true, message: 'Course deleted successfully!', type: 'success' });
+      setTimeout(() => {
+        navigate('/admin/courses'); // Redirect to courses list
+      }, 1500);
     } catch (error) {
       console.error('Error deleting course:', error);
-      alert('Error deleting course. Please try again.');
+      setToast({ show: true, message: 'Error deleting course. Please try again.', type: 'error' });
     } finally {
       setIsDeleting(false);
       setIsDeleteModalOpen(false);
@@ -447,6 +460,36 @@ const CourseDetail = () => {
                 className="w-full h-full"
                 title="PDF Viewer"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in fade-in slide-in-from-right-5 duration-300">
+          <div className={`rounded-lg px-6 py-4 shadow-lg border-l-4 ${
+            toast.type === 'success' 
+              ? 'bg-green-50 border-green-400 text-green-800' 
+              : 'bg-red-50 border-red-400 text-red-800'
+          }`}>
+            <div className="flex items-center">
+              {toast.type === 'success' ? (
+                <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              )}
+              <span className="font-medium">{toast.message}</span>
+              <button
+                onClick={() => setToast({ show: false, message: '', type: '' })}
+                className="ml-4 text-gray-400 hover:text-gray-600"
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>

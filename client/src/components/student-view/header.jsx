@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AlignJustify, LogOut, UserCircle, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { logoutUser } from "@/store/auth-slice";
+import Header from "../landingPage/Header";
 
 function AdminHeader() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = useState(false);
+  
+  // Get authentication status from Redux store
+  // Adjust this selector based on your auth slice structure
+  const { isAuthenticated, user } = useSelector(state => state.auth);
 
   function handleLogout() {
     dispatch(logoutUser());
@@ -19,6 +24,12 @@ function AdminHeader() {
     setIsNavOpen(!isNavOpen);
   }
 
+  // If not authenticated, use the landing page header
+  if (!isAuthenticated) {
+    return <Header />;
+  }
+
+  // If authenticated, show the admin header
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 bg-zinc-950 text-white shadow-xl border-b border-zinc-800">
       <div className="flex items-center gap-4">
@@ -29,8 +40,7 @@ function AdminHeader() {
           <AlignJustify />
           <span className="sr-only">Toggle Menu</span>
         </Button>
-          <div className="text-2xl font-bold p-0 text-white"><img  width="80px" src="/CyberLink.png"/></div>
-
+        <div className="text-2xl font-bold p-0 text-white"><img width="80px" src="/CyberLink.png"/></div>
       </div>
       
       {/* Mobile Navigation Menu - Overlay */}
@@ -44,8 +54,7 @@ function AdminHeader() {
       {/* Mobile Navigation Menu - Sidebar */}
       <nav className={`fixed top-0 left-0 h-full w-64 bg-zinc-950 z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
-          <div className="text-2xl font-bold text-white p-0"><img  width="80px" height="50px" src="/CyberLink.png"/></div>
-
+          <div className="text-2xl font-bold text-white p-0"><img width="80px" height="50px" src="/CyberLink.png"/></div>
           <Button onClick={toggleNavbar} className="text-white hover:bg-zinc-800 transition-colors p-2 rounded-full">
             <X />
             <span className="sr-only">Close Menu</span>

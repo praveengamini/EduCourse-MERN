@@ -18,7 +18,7 @@ const Hero = ({ onGetStartedClick }) => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
                 Explore Over
                 <br />
                 <span className="text-purple-400">5,000+ Courses</span>

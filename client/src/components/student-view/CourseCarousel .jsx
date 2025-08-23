@@ -29,7 +29,7 @@ const CourseCarousel = ({ courses }) => {
   };
 
   return (
-    <div className="slider-container px-4 pt-6">
+    <div className="slider-container  px-4 pt-6">
       <Slider {...settings}>
         {courses.map((course) => (
           <div key={course._id} className="px-2">

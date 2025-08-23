@@ -248,7 +248,7 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                <div className="mt-8 space-y-3">
+                {/* <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
                       onClick={handleEditToggle}
@@ -286,7 +286,7 @@ const UserProfile = () => {
                       </button>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

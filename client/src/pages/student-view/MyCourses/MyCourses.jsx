@@ -53,8 +53,8 @@ export default function MyCourses() {
             <div className="flex flex-col justify-center items-center bg-zinc-900/70 backdrop-blur-sm rounded-2xl shadow-xl p-12 text-center border border-zinc-800">
               <BookOpenIcon className="h-16 w-16 text-gray-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-300 mb-2">No courses found</h3>
-              <h3 className="text-xl font-semibold text-gray-300 mb-4">request access for the courses here</h3>
-              <Link className='w-35 h-10 border-violet-600 border-1 px-4 py-2 rounded-md transition duration-200 text-violet-600 hover:bg-violet-600 hover:text-white' to="/student/new-course">request access</Link>
+              <h3 className="text-xl font-semibold text-gray-300 mb-4">Request access for the courses here</h3>
+              <Link className='w-35 h-10 border-violet-600 border-1 px-4 py-2 rounded-md transition duration-200 text-violet-600 hover:bg-violet-600 hover:text-white' to="/student/new-course">Request</Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -269,7 +269,7 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons
                 <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
@@ -308,7 +308,7 @@ const UserProfile = () => {
                       </button>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

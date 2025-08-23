@@ -65,7 +65,7 @@ const CourseCarousel = ({ courses }) => {
                       {course.duration && (
                         <div className="flex items-center">
                           <Clock size={14} className="mr-2" />
-                          <span className="ml-1">{course.duration} mins</span>
+                          <span className="ml-1">{course.duration}</span>
                         </div>
                       )}
                     </div>

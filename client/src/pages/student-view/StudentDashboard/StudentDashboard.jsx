@@ -101,7 +101,7 @@ const StudentDashboard = () => {
                   Unlock a world of knowledge and skill. Dive into our extensive course catalog to find your passion.
                 </p>
                 <button 
-                  onClick={() => navigate('/student/new-course')}
+                  onClick={() => navigate('/student/home')}
                   className="bg-gradient-to-r from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-violet-500/25 transform hover:scale-105">
                   Explore All Courses
                 </button>

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { PlayCircle, GraduationCap, Clock, ArrowLeft, X, Loader2, FileText } from 'lucide-react';
+import { PlayCircle, GraduationCap, Clock, ArrowLeft, X, Loader2, FileText, UserPlus } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { generateCertificateCanvas } from "../../../utils/certificateUtils";
@@ -16,69 +16,95 @@ const CourseDisplay = () => {
     const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
     const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
     const [courseToStudentExists, setCourseToStudentExists] = useState(false);
-    const user = useSelector((state) => state.auth.user);
     const [completedVideos, setCompletedVideos] = useState([]);
     const [loading, setLoading] = useState(false);
+    
+    // Get user and authentication status
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (course?.videos && completedVideos.length === course.videos.length && course.videos.length > 0) {
+        if (isAuthenticated && user && course?.videos && completedVideos.length === course.videos.length && course.videos.length > 0) {
             toast.success("Certificate unlocked! You can now download it.");
         }
-    }, [completedVideos, course]);
+    }, [completedVideos, course, isAuthenticated, user]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Always fetch course data
                 const courseRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/course/${courseId}`);
                 setCourse(courseRes.data.course);
 
-                const enrollmentRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/courseToStudent`, {
-                    params: { courseId: courseId, userId: user.id }
-                });
-                setCourseToStudentExists(enrollmentRes.data.courseToStudentExists);
+                // Only fetch user-specific data if authenticated
+                if (isAuthenticated && user) {
+                    try {
+                        const enrollmentRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/courseToStudent`, {
+                            params: { courseId: courseId, userId: user.id }
+                        });
+                        setCourseToStudentExists(enrollmentRes.data.courseToStudentExists);
 
-                const completedRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/progress/completed`, {
-                    params: { userId: user.id, courseId }
-                });
-                setCompletedVideos(completedRes.data.completedVideoIds);
+                        const completedRes = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/progress/completed`, {
+                            params: { userId: user.id, courseId }
+                        });
+                        setCompletedVideos(completedRes.data.completedVideoIds);
+                    } catch (userErr) {
+                        console.error("Error fetching user-specific data:", userErr);
+                        // Don't show error for non-authenticated users
+                        if (isAuthenticated) {
+                            toast.error("Failed to load your progress data.");
+                        }
+                    }
+                }
             } catch (err) {
-                console.error("Error fetching data:", err);
+                console.error("Error fetching course data:", err);
                 toast.error("Failed to load course data.");
             }
         };
+        
         fetchData();
-    }, [courseId, user]);
+    }, [courseId, user, isAuthenticated]);
 
     useEffect(() => {
+        // Only track progress for authenticated users
+        if (!isAuthenticated || !user) return;
+
         const video = videoRef.current;
 
         const handleTimeUpdate = async () => {
             if (!selectedVideo || !user) return;
-            const watched = Math.floor(video.currentTime);
-            const total = Math.floor(video.duration);
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/progress`, {
-                userId: user.id,
-                courseId,
-                videoId: selectedVideo._id,
-                watchedDuration: watched,
-                totalDuration: total
-            });
+            try {
+                const watched = Math.floor(video.currentTime);
+                const total = Math.floor(video.duration);
+                await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/progress`, {
+                    userId: user.id,
+                    courseId,
+                    videoId: selectedVideo._id,
+                    watchedDuration: watched,
+                    totalDuration: total
+                });
+            } catch (error) {
+                console.error("Error updating progress:", error);
+            }
         };
 
         const handleEnded = async () => {
             if (!selectedVideo || !user) return;
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/complete`, {
-                userId: user.id,
-                courseId,
-                videoId: selectedVideo._id
-            });
+            try {
+                await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/student/complete`, {
+                    userId: user.id,
+                    courseId,
+                    videoId: selectedVideo._id
+                });
 
-            setCompletedVideos((prev) => {
-                if (!prev.includes(selectedVideo._id)) {
-                    return [...prev, selectedVideo._id];
-                }
-                return prev;
-            });
+                setCompletedVideos((prev) => {
+                    if (!prev.includes(selectedVideo._id)) {
+                        return [...prev, selectedVideo._id];
+                    }
+                    return prev;
+                });
+            } catch (error) {
+                console.error("Error marking video as complete:", error);
+            }
         };
 
         if (video) {
@@ -92,11 +118,13 @@ const CourseDisplay = () => {
                 video.removeEventListener('ended', handleEnded);
             }
         };
-    }, [selectedVideo, courseId, user]);
+    }, [selectedVideo, courseId, user, isAuthenticated]);
 
     useEffect(() => {
+        // Only fetch progress for authenticated users
+        if (!isAuthenticated || !user || !selectedVideo) return;
+        
         const fetchProgress = async () => {
-            if (!selectedVideo || !user) return;
             try {
                 const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/student/progress`, {
                     params: {
@@ -114,11 +142,18 @@ const CourseDisplay = () => {
             }
         };
 
-        if (selectedVideo) fetchProgress();
-    }, [selectedVideo, courseId, user]);
+        fetchProgress();
+    }, [selectedVideo, courseId, user, isAuthenticated]);
 
     const openVideoModal = (video) => {
-        setSelectedVideo(video);
+        // For non-authenticated users, show first video or preview
+        if (!isAuthenticated || !courseToStudentExists) {
+            if (course?.videos && course.videos.length > 0) {
+                setSelectedVideo(course.videos[0]); // Show first video as preview
+            }
+        } else {
+            setSelectedVideo(video);
+        }
         setIsVideoModalOpen(true);
     };
 
@@ -128,6 +163,10 @@ const CourseDisplay = () => {
     };
 
     const openPDFModal = (pdf) => {
+        if (!isAuthenticated || !courseToStudentExists) {
+            toast.info("Please login and enroll to access study materials");
+            return;
+        }
         setSelectedPDF(pdf);
         setIsPDFModalOpen(true);
     };
@@ -161,6 +200,11 @@ const CourseDisplay = () => {
     };
 
     const handleCertificateDownload = async () => {
+        if (!isAuthenticated || !user) {
+            toast.error("Please login to download certificate");
+            return;
+        }
+
         const username = user?.userName;
         const courseName = course?.title;
         const imageSrc = "/certificate.png";
@@ -194,10 +238,16 @@ const CourseDisplay = () => {
     };
     
     const handleEnrollment = () => {
+            navigate("/auth/login");
+    
         if (course) {
-            toast.info("enroll course here");
-            navigate("/student/new-course")
+            toast.info("Enroll course here");
+            navigate("/student/new-course");
         }
+    };
+
+    const handleLoginRedirect = () => {
+        navigate("/auth/login");
     };
 
     const getRandomRating = () => {
@@ -216,6 +266,9 @@ const CourseDisplay = () => {
             </div>
         );
     }
+
+    // Show enrolled view for authenticated users who are enrolled
+    const showEnrolledView = isAuthenticated && user && courseToStudentExists;
     
     return (
         <div className="min-h-screen bg-black text-gray-100 relative overflow-hidden" style={{ fontFamily: "Bai Jamjuree, sans-serif" }}>
@@ -247,7 +300,7 @@ const CourseDisplay = () => {
                 `}
             </style>
             <div className="relative z-10">
-                {courseToStudentExists ? (
+                {showEnrolledView ? (
                     <div className="mt-20 container mx-auto px-4 py-12 max-w-6xl">
                         <div className="flex items-center justify-between mb-8">
                             <h1 className="flex-1 text-3xl md:text-4xl font-bold text-violet-400 break-words">{course.title.toUpperCase()}</h1>
@@ -392,6 +445,7 @@ const CourseDisplay = () => {
                         </div>
                     </div>
                 ) : (
+                    // Preview/Public view for non-authenticated or non-enrolled users
                     <div className="mt-20 relative w-full overflow-hidden">
                         <div className="w-full bg-zinc-950/70 backdrop-blur-md overflow-hidden">
                             <div className="relative min-h-[450px] py-12 flex items-center">
@@ -406,6 +460,8 @@ const CourseDisplay = () => {
                                                 <span className="font-medium">Back to Courses</span>
                                             </button>
                                         </div>
+                                
+                                        
                                         <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg break-words">
                                             <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
@@ -436,19 +492,29 @@ const CourseDisplay = () => {
                                         <div className="relative aspect-video">
                                             <img src={course.coverImage} alt="Course Preview" className="w-full h-full object-cover"/>
                                             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                                <button onClick={() => openVideoModal(course.videos[0])} className="p-4 bg-white/20 rounded-full backdrop-blur-sm text-white hover:bg-white/40 transition-colors">
+                                                <button 
+                                                    onClick={() => course.videos?.[0] && openVideoModal(course.videos[0])} 
+                                                    className="p-4 bg-white/20 rounded-full backdrop-blur-sm text-white hover:bg-white/40 transition-colors"
+                                                >
                                                     <PlayCircle className="w-12 h-12" />
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="p-6 text-center">
-                                            <h3 className="text-xl font-bold text-white mb-4">Preview the course</h3>
+                                        <div className="p-6 text-center space-y-3">
+                                            <h3 className="text-xl font-bold text-white mb-4">
+                                                {!isAuthenticated ? "Preview the course" : "Enroll to access"}
+                                            </h3>
                                             <button
                                                 onClick={handleEnrollment}
                                                 className="w-full py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors"
                                             >
-                                                Enroll to Course
+                                                { "Enroll to Course"}
                                             </button>
+                                            {!isAuthenticated && (
+                                                <p className="text-sm text-gray-400">
+                                                    Create an account to track progress and earn certificates
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -457,11 +523,16 @@ const CourseDisplay = () => {
                     </div>
                 )}
             </div>
+            
+            {/* Video Modal */}
             {isVideoModalOpen && selectedVideo && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
                         <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-                            <h3 className="text-lg font-semibold text-gray-100 break-words">{selectedVideo.title}</h3>
+                            <h3 className="text-lg font-semibold text-gray-100 break-words">
+                                {selectedVideo.title} 
+                                {!showEnrolledView && <span className="text-violet-400 text-sm ml-2">(Preview)</span>}
+                            </h3>
                             <button onClick={closeVideoModal} className="text-gray-400 hover:text-white p-1">
                                 <X className="h-6 w-6" />
                             </button>
@@ -479,17 +550,31 @@ const CourseDisplay = () => {
                                 >
                                     Your browser does not support the video tag.
                                 </video>
+                                {!showEnrolledView && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                        <div className="bg-zinc-900 p-6 rounded-lg text-center">
+                                            <p className="text-white mb-4">Login and enroll to access full course content</p>
+                                            <button 
+                                                onClick={handleEnrollment}
+                                                className="px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
+                                            >
+                                                {!isAuthenticated ? "Login & Enroll" : "Enroll Now"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             )}
             
+            {/* PDF Modal */}
             {isPDFModalOpen && selectedPDF && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
                     <div className="bg-zinc-900 rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden">
                         <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-                            <h3 className="text-lg font-semibold text-gray-100">{'Study Material'}</h3>
+                            <h3 className="text-lg font-semibold text-gray-100">Study Material</h3>
                             <button onClick={closePDFModal} className="text-gray-400 hover:text-white p-1">
                                 <X className="h-6 w-6" />
                             </button>

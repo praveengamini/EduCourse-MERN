@@ -148,10 +148,39 @@ const getEnrolledStudentsForCourse = async (req, res) => {
     });
   }
 };
+const deleteCourse = async (req, res) => {
+    try {
+        const { id } = req.params;
 
+        // Find and delete the course
+        const course = await CourseModel.findByIdAndDelete(id);
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: 'Course not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Course deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while deleting course',
+            error: error.message
+        });
+    }
+};
 
 module.exports = {
   getAllCourses,
   getCourseById,
-  getEnrolledStudentsForCourse 
+  getEnrolledStudentsForCourse,
+  deleteCourse
+
 };

@@ -15,8 +15,20 @@ function CheckAuth({ isAuthenticated, user, children }) {
     }
   }
 
+  // Define public routes that don't require authentication
+  const publicRoutes = [
+    "/student/courses/",
+    "/student/new-course"
+  ];
+
+  const isPublicRoute = publicRoutes.some(route => 
+    location.pathname === route || 
+    (route.endsWith("/") && location.pathname.startsWith(route))
+  );
+
   if (
     !isAuthenticated &&
+    !isPublicRoute &&
     !(
       location.pathname.includes("/login") ||
       location.pathname.includes("/register") ||

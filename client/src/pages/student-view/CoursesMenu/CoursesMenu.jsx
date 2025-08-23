@@ -51,7 +51,7 @@ const AllCourses = () => {
             <div className="relative z-10 container mx-auto px-4 py-8">
                 {/* Back button */}
                 <button
-                    onClick={() => navigate("/student/home")}
+                    onClick={() => navigate(-1)}
                     className="group flex items-center text-violet-400 hover:text-violet-200 mb-8 transition-all duration-200 bg-zinc-900/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl"
                 >
                     <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />

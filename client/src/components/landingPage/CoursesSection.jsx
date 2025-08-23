@@ -14,38 +14,40 @@ const HeadingBlock = () => {
 
   return (
     <div className="mb-12 pl-4">
-      <div className="flex items-center justify-between w-full">
-        {/* Left: Heading */}
-        <h2 className="text-6xl font-bold text-[#C1BFFF] relative whitespace-nowrap">
-          Latest Courses
-          <img
-            src="/assets/thread_ltc2.png"
-            alt="underline"
-            className="absolute left-20 bottom-[-8px] w-[120px]"
-          />
-        </h2>
+  <div className="flex items-center justify-between w-full">
+    {/* Left: Heading */}
+    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#C1BFFF] relative whitespace-nowrap">
+      Latest Courses
+      <img
+        src="/assets/thread_ltc2.png"
+        alt="underline"
+        className="absolute left-20 bottom-[-8px] w-[120px]"
+      />
+    </h2>
 
-        {/* Center: Divider with graphic (hidden on mobile) */}
-        <div className="hidden md:flex items-center flex-grow mx-4">
-          <div className="mx-4 shrink-0">
-            <img
-              src="/assets/thread_latestcourse.png"
-              alt="center design"
-              className="w-150 h-25"
-            />
-          </div>
-        </div>
-
-        {/* Right: Browse All */}
-        <button
-          onClick={handleBrowseAll}
-          className="flex items-center space-x-2 text-[#C1BFFF] hover:text-purple-300 whitespace-nowrap cursor-pointer"
-        >
-          <span>Browse All</span>
-          <ArrowRight className="h-4 w-4" />
-        </button>
+    {/* Center: Divider with graphic (only visible on PC) */}
+    <div className="hidden lg:flex items-center justify-center flex-1 mx-4">
+      <div className="mx-4 shrink-0">
+        <img
+          src="/assets/thread_latestcourse.png"
+          alt="center design"
+          className="w-[200px] lg:w-[400px] xl:w-[600px] h-auto"
+        />
       </div>
     </div>
+
+    {/* Right: Browse All */}
+    <button
+      onClick={handleBrowseAll}
+      className="flex items-center space-x-2 text-[#C1BFFF] hover:text-purple-300 whitespace-nowrap cursor-pointer"
+    >
+      <span>Browse All</span>
+      <ArrowRight className="h-4 w-4" />
+    </button>
+  </div>
+</div>
+
+
   );
 }
 

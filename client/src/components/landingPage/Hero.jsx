@@ -76,9 +76,11 @@ const Hero = ({ onGetStartedClick }) => {
             <img
               src="/assets/thread.png"
               alt="Decorative thread"
-              className="absolute z-20 w-[300px] -top-10 -left-10 md:w-[700px] md:-top-20 md:-left-20 pointer-events-none select-none"
+              className="absolute z-20 w-[300px] -top-10 left-0 md:w-[700px] md:-top-20 md:-left-20 pointer-events-none select-none"
             />
           </div>
+
+
         </div>
       </div>
     </section>

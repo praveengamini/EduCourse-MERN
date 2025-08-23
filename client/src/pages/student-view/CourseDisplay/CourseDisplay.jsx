@@ -170,6 +170,10 @@ const CourseDisplay = () => {
         setSelectedPDF(pdf);
         setIsPDFModalOpen(true);
     };
+    const openFirstPDFModal = (pdf) => {
+        setSelectedPDF(pdf);
+        setIsPDFModalOpen(true);
+    };
 
     const closePDFModal = () => {
         setIsPDFModalOpen(false);
@@ -449,8 +453,8 @@ const CourseDisplay = () => {
                     <div className="mt-20 relative w-full overflow-hidden">
                         <div className="w-full bg-zinc-950/70 backdrop-blur-md overflow-hidden">
                             <div className="relative min-h-[450px] py-12 flex items-center">
-                                <div className="container mx-auto px-8 max-w-6xl grid md:grid-cols-2 gap-12 items-start">
-                                    <div className="flex-1 space-y-6 text-center md:text-left">
+                                <div className="container mx-auto px-8  flex items-center flex-wrap">
+                                    <div className="flex-1 space-y-6 pb-5 text-center md:text-left">
                                         <div className="flex items-center justify-center md:justify-start">
                                             <button
                                                 onClick={() => navigate(-1)}
@@ -462,10 +466,10 @@ const CourseDisplay = () => {
                                         </div>
                                 
                                         
-                                        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg break-words">
+                                        <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg break-words">
                                             <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
-                                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto md:mx-0 break-words hide-scrollbar overflow-y-scroll">
+                                        <p className="text-sm md:text-md whitespace-pre-wrap text-gray-300 max-w-2xl mx-auto md:mx-0 break-words hide-scrollbar overflow-y-scroll">
                                             {course.description}
                                         </p>
                                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm text-gray-300">
@@ -479,13 +483,12 @@ const CourseDisplay = () => {
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-lg">★</span>
-                                                <span>{getRandomRating()}</span>
+                                                <span>4.7</span>
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-4 h-4 rounded-full bg-gray-400"></div>
-                                                <span>Beginner</span>
-                                            </div>
+                                           
                                         </div>
+
+
                                     </div>
                                     
                                     <div className="w-full relative bg-zinc-900 border border-zinc-800 rounded-xl shadow-lg overflow-hidden flex-shrink-0 max-w-sm mx-auto md:mx-0">
@@ -510,6 +513,22 @@ const CourseDisplay = () => {
                                             >
                                                 { "Enroll to Course"}
                                             </button>
+                                            {/* Preview PDF for non-enrolled users */}
+                                            {course.pdfs && course.pdfs.length > 0 && (
+                                            <div className="mt-6 bg-zinc-900 border-2 border-zinc-800 border-dashed rounded-lg p-4 text-center">
+                                                <h3 className="text-lg font-semibold text-white mb-2">Preview Material</h3>
+                                                <button
+                                                onClick={() => openFirstPDFModal(course.pdfs[0])}
+                                                className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                                                >
+                                                View First PDF
+                                                </button>
+                                                <p className="text-sm text-gray-400 mt-2">
+                                                Login & enroll to unlock all study materials
+                                                </p>
+                                            </div>
+                                            )}
+
                                             {!isAuthenticated && (
                                                 <p className="text-sm text-gray-400">
                                                     Create an account to track progress and earn certificates

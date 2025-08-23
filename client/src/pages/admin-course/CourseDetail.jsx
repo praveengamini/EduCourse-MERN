@@ -235,7 +235,7 @@ const CourseDetail = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
                 Course Description
               </h2>
-              <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap bg-gray-50/70 p-4 rounded-xl border-l-4 border-indigo-200">
+              <p className="text-gray-700 leading-relaxed overflow-y-scroll h-120 text-lg whitespace-pre-wrap bg-gray-50/70 p-4 rounded-xl border-l-4 border-indigo-200">
                 {course.description}
               </p>
             </div>

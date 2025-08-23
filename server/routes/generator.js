@@ -54,7 +54,7 @@ router.post('/generate-certificate', async (req, res) => {
     });
 
     if (existingCertificate) {
-      return res.status(400).json({ 
+      return res.status(200).json({ 
         success: false, 
         message: 'Certificate already exists for this student and course' 
       });

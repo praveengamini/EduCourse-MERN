@@ -11,16 +11,13 @@ import {
 } from 'lucide-react';
 import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
-
 const UserProfile = () => {
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state) => state.auth);
-
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [isSaving, setIsSaving] = useState(false);
-
   useEffect(() => {
     if (user?.id) {
       fetchEnrolledCourses(user.id);
@@ -30,7 +27,6 @@ const UserProfile = () => {
       });
     }
   }, [user]); 
-
   const fetchEnrolledCourses = async (studentId) => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/admin/student/enrolledcourses?studentId=${studentId}`);
@@ -40,7 +36,6 @@ const UserProfile = () => {
       toast.error('Failed to load enrolled courses.');
     }
   };
-
   const handleEditToggle = () => {
     if (isEditing) {
       setEditForm({
@@ -50,12 +45,10 @@ const UserProfile = () => {
     }
     setIsEditing(!isEditing);
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSave = async () => {
     setIsSaving(true);
     try {
@@ -63,9 +56,7 @@ const UserProfile = () => {
         userName: editForm.userName,
         phone: editForm.phone,
       };
-
       const resultAction = await dispatch(updateUserProfile({ id: user.id, updatePayload }));
-
       if (updateUserProfile.fulfilled.match(resultAction)) {
         toast.success("Profile updated successfully!");
         setIsEditing(false);
@@ -79,14 +70,12 @@ const UserProfile = () => {
       setIsSaving(false);
     }
   };
-
   const getProgressColor = (percentage) => {
     if (percentage >= 75) return 'from-green-400 to-green-500';
     if (percentage >= 50) return 'from-yellow-400 to-orange-500';
     if (percentage >= 25) return 'from-orange-400 to-red-500';
     return 'from-red-400 to-red-500';
   };
-
   const completedCourses = enrolledCourses.filter(course => course.isCompleted).length;
   const totalProgress = enrolledCourses.reduce((sum, course) => sum + course.progressPercentage, 0);
   const averageProgress = enrolledCourses.length > 0 ? Math.round(totalProgress / enrolledCourses.length) : 0;
@@ -101,11 +90,9 @@ const UserProfile = () => {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-black pt-20 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white">My Profile</h1>
           <p className="text-gray-400">Manage your account and track your learning progress</p>
@@ -132,7 +119,6 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-    
             <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -147,7 +133,6 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-    
             <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -162,7 +147,6 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-    
             <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -178,8 +162,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-        </div>
-        
+        </div>        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <div className="bg-gray-900 rounded-xl shadow-lg overflow-hidden mb-6 border border-gray-700">
@@ -195,7 +178,6 @@ const UserProfile = () => {
 
               <div className="p-6">
                 <div className="space-y-6">
-                  {/* Username */}
                   <div className="flex items-start space-x-3">
                     <User className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -217,7 +199,6 @@ const UserProfile = () => {
                     </div>
                   </div>
 
-                  {/* Email (Non-editable) */}
                   <div className="flex items-start space-x-3">
                     <Mail className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -231,7 +212,6 @@ const UserProfile = () => {
                     </div>
                   </div>
 
-                  {/* Phone */}
                   <div className="flex items-start space-x-3">
                     <Phone className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -253,7 +233,6 @@ const UserProfile = () => {
                     </div>
                   </div>
 
-                  {/* Member Since */}
                   <div className="flex items-start space-x-3">
                     <Calendar className="w-5 h-5 text-gray-400 mt-1" />
                     <div className="flex-1">
@@ -269,8 +248,7 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons
-                <div className="mt-8 space-y-3">
+                {/* <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button
                       onClick={handleEditToggle}
@@ -386,7 +364,6 @@ const UserProfile = () => {
                               </div>
                             </div>
 
-                            {/* Progress Section */}
                             <div className="mb-4">
                               <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm font-semibold text-gray-400">Course Progress</span>
@@ -402,7 +379,6 @@ const UserProfile = () => {
                               </div>
                             </div>
 
-                            {/* Course Meta Information */}
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                               <span className="flex items-center space-x-1">
                                 <Calendar className="w-4 h-4" />

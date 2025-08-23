@@ -469,7 +469,7 @@ const CourseDisplay = () => {
                                         <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg break-words">
                                             <span className="text-violet-400">{course.title.toUpperCase()}</span>
                                         </h1>
-                                        <p className="text-sm md:text-md whitespace-pre-wrap text-gray-300 max-w-2xl mx-auto md:mx-0 break-words hide-scrollbar overflow-y-scroll">
+                                        <p className="text-sm h-150 md:text-md whitespace-pre-wrap text-gray-300 max-w-2xl mx-auto md:mx-0 break-words hide-scrollbar overflow-y-scroll">
                                             {course.description}
                                         </p>
                                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm text-gray-300">
@@ -519,7 +519,7 @@ const CourseDisplay = () => {
                                                 <h3 className="text-lg font-semibold text-white mb-2">Preview Material</h3>
                                                 <button
                                                 onClick={() => openFirstPDFModal(course.pdfs[0])}
-                                                className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                                                className="px-6 py-3 bg-emerald-600 text-white rounded-lg w-full py-3 hover:bg-emerald-700 transition-colors"
                                                 >
                                                 View First PDF
                                                 </button>

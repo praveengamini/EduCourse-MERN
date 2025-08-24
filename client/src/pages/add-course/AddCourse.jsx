@@ -344,7 +344,7 @@ const AddCourse = () => {
                 <button
                   type="button"
                   onClick={handleAddPdf}
-                  className="flex items-center space-x-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors border border-blue-200"
+                  className="flex items-center cursor-pointer space-x-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors border border-blue-200"
                 >
                   <PlusIcon className="h-5 w-5" />
                   <span>Add PDF Materials</span>
@@ -398,7 +398,7 @@ const AddCourse = () => {
                   type="button"
                   onClick={handleAddVideo}
                   disabled={uploadingVideos}
-                  className="flex items-center space-x-2 px-4 py-3 bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors border border-purple-200 disabled:opacity-50"
+                  className="flex items-center cursor-pointer space-x-2 px-4 py-3 bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors border border-purple-200 disabled:opacity-50"
                 >
                   <PlusIcon className="h-5 w-5" />
                   <span>Add Videos</span>
@@ -478,7 +478,7 @@ const AddCourse = () => {
                 type="submit"
                 disabled={uploadingVideos || isSubmitting}
                 onClick={handleSubmit}
-                className={`w-full flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+                className={`w-full flex items-center justify-center space-x-2 px-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer ${
                   uploadingVideos || isSubmitting
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-[1.02]'

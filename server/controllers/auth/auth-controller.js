@@ -106,7 +106,8 @@ const loginUser = async (req, res) => {
           role: checkUser.role,
           id: checkUser._id,
           userName: checkUser.userName,
-          phone: checkUser.phone,  // return phone on login
+          phone: checkUser.phone, 
+          createdAt : checkUser.createdAt
         },
         ...(removedDevice && {
           deviceRemoved: {

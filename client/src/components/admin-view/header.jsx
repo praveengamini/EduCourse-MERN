@@ -21,10 +21,10 @@ function AdminHeader({ setOpen }) {
         SKILL HUB <span className="font-normal text-muted-foreground ml-1">(Admin Portal)</span>
       </span>
     </div>
-      <div className="flex flex-1 justify-end">
+      <div className="flex flex-1 justify-end ">
         <Button
           onClick={handleLogout}
-          className="inline-flex gap-2 items-center rounded-md px-4 py-2 text-sm font-medium shadow"
+          className="inline-flex gap-2 cursor-pointer items-center rounded-md px-4 py-2 text-sm font-medium shadow"
         >
           <LogOut />
           Logout

@@ -172,7 +172,7 @@ const CourseDetail = () => {
           {/* Back Button */}
           <button
             onClick={() => navigate(-1)}
-            className="group flex items-center text-indigo-600 hover:text-indigo-800 transition-all duration-200 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl"
+            className="group flex cursor-pointer items-center text-indigo-600 hover:text-indigo-800 transition-all duration-200 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
             <span className="font-medium">Back to Courses</span>
@@ -182,7 +182,7 @@ const CourseDetail = () => {
           <div className="flex items-center space-x-3">
             <button
               onClick={handleEditCourse}
-              className="group flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              className="group flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 cursor-pointer rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
             >
               <PencilIcon className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform duration-200" />
               <span className="font-medium">Edit Course</span>
@@ -190,7 +190,7 @@ const CourseDetail = () => {
 
             <button
               onClick={handleDeleteCourse}
-              className="group flex items-center bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              className="group flex items-center bg-red-600 cursor-pointer hover:bg-red-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
             >
               <TrashIcon className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform duration-200" />
               <span className="font-medium">Delete Course</span>

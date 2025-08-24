@@ -138,7 +138,8 @@ function AdminHeader() {
           </Button>
           <Button
             onClick={handleLogout}
-            className="flex cursor-pointer gap-2 items-center text-sm font-semibold text-gray-900 bg-white hover:bg-gray-200 transition-colors shadow px-4 py-2 rounded-full"
+
+            className="flex gap-2 cursor-pointer items-center text-sm font-semibold text-gray-900 bg-white hover:bg-gray-200 transition-colors shadow px-4 py-2 rounded-full"
           >
             <LogOut className="w-5 h-5" />
             <span className="hidden md:inline">Logout</span>

@@ -105,6 +105,7 @@ const StudentDashboard = () => {
                 <button 
                   onClick={() => navigate('/student/home')}
                   className="bg-gradient-to-r cursor-pointer from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-violet-500/25 transform hover:scale-105">
+
                   Explore All Courses
                 </button>
               </div>
@@ -267,6 +268,7 @@ const StudentDashboard = () => {
         <div className="flex flex-wrap gap-4 mb-8 justify-center sm:justify-start">
           <button
             className={`cursor-pointer flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+
               activeTab === 'myCourses'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
@@ -278,6 +280,7 @@ const StudentDashboard = () => {
           </button>
           <button
             className={`cursor-pointer flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+
               activeTab === 'certifications'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'

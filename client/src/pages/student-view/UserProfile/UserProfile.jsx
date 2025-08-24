@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
@@ -311,6 +312,7 @@ const UserProfile = () => {
                     <h3 className="text-2xl font-bold text-gray-300 mb-2">No courses enrolled yet</h3>
                     <p className="text-gray-400 mb-6">Start your learning journey by enrolling in a course</p>
                     <button onClick={()=>navigate("/student/all-courses")} className="bg-purple-700 cursor-pointer text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg">
+
                       Browse Courses
                     </button>
                   </div>

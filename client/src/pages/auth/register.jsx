@@ -5,11 +5,13 @@ import { registerUser } from "@/store/auth-slice";
 import { useState } from "react"; 
 import { useDispatch } from "react-redux"; 
 import { Link, useNavigate } from "react-router-dom"; 
-import { Eye, EyeOff, User, Mail, Lock, CheckCircle, XCircle } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Lock, CheckCircle, XCircle, Phone } from "lucide-react"; 
 import { MdPeopleAlt } from "react-icons/md";
+
 const initialState = { 
   userName: "", 
   email: "", 
+  phone: "",   // ✅ added phone
   password: "", 
   confirmPassword: "",
 }; 
@@ -28,20 +30,16 @@ function AuthRegister() {
     if (password.length < 8) {
       errors.push("Password must be at least 8 characters long");
     }
-    
     if (!/(?=.*[a-z])/.test(password)) {
       errors.push("Password must contain at least one lowercase letter");
     }
-    
     if (!/(?=.*[A-Z])/.test(password)) {
       errors.push("Password must contain at least one uppercase letter");
     }
-    
     if (!/(?=.*\d)/.test(password)) {
       errors.push("Password must contain at least one number");
     }
-    
-    if (!/(?=.*[!@#$%^&*(),.?":{}|<>])/.test(password)) {
+    if (!/(?=.*[!@#$%^&*(),.?\":{}|<>])/.test(password)) {
       errors.push("Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)");
     }
     
@@ -86,6 +84,7 @@ function AuthRegister() {
 
   const isFormValid = formData.userName && 
                      formData.email && 
+                     formData.phone &&   // ✅ must include phone
                      formData.password && 
                      formData.confirmPassword &&
                      formData.password === formData.confirmPassword &&
@@ -96,7 +95,7 @@ function AuthRegister() {
     { text: "One lowercase letter", test: /(?=.*[a-z])/.test(formData.password) },
     { text: "One uppercase letter", test: /(?=.*[A-Z])/.test(formData.password) },
     { text: "One number", test: /(?=.*\d)/.test(formData.password) },
-    { text: "One special character", test: /(?=.*[!@#$%^&*(),.?":{}|<>])/.test(formData.password) }
+    { text: "One special character", test: /(?=.*[!@#$%^&*(),.?\":{}|<>])/.test(formData.password) }
   ];
  
   return ( 
@@ -104,7 +103,7 @@ function AuthRegister() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-lg">
-          <MdPeopleAlt className="text-4xl text-purple-500 "/>
+            <MdPeopleAlt className="text-4xl text-purple-500 "/>
           </div>
           <p className="text-gray-400 text-xl">
            Let's get started with your account
@@ -130,6 +129,18 @@ function AuthRegister() {
               placeholder="Email address"
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
+            />
+          </div>
+
+          {/* ✅ Phone input */}
+          <div className="relative">
+            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
             />
           </div>
@@ -208,7 +219,6 @@ function AuthRegister() {
               {formData.password === formData.confirmPassword ? 'Passwords match' : 'Passwords do not match'}
             </div>
           )}
-
 
           <button
             onClick={onSubmit}

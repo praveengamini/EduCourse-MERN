@@ -121,7 +121,7 @@ const AllCourses = ({ isLanding = false }) => {
             <p className="text-gray-500 mb-6">Try adjusting your filters or create a new course</p>
             <button
               onClick={() => navigate('/admin/add-course')}
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="cursor-pointer bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Create First Course
             </button>
@@ -201,7 +201,7 @@ const AllCourses = ({ isLanding = false }) => {
               navigate(`/admin/add-course`);
             }
           }}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group hover:scale-110"
+          className="fixed bottom-8 cursor-pointer right-8 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group hover:scale-110"
         >
           <PlusIcon className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
         </button>

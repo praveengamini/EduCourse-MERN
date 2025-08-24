@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
 const UserProfile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, isLoading } = useSelector((state) => state.auth);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -308,7 +310,8 @@ const UserProfile = () => {
                     <div className="text-gray-600 text-8xl mb-6">📚</div>
                     <h3 className="text-2xl font-bold text-gray-300 mb-2">No courses enrolled yet</h3>
                     <p className="text-gray-400 mb-6">Start your learning journey by enrolling in a course</p>
-                    <button className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg">
+                    <button onClick={() => navigate("/student/home")}
+                    className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg cursor-pointer">
                       Browse Courses
                     </button>
                   </div>

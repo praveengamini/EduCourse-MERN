@@ -30,7 +30,7 @@ const Header = () => {
           <div className="hidden md:flex items-center">
             <button
               onClick={handleLogin}
-              className="flex-1 py-2 px-6 text-center bg-white text-purple-600 border border-purple-600 rounded-md shadow hover:bg-gray-400 transition"
+              className="flex-1 py-2 px-6 cursor-pointer text-center bg-white text-purple-600 border border-purple-600 rounded-md shadow hover:bg-gray-400 transition"
             >
               Login
             </button>

@@ -1,5 +1,7 @@
 const CourseModel = require('../../models/CourseModel');
 const EnrolledCourseModel = require('../../models/EnrolledCourseModel');
+const CourseVideoModel = require('../../models/CourseVideoModel');
+const ProgressModel = require('../../models/ProgressModel')
 
 const getAllCourses = async (req, res) => {
   try {
@@ -151,22 +153,23 @@ const getEnrolledStudentsForCourse = async (req, res) => {
 const deleteCourse = async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Find and delete the course
         const course = await CourseModel.findByIdAndDelete(id);
-        const enrollCoursesDelete = await EnrolledCourseModel.deleteMany({courseId:id});
-        console.log("course deleted", enrollCoursesDelete);
-        
+
         if (!course) {
-            return res.status(200).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Course not found'
             });
         }
+        await EnrolledCourseModel.deleteMany({ courseId: id });
+        if (course.videos && course.videos.length > 0) {
+            await CourseVideoModel.deleteMany({ _id: { $in: course.videos } });
+        }
+        await ProgressModel.deleteMany({ courseId: id });
 
         res.status(200).json({
             success: true,
-            message: 'Course deleted successfully'
+            message: 'Course and related data deleted successfully'
         });
 
     } catch (error) {
@@ -177,8 +180,8 @@ const deleteCourse = async (req, res) => {
             error: error.message
         });
     }
-
 };
+
 
 module.exports = {
   getAllCourses,

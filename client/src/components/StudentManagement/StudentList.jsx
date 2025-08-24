@@ -210,7 +210,7 @@ const StudentList = ({ onStudentSelect }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button
                     onClick={() => onStudentSelect(student._id)}
-                    className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    className="inline-flex items-center cursor-pointer px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                   >
                     <Eye className="h-4 w-4 mr-1" />
                     View Details

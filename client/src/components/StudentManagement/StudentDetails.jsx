@@ -121,6 +121,9 @@ const StudentDetails = ({ studentId, onBack }) => {
 
   const { student, enrolledCourses, statistics } = studentData;
 
+  // Filter out enrollments with null or undefined courseId
+  const validEnrollments = enrolledCourses?.filter(enrollment => enrollment?.courseId) || [];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -142,26 +145,30 @@ const StudentDetails = ({ studentId, onBack }) => {
             </div>
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{student.userName}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{student?.userName || 'Unknown Student'}</h1>
             <div className="mt-2 space-y-1">
               <div className="flex items-center text-gray-600">
                 <Mail className="h-4 w-4 mr-2" />
-                {student.email}
+                {student?.email || 'No email provided'}
               </div>
-              {student.phone && (
+              {student?.phone && (
                 <div className="flex items-center text-gray-600">
                   <Phone className="h-4 w-4 mr-2" />
                   {student.phone}
                 </div>
               )}
-              <div className="flex items-center text-gray-600">
-                <Calendar className="h-4 w-4 mr-2" />
-                Joined {formatDate(student.createdAt)}
+              {student?.createdAt && (
+                <div className="flex items-center text-gray-600">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Joined {formatDate(student.createdAt)}
+                </div>
+              )}
+            </div>
+            {student?._id && (
+              <div className="mt-3 text-xs text-gray-500 font-mono">
+                Student ID: {student._id}
               </div>
-            </div>
-            <div className="mt-3 text-xs text-gray-500 font-mono">
-              Student ID: {student._id}
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -175,7 +182,7 @@ const StudentDetails = ({ studentId, onBack }) => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Enrolled</p>
-              <p className="text-2xl font-bold text-gray-900">{statistics.totalEnrolled}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics?.totalEnrolled || 0}</p>
             </div>
           </div>
         </div>
@@ -187,7 +194,7 @@ const StudentDetails = ({ studentId, onBack }) => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Completed</p>
-              <p className="text-2xl font-bold text-gray-900">{statistics.totalCompleted}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics?.totalCompleted || 0}</p>
             </div>
           </div>
         </div>
@@ -199,7 +206,7 @@ const StudentDetails = ({ studentId, onBack }) => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">In Progress</p>
-              <p className="text-2xl font-bold text-gray-900">{statistics.totalInProgress}</p>
+              <p className="text-2xl font-bold text-gray-900">{statistics?.totalInProgress || 0}</p>
             </div>
           </div>
         </div>
@@ -211,53 +218,60 @@ const StudentDetails = ({ studentId, onBack }) => {
           <h2 className="text-lg font-semibold text-gray-900">Enrolled Courses</h2>
         </div>
 
-        {enrolledCourses.length === 0 ? (
+        {validEnrollments.length === 0 ? (
           <div className="text-center py-12">
             <BookOpen className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">No courses enrolled</h3>
-            <p className="mt-1 text-sm text-gray-500">This student hasn't enrolled in any courses yet.</p>
+            <p className="mt-1 text-sm text-gray-500">
+              {enrolledCourses?.length > validEnrollments.length 
+                ? "Some courses may have been deleted or are no longer available."
+                : "This student hasn't enrolled in any courses yet."
+              }
+            </p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
-            {enrolledCourses.map((enrollment) => (
+            {validEnrollments.map((enrollment) => (
               <div key={enrollment._id} className="p-6 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="text-lg font-medium text-gray-900">
-                          {enrollment.courseId.title}
+                          {enrollment.courseId?.title || 'Course Title Not Available'}
                         </h3>
                         <p className="mt-1 text-sm text-gray-600 max-w-2xl">
-                          {enrollment.courseId.description}
+                          {enrollment.courseId?.description || 'No description available'}
                         </p>
                       </div>
                       <div className="ml-4 flex-shrink-0 flex items-center space-x-2">
                         {getStatusBadge(enrollment.status)}
-                        <button
-                          onClick={() => handleUnenrollCourse(enrollment.courseId._id, enrollment.courseId.title)}
-                          disabled={unenrollingCourse === enrollment.courseId._id}
-                          className="inline-flex items-center px-2 py-1 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {unenrollingCourse === enrollment.courseId._id ? (
-                            <>
-                              <div className="animate-spin rounded-full h-3 w-3 border-b border-red-700 mr-1"></div>
-                              Unenrolling...
-                            </>
-                          ) : (
-                            <>
-                              <UserMinus className="h-3 w-3 mr-1" />
-                              Unenroll
-                            </>
-                          )}
-                        </button>
+                        {enrollment.courseId?._id && (
+                          <button
+                            onClick={() => handleUnenrollCourse(enrollment.courseId._id, enrollment.courseId.title)}
+                            disabled={unenrollingCourse === enrollment.courseId._id}
+                            className="inline-flex items-center px-2 py-1 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {unenrollingCourse === enrollment.courseId._id ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b border-red-700 mr-1"></div>
+                                Unenrolling...
+                              </>
+                            ) : (
+                              <>
+                                <UserMinus className="h-3 w-3 mr-1" />
+                                Unenroll
+                              </>
+                            )}
+                          </button>
+                        )}
                       </div>
                     </div>
 
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                       <div>
                         <span className="text-gray-500">Duration:</span>
-                        <span className="ml-2 text-gray-900">{enrollment.courseId.duration}</span>
+                        <span className="ml-2 text-gray-900">{enrollment.courseId?.duration || 'N/A'}</span>
                       </div>
                       <div>
                         <span className="text-gray-500">Enrolled:</span>
@@ -276,9 +290,9 @@ const StudentDetails = ({ studentId, onBack }) => {
                       <div className="mt-4">
                         <div className="flex items-center justify-between text-sm mb-2">
                           <span className="text-gray-600">Progress</span>
-                          <span className="text-gray-900 font-medium">{enrollment.progressPercentage}%</span>
+                          <span className="text-gray-900 font-medium">{enrollment.progressPercentage || 0}%</span>
                         </div>
-                        <ProgressBar percentage={enrollment.progressPercentage} />
+                        <ProgressBar percentage={enrollment.progressPercentage || 0} />
                       </div>
                     )}
 

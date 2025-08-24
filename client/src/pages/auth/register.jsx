@@ -117,7 +117,7 @@ function AuthRegister() {
         </div>
 
         {/* Wrap in form element */}
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6 px-3">
           <div className="relative">
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -169,12 +169,12 @@ function AuthRegister() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400 hover:text-purple-600 transition-colors"
             >
               {showPassword ? (
-                <EyeOff className="w-5 h-5" />
+                <EyeOff className="w-5 h-5 cursor-pointer" />
               ) : (
-                <Eye className="w-5 h-5" />
+                <Eye className="w-5 h-5 cursor-pointer" />
               )}
             </button>
           </div>
@@ -193,12 +193,12 @@ function AuthRegister() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400 hover:text-purple-600 transition-colors"
             >
               {showConfirmPassword ? (
-                <EyeOff className="w-5 h-5" />
+                <EyeOff className="w-5 cursor-pointer h-5" />
               ) : (
-                <Eye className="w-5 h-5" />
+                <Eye className="w-5 h-5 cursor-pointer" />
               )}
             </button>
           </div>
@@ -239,7 +239,7 @@ function AuthRegister() {
             disabled={!isFormValid}
             className={`w-full font-medium py-3 px-4 rounded-lg transition duration-200 shadow-md ${
               isFormValid
-                ? 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white'
+                ? 'bg-gradient-to-r cursor-pointer from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white'
                 : 'bg-gray-700 text-gray-400 cursor-not-allowed'
             }`}
           >

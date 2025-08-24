@@ -79,27 +79,27 @@ function AuthLogin() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400 hover:text-purple-600 transition-colors"
             >
               {showPassword ? (
-                <EyeOff className="w-5 h-5" />
+                <EyeOff className="w-5 h-5 cursor-pointer" />
               ) : (
-                <Eye className="w-5 h-5" />
+                <Eye className="w-5 h-5 cursor-pointer" />
               )}
             </button>
           </div>
 
           <div className="flex items-center justify-between">
             <label className="flex items-center">
-              <input type="checkbox" className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500" />
-              <span className="ml-2 text-sm text-gray-400">Remember me</span>
+              <input type="checkbox" className="w-4 h-4 accent-purple-600 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500" />
+              <span className="ml-2 cursor-pointer text-sm text-gray-400">Remember me</span>
             </label>
           </div>
 
           {/* Change to type="submit" and remove onClick */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-md"
+            className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-md"
           >
             Login
           </button>

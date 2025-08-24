@@ -6,7 +6,7 @@ function AuthLayout() {
   const isRegister = location.pathname.includes('register');
 
   return (
-    <div className="flex min-h-screen w-full bg-gradient-to-br from-slate-50 to-stone-100 relative">
+    <div className="flex min-h-screen w-full ">
       <div className="absolute top-6 left-6 z-10">
         <Link 
           to="/" 
@@ -31,7 +31,7 @@ function AuthLayout() {
 
       {isRegister ? (
         <>
-          <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-1 items-center justify-center bg-black">
             <div className={`
               w-full transition-transform duration-500 ease-in-out
               ${isRegister ? 'transform translate-x-0' : 'transform -translate-x-full'}

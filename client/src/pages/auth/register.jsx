@@ -254,7 +254,7 @@ function AuthRegister() {
               to="/auth/login"
               className="text-purple-500 hover:text-purple-400 font-medium"
             >
-              Sign in.
+              Sign in
             </Link>
           </p>
         </div>

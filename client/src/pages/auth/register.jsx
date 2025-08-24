@@ -105,7 +105,7 @@ function AuthRegister() {
   ];
  
   return ( 
-    <div className="w-full h-screen bg-black flex items-center justify-center px-12 py-8 overflow-y-auto">
+    <div className=" bg-black flex items-center justify-center overflow-y-auto">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-lg">
@@ -147,7 +147,7 @@ function AuthRegister() {
             <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               required
-              type="tel"
+              type="number"
               placeholder="Phone Number"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}

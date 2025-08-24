@@ -59,6 +59,12 @@ function AuthRegister() {
   function onSubmit(event) { 
     event.preventDefault(); 
     
+    // Manual validation as backup
+    if (!formData.userName || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    
     const passwordValidationErrors = validatePassword(formData.password);
     if (passwordValidationErrors.length > 0) {
       toast.error("Please fix password requirements");
@@ -110,10 +116,12 @@ function AuthRegister() {
           </p>
         </div>
 
-        <div className="space-y-6">
+        {/* Wrap in form element */}
+        <form onSubmit={onSubmit} className="space-y-6">
           <div className="relative">
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
+              required
               type="text"
               placeholder="Username"
               value={formData.userName}
@@ -125,6 +133,7 @@ function AuthRegister() {
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
+              required
               type="email"
               placeholder="Email address"
               value={formData.email}
@@ -137,7 +146,8 @@ function AuthRegister() {
           <div className="relative">
             <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
-              type="text"
+              required
+              type="tel"
               placeholder="Phone Number"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
@@ -148,8 +158,10 @@ function AuthRegister() {
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
+              required
               type={showPassword ? "text" : "password"}
               placeholder="Password"
+              minLength="8"
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
               className="w-full pl-12 pr-12 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
@@ -170,8 +182,10 @@ function AuthRegister() {
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
+              required
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
+              minLength="8"
               value={formData.confirmPassword}
               onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
               className="w-full pl-12 pr-12 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
@@ -221,7 +235,7 @@ function AuthRegister() {
           )}
 
           <button
-            onClick={onSubmit}
+            type="submit"
             disabled={!isFormValid}
             className={`w-full font-medium py-3 px-4 rounded-lg transition duration-200 shadow-md ${
               isFormValid
@@ -231,7 +245,7 @@ function AuthRegister() {
           >
             Create Account
           </button>
-        </div>
+        </form>
 
         <div className="text-center mt-8">
           <p className="text-gray-400">
@@ -240,7 +254,7 @@ function AuthRegister() {
               to="/auth/login"
               className="text-purple-500 hover:text-purple-400 font-medium"
             >
-              Sign in.
+              Sign in
             </Link>
           </p>
         </div>

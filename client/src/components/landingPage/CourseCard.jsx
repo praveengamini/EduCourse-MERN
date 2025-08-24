@@ -44,7 +44,7 @@ const CourseCard = ({ course }) => {
   const rating = (Math.random() * (5 - 4) + 4).toFixed(1); // 4.0 - 5.0
 
   return (
-    <div className="bg-[#0f0f0f] border border-gray-700 rounded-lg p-5 w-15rem h-15rem text-white font-sans" >
+    <div className="bg-[#0f0f0f] border  hover:border-purple-600 border-gray-700 rounded-lg p-5 w-15rem h-15rem text-white font-sans" >
 
       {/* Top Info */}
       <div className="flex justify-between text-sm text-gray-300 mb-4">

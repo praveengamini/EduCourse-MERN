@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
+import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ const UserProfile = () => {
             <span className="text-white text-lg font-bold">Learning Stats</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-purple-500 hover:-translate-y-3 hover:scale-102 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-purple-700 mb-1">
@@ -121,7 +122,7 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-purple-500 hover:-translate-y-3 hover:scale-102 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-purple-700 mb-1">
@@ -135,7 +136,7 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-purple-500 hover:-translate-y-3 hover:scale-102 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-purple-700 mb-1">
@@ -149,7 +150,7 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-purple-500 hover:-translate-y-3 hover:scale-102 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-purple-700 mb-1">
@@ -310,8 +311,8 @@ const UserProfile = () => {
                     <div className="text-gray-600 text-8xl mb-6">📚</div>
                     <h3 className="text-2xl font-bold text-gray-300 mb-2">No courses enrolled yet</h3>
                     <p className="text-gray-400 mb-6">Start your learning journey by enrolling in a course</p>
-                    <button onClick={() => navigate("/student/home")}
-                    className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg cursor-pointer">
+                    <button onClick={()=>navigate("/student/all-courses")} className="bg-purple-700 cursor-pointer text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition-all duration-200 shadow-lg">
+
                       Browse Courses
                     </button>
                   </div>

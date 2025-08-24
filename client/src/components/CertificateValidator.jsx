@@ -65,7 +65,7 @@ const CertificateValidator = () => {
             </style>
             <div className="max-w-4xl mx-auto py-20 px-4 relative z-10">
                 <div className="text-center mb-10">
-                    <h1 className="text-4xl font-bold text-violet-400 mb-2">Certificate Validator</h1>
+                    <h1 className="pt-5 text-4xl font-bold text-violet-400 mb-2">Certificate Validator</h1>
                     <p className="text-lg text-gray-400">Enter a certificate number to validate and view certificate details</p>
                 </div>
 
@@ -89,7 +89,7 @@ const CertificateValidator = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full sm:w-auto px-8 py-3 bg-violet-600 text-white rounded-lg hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto px-8 py-3 cursor-pointer bg-violet-600 text-white rounded-lg hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium flex items-center justify-center gap-2"
                             >
                                 {loading ? (
                                     <>

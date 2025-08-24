@@ -519,7 +519,7 @@ const CourseDisplay = () => {
                                                 <h3 className="text-lg font-semibold text-white mb-2">Preview Material</h3>
                                                 <button
                                                 onClick={() => openFirstPDFModal(course.pdfs[0])}
-                                                className="px-6 py-3 bg-emerald-600 text-white rounded-lg w-full py-3 hover:bg-emerald-700 transition-colors"
+                                                className="px-6 py-3 bg-emerald-600 text-white rounded-lg w-full  hover:bg-emerald-700 transition-colors"
                                                 >
                                                 View First PDF
                                                 </button>

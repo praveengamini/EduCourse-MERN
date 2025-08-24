@@ -104,7 +104,8 @@ const StudentDashboard = () => {
                 </p>
                 <button 
                   onClick={() => navigate('/student/home')}
-                  className="bg-gradient-to-r from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 text-white px-8 py-3 rounded-full font-semibold cursor-pointer transition-all duration-300 shadow-lg hover:shadow-violet-500/25 transform hover:scale-105">
+                  className="bg-gradient-to-r cursor-pointer from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-violet-500/25 transform hover:scale-105">
+
                   Explore All Courses
                 </button>
               </div>
@@ -171,10 +172,10 @@ const StudentDashboard = () => {
               </a>
               <button
                 onClick={() => handleDownload(cert.certificateUrl, `certificate-${cert.certificateNumber}.png`)}
-                className="flex items-center justify-center space-x-2 bg-zinc-700 hover:bg-zinc-600 text-white py-3 px-4 rounded-full font-semibold transition-colors duration-200"
+                className="flex cursor-pointer items-center justify-center space-x-2 bg-zinc-700 hover:bg-zinc-600 text-white py-3 px-4 rounded-full font-semibold transition-colors duration-200"
               >
                 <Download size={18} />
-                <span>Download</span>
+                <span className=''>Download</span>
               </button>
             </div>
           </div>
@@ -217,7 +218,7 @@ const StudentDashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="bg-zinc-950/70 border border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+          <div className="bg-zinc-950/70 border hover:border-purple-500 hover:-translate-y-3 hover:scale-102 transition-all border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-4xl font-bold text-violet-400 mb-1">{String(stats.enrolled || 0).padStart(2, '0')}</div>
@@ -228,7 +229,7 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-zinc-950/70 border border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+          <div className="bg-zinc-950/70 border border-zinc-800 hover:border-green-500 hover:-translate-y-3 hover:scale-102 transition-all rounded-2xl p-6 shadow-xl backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-4xl font-bold text-emerald-400 mb-1">{String(stats.completed || 0).padStart(2, '0')}</div>
@@ -239,7 +240,7 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-zinc-950/70 border border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+          <div className="bg-zinc-950/70 border hover:border-cyan-500 hover:-translate-y-3 hover:scale-102 transition-all border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-4xl font-bold text-cyan-400 mb-1">{stats.time || '0h'}</div>
@@ -250,7 +251,7 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-zinc-950/70 border border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+          <div className="bg-zinc-950/70 border hover:border-yellow-500 hover:-translate-y-3 hover:scale-102 transition-all border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-4xl font-bold text-yellow-400 mb-1">{String(stats.certificates || 0).padStart(2, '0')}</div>
@@ -266,7 +267,8 @@ const StudentDashboard = () => {
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-4 mb-8 justify-center sm:justify-start">
           <button
-            className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 cursor-pointer ${
+            className={`cursor-pointer flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+
               activeTab === 'myCourses'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
@@ -277,7 +279,8 @@ const StudentDashboard = () => {
             My Courses
           </button>
           <button
-            className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 cursor-pointer ${
+            className={`cursor-pointer flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+
               activeTab === 'certifications'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'

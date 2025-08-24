@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { MdPeopleAlt } from "react-icons/md";
+
 const initialState = {
   email: "",
   password: "",
@@ -19,6 +20,12 @@ function AuthLogin() {
 
   function onSubmit(event) {
     event.preventDefault();
+
+    // Manual validation as backup
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
 
     dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
@@ -38,7 +45,7 @@ function AuthLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-lg">
-         <MdPeopleAlt className="text-4xl text-purple-500"/>
+            <MdPeopleAlt className="text-4xl text-purple-500"/>
           </div>
           <p className="text-gray-400 text-lg">
             Empower Your Journey: Where Professionalism<br />
@@ -46,11 +53,13 @@ function AuthLogin() {
           </p>
         </div>
 
-        <div className="space-y-6">
+        {/* Wrap inputs in a form element */}
+        <form onSubmit={onSubmit} className="space-y-6">
           <div>
             <input
+              required
               type="email"
-              placeholder="email"
+              placeholder="Email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
@@ -59,8 +68,10 @@ function AuthLogin() {
           
           <div className="relative">
             <input
+              required
               type={showPassword ? "text" : "password"}
               placeholder="Password"
+              minLength="6"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               className="w-full px-4 py-3 pr-12 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-sm"
@@ -83,11 +94,11 @@ function AuthLogin() {
               <input type="checkbox" className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500" />
               <span className="ml-2 text-sm text-gray-400">Remember me</span>
             </label>
-            {/* <a href="#" className="text-sm text-gray-400 hover:text-white">Forgot Password?</a> */}
           </div>
 
+          {/* Change to type="submit" and remove onClick */}
           <button
-            onClick={onSubmit}
+            type="submit"
             className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-md"
           >
             Login
@@ -101,7 +112,7 @@ function AuthLogin() {
               <span className="px-2 bg-black text-gray-400">or</span>
             </div>
           </div>
-        </div>
+        </form>
 
         <div className="text-center mt-8">
           <p className="text-gray-400">

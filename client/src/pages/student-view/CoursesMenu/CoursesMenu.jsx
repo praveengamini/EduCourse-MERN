@@ -55,7 +55,7 @@ const AllCourses = () => {
                     className="group flex items-center text-violet-400 hover:text-violet-200 mb-8 transition-all duration-200 bg-zinc-900/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl"
                 >
                     <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
-                    <span className="font-medium">Back</span>
+                    <span className="font-medium cursor-pointer">Back</span>
                 </button>
 
                 {/* Header Section */}
@@ -74,7 +74,7 @@ const AllCourses = () => {
                         {/* Filters Section */}
                         <div className="flex items-center gap-3 flex-wrap">
                             <div className="relative">
-                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
+                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 font-extrabold bg-black text-white" />
                                 <input
                                     type="text"
                                     name="title"
@@ -91,7 +91,7 @@ const AllCourses = () => {
                                     name="cost"
                                     value={filters.cost}
                                     onChange={handleFilterChange}
-                                    className="bg-zinc-900 border border-zinc-700 rounded-md px-3 py-2 text-sm font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                                    className="bg-zinc-900 border cursor-pointer border-zinc-700 rounded-md px-3 py-2 text-sm font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400"
                                     >
                                     <option className='bg-zinc-900' value="">All Prices</option>
                                     <option className='bg-zinc-900' value=">1000">{'> ₹1000'}</option>

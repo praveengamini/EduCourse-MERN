@@ -45,10 +45,10 @@ const FAQSection = () => {
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+            <div key={index} className="border  border-gray-200 rounded-lg overflow-hidden">
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 flex items-center justify-between transition-colors"
+                className="w-full cursor-pointer  px-6 py-4 text-left bg-white hover:bg-gray-400 flex items-center justify-between transition-colors"
               >
                 <span className="font-medium text-gray-900">{faq.question}</span>
                 {openFAQ === index ? (

@@ -33,7 +33,6 @@ function AdminHeader() {
       spread: 100,
       origin: { y: 0.6 }
     });
-    navigate("/student/"); 
   }
 
   // If not authenticated, show landing header

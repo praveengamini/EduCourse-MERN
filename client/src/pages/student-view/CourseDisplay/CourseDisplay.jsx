@@ -309,11 +309,11 @@ const CourseDisplay = () => {
                         <div className="flex items-center justify-between mb-8">
                             <h1 className="flex-1 text-3xl md:text-4xl font-bold text-violet-400 break-words">{course.title.toUpperCase()}</h1>
                             <button
-                                onClick={() => navigate(-1)}
+                                onClick={() => navigate("/student/my-courses")}
                                 className="group flex items-center text-gray-400 hover:text-violet-400 transition-colors px-4 py-2 rounded-full"
                             >
-                                <ArrowLeft className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-                                <span className="font-medium">Back to Courses</span>
+                                <ArrowLeft className="h-5  w-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+                                <span className="font-medium cursor-pointer">Back to Courses</span>
                             </button>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">

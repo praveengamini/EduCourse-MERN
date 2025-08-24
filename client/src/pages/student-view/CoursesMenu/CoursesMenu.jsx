@@ -107,10 +107,10 @@ const AllCourses = () => {
                     {/* Results Count */}
                     <div className="flex items-center justify-between">
                         <p className="text-sm text-gray-400">
-                            Showing <span className="font-semibold text-violet-400">{courses.length}</span> courses
+                            Showing <span className="font-semibold text-violet-400">{courses.length}</span> course(s)
                         </p>
                         <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
                             Live updates
                         </div>
                     </div>
@@ -149,20 +149,32 @@ const AllCourses = () => {
                                     </h2>
                                     
                                     <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center text-sm text-gray-400 bg-zinc-800 rounded-full px-3 py-1">
+                                        <div className="flex-col space-y-3 items-center justify-between">
+                                            <div className="flex items-center text-sm text-gray-400 bg-purple-500/50 rounded-full px-3 py-1">
                                                 <UsersIcon className="h-4 w-4 mr-2 text-violet-400" />
                                                 <span className="font-medium">{course.studentCount}</span>
-                                                <span className="ml-1">students</span>
+                                                <span className="ml-1">student(s)</span>
                                             </div>
                                             
-                                            <div className="flex items-center text-sm text-gray-400 bg-green-900/40 rounded-full px-3 py-1">
-                                                <CurrencyRupeeIcon className="h-4 w-4 mr-1 text-green-400" />
-                                                <span className="font-bold text-green-400">₹{course.cost}</span>
+                                          <div className="flex items-center gap-2 text-sm bg-green-900/20 border border-green-700 rounded-full px-4 py-1 shadow-sm">
+                                            <CurrencyRupeeIcon className="h-4 w-4 text-green-400" />
+
+                                            <span className="font-semibold  text-gray-200 line-through">
+                                                ₹{course.cost * 2}
+                                            </span>
+
+                                            <span className="font-bold text-green-400">
+                                                ₹{course.cost}
+                                            </span>
+
+                                            <span className="ml-1 bg-red-700/40 texgreent--300 text-xs font-semibold px-2 py-0.5 rounded-full">
+                                                -50%
+                                            </span>
                                             </div>
+
                                         </div>
 
-                                        <div className="flex items-center text-xs text-gray-500 bg-zinc-800 rounded-full px-3 py-2">
+                                        <div className="flex items-center text-xs text-black bg-yellow-400/50 rounded-full px-3 py-2">
                                             <CalendarDaysIcon className="h-4 w-4 mr-2" />
                                             <span>Created {new Date(course.createdAt).toLocaleDateString('en-US', { 
                                                 year: 'numeric', 

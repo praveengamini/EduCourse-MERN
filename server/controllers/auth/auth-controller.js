@@ -7,7 +7,8 @@ const MAX_DEVICES = 3;
 
 // REGISTER
 const registerUser = async (req, res) => {
-  const { userName, email,password } = req.body;
+  const { userName, email, password, phone } = req.body; // include phone
+
   try {
     const checkUser = await User.findOne({ email });
     if (checkUser) {
@@ -18,15 +19,22 @@ const registerUser = async (req, res) => {
     }
 
     const hashPassword = await hash(password, 12);
-    const newUser = new User({ userName, email, password: hashPassword });
+    const newUser = new User({ userName, email, phone, password: hashPassword }); // add phone here
 
     await newUser.save();
     res.status(200).json({
       success: true,
       message: "Registration successful",
+      user: {
+        id: newUser._id,
+        userName: newUser.userName,
+        email: newUser.email,
+        phone: newUser.phone,   // return phone
+        role: newUser.role,
+        createdAt: newUser.createdAt,
+      },
     });
   } catch (e) {
-    // console.error("Registration error:", e);
     res.status(500).json({
       success: false,
       message: "Some error occurred during registration",
@@ -61,8 +69,8 @@ const loginUser = async (req, res) => {
         role: checkUser.role,
         email: checkUser.email,
         userName: checkUser.userName,
-        phone: checkUser.phone,
-        createdAt : checkUser.createdAt
+        phone: checkUser.phone,     // add phone to JWT payload
+        createdAt: checkUser.createdAt,
       },
       "CLIENT_SECRET_KEY", // Ideally from process.env.JWT_SECRET
       { expiresIn: "60m" }
@@ -80,7 +88,7 @@ const loginUser = async (req, res) => {
 
     if (checkUser.devices.length >= MAX_DEVICES) {
       checkUser.devices.sort((a, b) => new Date(a.time) - new Date(b.time));
-      removedDevice = checkUser.devices.shift(); // Remove oldest
+      removedDevice = checkUser.devices.shift();
       const deviceName = `${removedDevice.browser} on ${removedDevice.os}`;
       deviceRemovedMessage = ` Device "${deviceName}" was logged out due to device limit.`;
     }
@@ -98,6 +106,7 @@ const loginUser = async (req, res) => {
           role: checkUser.role,
           id: checkUser._id,
           userName: checkUser.userName,
+          phone: checkUser.phone,  // return phone on login
         },
         ...(removedDevice && {
           deviceRemoved: {
@@ -109,7 +118,6 @@ const loginUser = async (req, res) => {
         }),
       });
   } catch (e) {
-    // console.error("Login error:", e);
     res.status(500).json({
       success: false,
       message: "Some error occurred during login",

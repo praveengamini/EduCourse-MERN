@@ -58,6 +58,8 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
+    console.log(user);
+    
     if (user?.id) {
       axios
         .get(`${import.meta.env.VITE_SERVER_URL}/api/dashboard/${user.id}`)

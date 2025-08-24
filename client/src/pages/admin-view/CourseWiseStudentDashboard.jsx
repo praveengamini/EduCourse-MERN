@@ -151,7 +151,7 @@ const CourseWiseStudentDashboard = () => {
                   <h3 className="text-lg font-semibold text-gray-700">Filters & Search</h3>
                   <button
                     onClick={clearAllFilters}
-                    className="px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                    className="px-4 py-2 cursor-pointer text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors duration-200"
                   >
                     Clear All Filters
                   </button>
@@ -266,7 +266,7 @@ const CourseWiseStudentDashboard = () => {
                       <p className="text-gray-400 mt-2">Try adjusting your search criteria</p>
                       <button
                         onClick={clearAllFilters}
-                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                        className="cursor-pointer mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
                       >
                         Clear All Filters
                       </button>

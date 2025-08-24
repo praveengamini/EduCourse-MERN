@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 export default function NewCourse() {
     const [courses, setCourses] = useState(null);
     const [loading, setLoading] = useState(false); 
+    const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
 
     useEffect(() => {
@@ -52,6 +54,7 @@ export default function NewCourse() {
 
     return (
         <div className="mt-20 md:mt-10 relative flex flex-col items-center justify-center min-h-screen bg-black text-gray-100 p-4 overflow-hidden" style={{ fontFamily: "Inter, sans-serif" }}>
+
             <div className="absolute inset-0 z-0 bg-repeat opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-800 rounded-full blur-3xl opacity-40 animate-blob"></div>
             <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000"></div>

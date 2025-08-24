@@ -38,6 +38,7 @@ const Header = () => {
             <button
               onClick={handleLogin}
               className="flex-1 py-2 px-6 text-center cursor-pointer bg-white text-purple-600 border border-purple-600 rounded-md shadow hover:bg-gray-400 transition"
+
             >
               Login
             </button>

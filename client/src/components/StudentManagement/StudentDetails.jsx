@@ -131,7 +131,7 @@ const StudentDetails = ({ studentId, onBack }) => {
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={onBack}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center cursor-pointer px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Students
@@ -250,7 +250,7 @@ const StudentDetails = ({ studentId, onBack }) => {
                           <button
                             onClick={() => handleUnenrollCourse(enrollment.courseId._id, enrollment.courseId.title)}
                             disabled={unenrollingCourse === enrollment.courseId._id}
-                            className="inline-flex items-center px-2 py-1 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center cursor-pointer px-2 py-1 border border-red-300 rounded-md text-xs font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {unenrollingCourse === enrollment.courseId._id ? (
                               <>

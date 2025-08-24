@@ -254,7 +254,7 @@ const EnrollCourse = () => {
             onClick={handleEnroll}
             disabled={loading || !selectedStudent || !selectedCourse}
             className={`
-              relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform
+              relative px-8 py-4 rounded-2xl font-semibold text-lg cursor-pointer transition-all duration-300 transform
               ${(loading || !selectedStudent || !selectedCourse) 
                 ? 'bg-slate-300 text-slate-500 cursor-not-allowed' 
                 : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95'

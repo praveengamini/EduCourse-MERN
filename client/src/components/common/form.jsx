@@ -55,7 +55,7 @@ function CommonForm({
             {isPassword && (
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                className="absolute cursor-pointer inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
                 onClick={() => togglePasswordVisibility(getControlItem.name)}
               >
                 {isPasswordVisible ? (
@@ -133,7 +133,7 @@ function CommonForm({
             {isPassword && (
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                className="absolute cursor-pointer inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
                 onClick={() => togglePasswordVisibility(getControlItem.name)}
               >
                 {isPasswordVisible ? (

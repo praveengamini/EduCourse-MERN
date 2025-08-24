@@ -83,32 +83,44 @@ export default function MyCourses() {
                       </h2>
                       
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-400 bg-zinc-800 rounded-full px-3 py-1">
-                            <UsersIcon className="h-4 w-4 mr-2 text-violet-400" />
-                            <span className="font-medium">{individual.courseId.studentCount}</span>
-                            <span className="ml-1">students</span>
-                          </div>
-                          
-                          <div className="flex items-center text-sm text-gray-400 bg-green-900/40 rounded-full px-3 py-1">
-                            <CurrencyRupeeIcon className="h-4 w-4 mr-1 text-green-400" />
-                            <span className="font-bold text-green-400">₹{individual.courseId.cost}</span>
-                          </div>
-                        </div>
+                        <div className="flex-col space-y-3 items-center justify-between">
+                            <div className="flex items-center text-sm text-gray-400 bg-purple-500/50 rounded-full px-3 py-1">
+                                <UsersIcon className="h-4 w-4 mr-2 text-violet-400" />
+                                <span className="font-medium">{individual.courseId.studentCount}</span>
+                                <span className="ml-1">student(s)</span>
+                            </div>
+                            
+                          <div className="flex items-center gap-2 text-sm bg-green-900/20 border border-green-700 rounded-full px-4 py-1 shadow-sm">
+                            <CurrencyRupeeIcon className="h-4 w-4 text-green-400" />
 
-                        <div className="flex items-center text-xs text-gray-500 bg-zinc-800 rounded-full px-3 py-2">
-                          <CalendarDaysIcon className="h-4 w-4 mr-2" />
-                          <span>Created {new Date(individual.courseId.createdAt).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })}</span>
+                            <span className="font-semibold  text-gray-200 line-through">
+                                ₹{individual.courseId.cost * 2}
+                            </span>
+
+                            <span className="font-bold text-green-400">
+                                ₹{individual.courseId.cost}
+                            </span>
+
+                            <span className="ml-1 bg-red-700/40 texgreent--300 text-xs font-semibold px-2 py-0.5 rounded-full">
+                                -50%
+                            </span>
+                            </div>
+
                         </div>
-                        <button onClick={() => navigate(`/student/courses/${individual.courseId._id}`)} className="w-full py-2 cursor-pointer text-violet-400 border border-violet-600 hover:bg-violet-600 hover:text-white transition rounded-2xl mt-4">
-                          View Course
-                        </button> 
-                      </div>
+                     
+                        <div className="flex items-center text-xs text-black bg-yellow-400/50 rounded-full px-3 py-2">
+                            <CalendarDaysIcon className="h-4 w-4 mr-2" />
+                            <span>Created {new Date(individual.courseId.createdAt).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'short', 
+                                day: 'numeric' 
+                            })}</span>
+                        </div>
+                        <button onClick={()=>navigate(`/student/courses/${individual.courseId.yy_id}`)} className="w-full py-2 cursor-pointer text-violet-400 border border-violet-600 hover:bg-violet-600 hover:text-white transition rounded-2xl mt-4">
+                            View Course
+                        </button>
                     </div>
+    </div>
                   </div>
                 );
               })}

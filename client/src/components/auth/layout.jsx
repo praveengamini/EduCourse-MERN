@@ -6,7 +6,7 @@ function AuthLayout() {
   const isRegister = location.pathname.includes('register');
 
   return (
-    <div className="flex min-h-screen w-full ">
+    <div className="flex min-h-screen w-full">
       <div className="absolute top-6 left-6 z-10">
         <Link 
           to="/" 
@@ -39,7 +39,7 @@ function AuthLayout() {
               <Outlet />
             </div>
           </div>
-          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen">
+          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen sticky top-0">
             <div className={`
               w-full h-full
               transition-transform duration-500 ease-in-out
@@ -55,7 +55,7 @@ function AuthLayout() {
         </>
       ) : (
         <>
-          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen">
+          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen sticky top-0">
             <div className={`
               w-full h-full
               transition-transform duration-500 ease-in-out

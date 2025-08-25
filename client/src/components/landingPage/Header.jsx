@@ -6,39 +6,62 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate('/auth/login');
-  };
+  const handleLogin = () => navigate('/auth/login');
+
   function launchConfetti() {
-      confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
-    }
-  
+    confetti({
+      particleCount: 200,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+  }
+
+  // ✅ Common nav links
+  const navLinks = [
+    { label: "Home", href: "/" },
+    { label: "Courses", href: "/#courses" },
+    { label: "FAQ", href: "/#faqsection" },
+    { label: "Verify Certificate", onClick: () => navigate('/validator') }
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <button onClick={()=>launchConfetti()} className=" font-bold text-white cursor-pointer"><img  width="120px" src="/CyberLink.png" className='p-2'/></button>
+            <button onClick={launchConfetti} className="font-bold text-white cursor-pointer">
+              <img width="120px" src="/CyberLink.png" className="p-2" />
+            </button>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
-            <a href="/#courses" className="text-gray-300 hover:text-white transition-colors">Courses</a>
-            <a  href="/#faqsection" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
-            <a onClick={() => navigate('/validator')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Verify Certificate</a>
+            {navLinks.map((link, i) =>
+              link.onClick ? (
+                <span
+                  key={i}
+                  onClick={link.onClick}
+                  className="text-gray-300 hover:text-white transition-colors cursor-pointer"
+                >
+                  {link.label}
+                </span>
+              ) : (
+                <a
+                  key={i}
+                  href={link.href}
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </nav>
 
-          {/* Desktop Login Button Only */}
+          {/* Desktop Login Button */}
           <div className="hidden md:flex items-center">
             <button
               onClick={handleLogin}
               className="flex-1 py-2 px-6 text-center cursor-pointer bg-white text-purple-600 border border-purple-600 rounded-md shadow hover:bg-gray-400 transition"
-
             >
               Login
             </button>
@@ -58,10 +81,29 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-black border-t border-gray-800">
           <div className="px-4 py-2 space-y-2">
-            <a href="#home" className="block py-2 text-gray-300 hover:text-white">Home</a>
-            <a href="#courses" className="block py-2 text-gray-300 hover:text-white">About</a>
-            <a href="#about" className="block py-2 text-gray-300 hover:text-white">Courses</a>
-            <a href="#contact" className="block py-2 text-gray-300 hover:text-white">Blog</a>
+            {navLinks.map((link, i) =>
+              link.onClick ? (
+                <span
+                  key={i}
+                  onClick={() => {
+                    link.onClick();
+                    setIsMenuOpen(false); // close menu after click
+                  }}
+                  className="block py-2 text-gray-300 hover:text-white cursor-pointer"
+                >
+                  {link.label}
+                </span>
+              ) : (
+                <a
+                  key={i}
+                  href={link.href}
+                  className="block py-2 text-gray-300 hover:text-white"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              )
+            )}
             <div className="pt-2">
               <button
                 onClick={handleLogin}
@@ -76,5 +118,6 @@ const Header = () => {
     </header>
   );
 };
+
 
 export default Header;

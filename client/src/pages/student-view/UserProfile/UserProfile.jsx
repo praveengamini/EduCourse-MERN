@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import {
@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
-import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

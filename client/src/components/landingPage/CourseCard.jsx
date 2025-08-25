@@ -58,7 +58,10 @@ const CourseCard = ({ course }) => {
         </div>
         <div className="text-right">
           <div className="uppercase text-xs">Cost</div>
-          <div className="text-white text-sm">₹ {course.cost.toLocaleString('en-IN')}</div>
+          <div className='flex gap-2'>
+            <div className='line-through'>₹ {course.cost*2-1} </div> <span className='text-red-400'> -50%</span>
+            <div className="text-green-400 text-sm">₹ {course.cost.toLocaleString('en-IN')}</div>
+          </div>
         </div>
       </div>
 

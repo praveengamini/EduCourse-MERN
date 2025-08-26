@@ -94,7 +94,7 @@ export default function MyCourses() {
                             <CurrencyRupeeIcon className="h-4 w-4 text-green-400" />
 
                             <span className="font-semibold  text-gray-200 line-through">
-                                ₹{individual.courseId.cost * 2}
+                                ₹{individual.courseId.cost * 2-1}
                             </span>
 
                             <span className="font-bold text-green-400">

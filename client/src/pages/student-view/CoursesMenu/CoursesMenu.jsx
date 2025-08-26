@@ -164,7 +164,7 @@ const AllCourses = () => {
                                             </span>
 
                                             <span className="font-bold text-green-400">
-                                                ₹{course.cost}
+                                                ₹{course.cost-1}
                                             </span>
 
                                             <span className="ml-1 bg-red-700/40 texgreent--300 text-xs font-semibold px-2 py-0.5 rounded-full">

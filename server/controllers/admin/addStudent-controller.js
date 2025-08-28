@@ -65,44 +65,97 @@ const addStudentByAdmin = async (req, res) => {
           <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Password:</strong> 
-              <span id="password" style="background-color: #fff; padding: 5px; border: 1px solid #ddd; font-family: monospace; user-select: all;">${randomPassword}</span>
-              <button onclick="copyPassword()" style="margin-left: 10px; padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">Copy</button>
+              <span id="password" style="background-color: #fff; padding: 5px 10px; border: 1px solid #ddd; font-family: monospace; user-select: all; display: inline-block; border-radius: 3px;">${randomPassword}</span>
+              <button onclick="copyPassword()" id="copyBtn" style="margin-left: 10px; padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">Copy</button>
             </p>
           </div>
           
           <script>
             function copyPassword() {
-              const passwordText = document.getElementById('password').textContent;
-              navigator.clipboard.writeText(passwordText).then(() => {
-                const button = event.target;
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                button.style.backgroundColor = '#28a745';
-                setTimeout(() => {
-                  button.textContent = originalText;
-                  button.style.backgroundColor = '#007bff';
-                }, 2000);
-              }).catch(err => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = passwordText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                const button = event.target;
-                button.textContent = 'Copied!';
-                button.style.backgroundColor = '#28a745';
-                setTimeout(() => {
-                  button.textContent = 'Copy';
-                  button.style.backgroundColor = '#007bff';
-                }, 2000);
-              });
+              const passwordElement = document.getElementById('password');
+              const passwordText = passwordElement.textContent || passwordElement.innerText;
+              const button = document.getElementById('copyBtn');
+              
+              // Modern clipboard API
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(passwordText).then(() => {
+                  showCopySuccess(button);
+                }).catch(() => {
+                  fallbackCopy(passwordText, button);
+                });
+              } else {
+                fallbackCopy(passwordText, button);
+              }
             }
+            
+            function fallbackCopy(text, button) {
+              // Create a temporary textarea element
+              const textArea = document.createElement('textarea');
+              textArea.value = text;
+              textArea.style.position = 'fixed';
+              textArea.style.left = '-999999px';
+              textArea.style.top = '-999999px';
+              document.body.appendChild(textArea);
+              
+              // Select and copy the text
+              textArea.focus();
+              textArea.select();
+              
+              try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                  showCopySuccess(button);
+                } else {
+                  showCopyError(button);
+                }
+              } catch (err) {
+                showCopyError(button);
+              }
+              
+              document.body.removeChild(textArea);
+            }
+            
+            function showCopySuccess(button) {
+              const originalText = button.textContent;
+              const originalColor = button.style.backgroundColor;
+              button.textContent = 'Copied!';
+              button.style.backgroundColor = '#28a745';
+              setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = originalColor || '#007bff';
+              }, 2000);
+            }
+            
+            function showCopyError(button) {
+              const originalText = button.textContent;
+              const originalColor = button.style.backgroundColor;
+              button.textContent = 'Select & Copy';
+              button.style.backgroundColor = '#ffc107';
+              setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = originalColor || '#007bff';
+              }, 3000);
+            }
+            
+            // Alternative: Select text when clicked (fallback for email clients that don't support clipboard)
+            document.getElementById('password').onclick = function() {
+              if (window.getSelection) {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                selection.removeAllRanges();
+                selection.addRange(range);
+              } else if (document.selection) {
+                const range = document.body.createTextRange();
+                range.moveToElementText(this);
+                range.select();
+              }
+            };
           </script>
           
           <p style="color: #e74c3c;"><strong>Important:</strong> Please change your password after your first login for security purposes.</p>
+          
+          <p><strong>Note:</strong> If the copy button doesn't work, you can click on the password text to select it, then copy manually using Ctrl+C (or Cmd+C on Mac).</p>
           
           <p>You can now log in to your account using these credentials.</p>
           

@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
         email: newUser.email,
         phone: newUser.phone,   // return phone
         role: newUser.role,
-        createdAt: newUser.createdAt,
+        createdAt: newUser.createdAt
       },
     });
   } catch (e) {
@@ -107,7 +107,8 @@ const loginUser = async (req, res) => {
           id: checkUser._id,
           userName: checkUser.userName,
           phone: checkUser.phone, 
-          createdAt : checkUser.createdAt
+          createdAt : checkUser.createdAt,
+         createdByAdmin:checkUser.createdByAdmin
         },
         ...(removedDevice && {
           deviceRemoved: {

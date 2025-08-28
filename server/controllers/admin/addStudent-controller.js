@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const User = require('../../models/User'); 
-
+const jwt = require('jsonwebtoken')
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -211,7 +211,7 @@ const changePassword = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Email and password are required'
+        message: "Email and password are required",
       });
     }
 
@@ -219,33 +219,70 @@ const changePassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found'
+        message: "User not found",
       });
     }
 
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    await User.findByIdAndUpdate(user._id, {
-      password: hashedPassword,
-      createdByAdmin: false
-    });
+    // Update password and clear devices (invalidate old tokens)
+    user.password = hashedPassword;
+    user.devices = [];
+    user.createdByAdmin=false
+    await user.save();
 
-    res.status(200).json({
-      success: true,
-      message: 'Password changed successfully'
-    });
+    // Generate a fresh JWT with updated values
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+        userName: user.userName,
+        phone: user.phone,
+        createdAt: user.createdAt,
+        createdByAdmin: false
+      },
+      process.env.JWT_SECRET || "CLIENT_SECRET_KEY",
+      { expiresIn: "60m" }
+    );
 
+    // Add new device entry
+    const newDevice = {
+      browser: req.useragent?.browser || "Unknown",
+      os: req.useragent?.os || "Unknown",
+      time: new Date(),
+      token: token,
+    };
+
+    user.devices.push(newDevice);
+    await user.save();
+
+    // Send response with new token
+    res
+      .cookie("token", token, { httpOnly: true, secure: false })
+      .status(200)
+      .json({
+        success: true,
+        message: "Password changed successfully. New token issued.",
+        user: {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+          userName: user.userName,
+          phone: user.phone,
+          createdAt: user.createdAt,
+          createdByAdmin: user.createdByAdmin,
+        },
+      });
   } catch (error) {
-    console.error('Error changing password:', error);
+    console.error("Error changing password:", error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: "Internal server error",
     });
   }
 };
-
-
 
 module.exports = {
   addStudentByAdmin,

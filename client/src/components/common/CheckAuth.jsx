@@ -1,17 +1,38 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function CheckAuth({ isAuthenticated, user, children }) {
   const location = useLocation();
-
-  console.log(location.pathname, isAuthenticated);
 
   if (location.pathname === "/") {
     if (isAuthenticated) {
       if (user?.role === "admin") {
         return <Navigate to="/admin/dashboard" />;
       } else {
+        // Check if student was created by admin and needs to change password
+        if (user?.role === "student" && user?.createdByAdmin === true) {
+          return <Navigate to="/student/change-password" />;
+        }
         return <Navigate to="/student" />;
       }
+    }
+  }
+
+  // CRITICAL: Check if authenticated student was created by admin
+  if (isAuthenticated && user?.role === "student" && user?.createdByAdmin === true) {
+    // Force admin-created students to stay on change-password page only
+    if (location.pathname !== "/student/change-password") {
+      // Show toast notification
+      toast.error("You must change your password before accessing other pages!");
+      return <Navigate to="/student/change-password" replace />;
+    }
+  }
+
+  // Restrict non-admin-created users from accessing change-password page
+  if (isAuthenticated && user?.role === "student" && user?.createdByAdmin !== true) {
+    if (location.pathname === "/student/change-password") {
+      toast.error("Access Denied! This page is only for admin-created accounts.");
+      return <Navigate to="/student" replace />;
     }
   }
 
@@ -46,6 +67,10 @@ function CheckAuth({ isAuthenticated, user, children }) {
     if (user?.role === "admin") {
       return <Navigate to="/admin/dashboard" />;
     } else {
+      // Check if student was created by admin and needs to change password
+      if (user?.role === "student" && user?.createdByAdmin === true) {
+        return <Navigate to="/student/change-password" />;
+      }
       return <Navigate to="/student" />;
     }
   }

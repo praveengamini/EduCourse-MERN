@@ -36,8 +36,7 @@ import AllCoursesPage from './components/landingPage/AllCoursesPage';
 import AddNewStudent from './pages/admin-view/AddNewStudent';
 import ChangePassword from './pages/student-view/ChangePassword/ChangePassword';
 const App = () => {
-   const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
-   
+   const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)   
    const dispatch = useDispatch();
    useEffect(() => {
      dispatch(checkAuth1());

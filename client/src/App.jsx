@@ -34,16 +34,18 @@ import CertificateGeneratorPanel from './components/CertificateGeneratorPanel';
 import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashboard';
 import AllCoursesPage from './components/landingPage/AllCoursesPage';
 import AddNewStudent from './pages/admin-view/AddNewStudent';
+import ChangePassword from './pages/student-view/ChangePassword/ChangePassword';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)
-  const dispatch = useDispatch();
-  useEffect(() => {
+   
+   const dispatch = useDispatch();
+   useEffect(() => {
      dispatch(checkAuth1());
-  }, [dispatch]);
-
-  if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center text-lg">
+    }, [dispatch]);
+    
+    if (isLoading) {
+      return (
+        <div className="h-screen flex items-center justify-center text-lg">
         Checking authentication...
       </div>
     );
@@ -91,6 +93,7 @@ const App = () => {
             <Route path="all-courses" element={<CoursesMenu/>}/>
             <Route path="courses/:courseId" element={<CourseDisplay />} />
             <Route path="validator" element={<CertificateValidator />} />
+            <Route path='change-password' element={<ChangePassword/>} />
         </Route>
           <Route path="/validator" element={<LandingPageValidator />} />
         <Route path='*' element={<PageNotFound/>} />

@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const User = require('../../models/User'); 
 
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER, 

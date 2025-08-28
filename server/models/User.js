@@ -32,6 +32,10 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  createdByAdmin:{
+    type: Boolean,
+    default: false
+  },
   devices: [deviceSchema]
 });
 

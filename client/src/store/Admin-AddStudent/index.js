@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Base URL for API
-const API_BASE_URL = '/api/adminStudent';
+const API_BASE_URL = `${import.meta.env.VITE_SERVER_URL}/api/adminStudent`;
 
 // Async thunk for adding student by admin
 export const addStudentByAdmin = createAsyncThunk(

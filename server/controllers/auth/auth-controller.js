@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
         message: "Incorrect password! Please try again.",
       });
     }
-
+    
     const token = sign(
       {
         id: checkUser._id,
@@ -71,6 +71,7 @@ const loginUser = async (req, res) => {
         userName: checkUser.userName,
         phone: checkUser.phone,     // add phone to JWT payload
         createdAt: checkUser.createdAt,
+        createdByAdmin:checkUser.createdByAdmin
       },
       "CLIENT_SECRET_KEY", // Ideally from process.env.JWT_SECRET
       { expiresIn: "60m" }
@@ -184,7 +185,7 @@ const authMiddleware = async (req, res, next) => {
         message: "Unauthorised user!",
       });
     }
-
+    
     req.user = decoded;
     next();
   } catch (error) {

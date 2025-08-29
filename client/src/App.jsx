@@ -35,6 +35,7 @@ import StudentDashboard from './pages/student-view/StudentDashboard/StudentDashb
 import AllCoursesPage from './components/landingPage/AllCoursesPage';
 import AddNewStudent from './pages/admin-view/AddNewStudent';
 import ChangePassword from './pages/student-view/ChangePassword/ChangePassword';
+import LoadingComponent from './utils/LoadingComponent';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)   
    const dispatch = useDispatch();
@@ -44,9 +45,7 @@ const App = () => {
     
     if (isLoading) {
       return (
-        <div className="h-screen flex items-center justify-center text-lg">
-        Checking authentication...
-      </div>
+      <LoadingComponent />
     );
   }
 

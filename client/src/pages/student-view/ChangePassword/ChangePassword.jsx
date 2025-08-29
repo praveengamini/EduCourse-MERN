@@ -13,6 +13,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { changePassword } from '@/store/Admin-AddStudent'
+import { logoutUser } from '@/store/auth-slice'
+
 const ChangePassword = () => {
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.adminStudent || {})
@@ -82,7 +84,9 @@ const ChangePassword = () => {
       })).unwrap()
 
       if (result.success) {
-        toast.success(result.message || 'Password changed successfully!')
+        toast.success(result.message || 'Password changed successfully! Logging out...')
+        
+        // Clear form data
         setFormData({ 
           email: user?.email || '', 
           password: '', 
@@ -90,6 +94,11 @@ const ChangePassword = () => {
         })
         setErrors({})
         setIsOpen(false)
+        
+        // Add a small delay before logout for better UX
+        setTimeout(() => {
+          dispatch(logoutUser())
+        }, 1500) // 1.5 second delay to show the success message
       }
     } catch (error) {
       toast.error(error.message || 'Failed to change password')
@@ -122,6 +131,7 @@ const ChangePassword = () => {
           </DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-400">
             Enter your email and new password to update your account credentials.
+            You will be logged out after changing your password.
           </DialogDescription>
         </DialogHeader>
         

@@ -120,7 +120,7 @@ export default function MyCourses() {
                             View Course
                         </button>
                     </div>
-    </div>
+                    </div>
                   </div>
                 );
               })}

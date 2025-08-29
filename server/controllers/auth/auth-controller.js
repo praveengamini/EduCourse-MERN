@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const hashPassword = await hash(password, 12);
+    const hashPassword = await hash(password, parseInt(process.env.SALT_ROUNDS));
     const newUser = new User({ userName, email, phone, password: hashPassword }); // add phone here
 
     await newUser.save();
@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
         email: newUser.email,
         phone: newUser.phone,   // return phone
         role: newUser.role,
-        createdAt: newUser.createdAt,
+        createdAt: newUser.createdAt
       },
     });
   } catch (e) {
@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
         message: "Incorrect password! Please try again.",
       });
     }
-
+    
     const token = sign(
       {
         id: checkUser._id,
@@ -71,8 +71,9 @@ const loginUser = async (req, res) => {
         userName: checkUser.userName,
         phone: checkUser.phone,     // add phone to JWT payload
         createdAt: checkUser.createdAt,
+        createdByAdmin:checkUser.createdByAdmin
       },
-      "CLIENT_SECRET_KEY", // Ideally from process.env.JWT_SECRET
+      process.env.JWT_SECRET, // Ideally from process.env.JWT_SECRET
       { expiresIn: "60m" }
     );
 
@@ -107,7 +108,8 @@ const loginUser = async (req, res) => {
           id: checkUser._id,
           userName: checkUser.userName,
           phone: checkUser.phone, 
-          createdAt : checkUser.createdAt
+          createdAt : checkUser.createdAt,
+         createdByAdmin:checkUser.createdByAdmin
         },
         ...(removedDevice && {
           deviceRemoved: {
@@ -166,7 +168,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = verify(token, "CLIENT_SECRET_KEY");
+    const decoded = verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {
@@ -183,7 +185,7 @@ const authMiddleware = async (req, res, next) => {
         message: "Unauthorised user!",
       });
     }
-
+    
     req.user = decoded;
     next();
   } catch (error) {

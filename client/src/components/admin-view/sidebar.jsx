@@ -11,9 +11,9 @@ import {
   Menu,
   X,
   Settings,
-  Bell
+  Bell,
+  UserRoundPlus
 } from 'lucide-react';
-
 const AdminHeader = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
@@ -59,6 +59,12 @@ const AdminHeader = () => {
       href: '/admin/coursewisestudent',
       icon: GraduationCap,
       description: 'Course-wise analytics'
+    },
+    {
+      name: 'Add Student',
+      href: '/admin/add-student',
+      icon: UserRoundPlus,
+      description: 'register new student'
     }
   ];
 

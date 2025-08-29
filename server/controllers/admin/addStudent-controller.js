@@ -226,58 +226,19 @@ const changePassword = async (req, res) => {
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Update password and clear devices (invalidate old tokens)
     user.password = hashedPassword;
-    user.devices = [];
-    user.createdByAdmin=false
+    if (Array.isArray(user.devices)) user.devices = [];
+    user.createdByAdmin = false;
+
     await user.save();
 
-    // Generate a fresh JWT with updated values
-    const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role,
-        email: user.email,
-        userName: user.userName,
-        phone: user.phone,
-        createdAt: user.createdAt,
-        createdByAdmin: false
-      },
-      process.env.JWT_SECRET || "CLIENT_SECRET_KEY",
-      { expiresIn: "60m" }
-    );
-
-    // Add new device entry
-    const newDevice = {
-      browser: req.useragent?.browser || "Unknown",
-      os: req.useragent?.os || "Unknown",
-      time: new Date(),
-      token: token,
-    };
-
-    user.devices.push(newDevice);
-    await user.save();
-
-    // Send response with new token
-    res
-      .cookie("token", token, { httpOnly: true, secure: false })
-      .status(200)
-      .json({
-        success: true,
-        message: "Password changed successfully. New token issued.",
-        user: {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-          userName: user.userName,
-          phone: user.phone,
-          createdAt: user.createdAt,
-          createdByAdmin: user.createdByAdmin,
-        },
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Password changed successfully. Please log in again.",
+    });
   } catch (error) {
     console.error("Error changing password:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Internal server error",
     });

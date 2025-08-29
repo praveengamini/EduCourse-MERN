@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const hashPassword = await hash(password, 12);
+    const hashPassword = await hash(password, process.env.SALT_ROUNDS);
     const newUser = new User({ userName, email, phone, password: hashPassword }); // add phone here
 
     await newUser.save();
@@ -73,7 +73,7 @@ const loginUser = async (req, res) => {
         createdAt: checkUser.createdAt,
         createdByAdmin:checkUser.createdByAdmin
       },
-      "CLIENT_SECRET_KEY", // Ideally from process.env.JWT_SECRET
+      process.env.JWT_SECRET, // Ideally from process.env.JWT_SECRET
       { expiresIn: "60m" }
     );
 
@@ -168,7 +168,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = verify(token, "CLIENT_SECRET_KEY");
+    const decoded = verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {

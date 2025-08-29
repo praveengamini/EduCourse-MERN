@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const hashPassword = await hash(password, process.env.SALT_ROUNDS);
+    const hashPassword = await hash(password, parseInt(process.env.SALT_ROUNDS));
     const newUser = new User({ userName, email, phone, password: hashPassword }); // add phone here
 
     await newUser.save();

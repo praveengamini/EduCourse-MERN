@@ -37,7 +37,7 @@ const addStudentByAdmin = async (req, res) => {
 
     const randomPassword = generateRandomPassword();
     
-    const hashedPassword = await bcrypt.hash(randomPassword, process.env.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(randomPassword, parseInt(process.env.SALT_ROUNDS));
 
     const newUser = new User({
       userName,
@@ -223,7 +223,7 @@ const changePassword = async (req, res) => {
     }
 
     
-    const hashedPassword = await bcrypt.hash(password, process.env.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS));
 
     user.password = hashedPassword;
     if (Array.isArray(user.devices)) user.devices = [];

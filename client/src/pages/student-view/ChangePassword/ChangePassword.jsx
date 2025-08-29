@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Eye, EyeOff, Lock, Mail, X } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail, LogOutIcon } from 'lucide-react'
 import { changePassword } from '@/store/Admin-AddStudent'
 import { logoutUser } from '@/store/auth-slice'
 
@@ -114,14 +114,13 @@ const ChangePassword = () => {
 
   return (
     <>
-      {/* Backdrop with blur - this should blur everything behind */}
+      {/* Backdrop with blur - can't be closed by clicking */}
       <div 
         className="fixed inset-0 z-50 bg-black/50"
         style={{
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)'
         }}
-        onClick={handleClose}
       />
       
       {/* Modal content */}
@@ -130,13 +129,14 @@ const ChangePassword = () => {
           className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-lg shadow-2xl border"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close button */}
+          {/* Logout button */}
           <button
-            onClick={handleClose}
-            className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            onClick={() => dispatch(logoutUser())}
+            className="absolute right-4 top-4 px-3 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-2"
             disabled={loading}
           >
-            <X className="h-5 w-5" />
+            <LogOutIcon className="h-4 w-4" />
+            Logout
           </button>
 
           <div className="p-6">
@@ -263,20 +263,11 @@ const ChangePassword = () => {
                 )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleClose}
-                  className="flex-1"
-                  disabled={loading}
-                >
-                  Cancel
-                </Button>
+              {/* Action Button */}
+              <div className="pt-4">
                 <Button
                   type="submit"
-                  className="flex-1"
+                  className="w-full"
                   disabled={loading}
                 >
                   {loading ? (

@@ -125,7 +125,7 @@ const AddNewStudent = () => {
         <form onSubmit={handleSubmit} className="w-full space-y-6">
           {/* Username Field */}
           <div className="w-full">
-            <label htmlFor="userName" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+            <label htmlFor="userName" className=" text-lg font-semibold text-black mb-3 flex items-center gap-2">
               <User className="w-4 h-4 text-gray-600" />
               Username <span className="text-purple-600">*</span>
             </label>
@@ -148,7 +148,7 @@ const AddNewStudent = () => {
 
           {/* Email Field */}
           <div className="w-full">
-            <label htmlFor="email" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+            <label htmlFor="email" className=" text-lg font-semibold text-black mb-3 flex items-center gap-2">
               <Mail className="w-4 h-4 text-gray-600" />
               Email Address <span className="text-purple-600">*</span>
             </label>
@@ -174,7 +174,7 @@ const AddNewStudent = () => {
 
           {/* Phone Field */}
           <div className="w-full">
-            <label htmlFor="phone" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+            <label htmlFor="phone" className=" text-lg font-semibold text-black mb-3 flex items-center gap-2">
               <Phone className="w-4 h-4 text-gray-600" />
               Phone Number <span className="text-purple-600">*</span>
             </label>

@@ -36,15 +36,7 @@ export const updateUserProfile = createAsyncThunk(
 );
 // =======================================================
 
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async (formData) => {
-    const response = await axios.post(`${BASE_URL}/api/auth/register`, formData, {
-      withCredentials: true,
-    });
-    return response.data;
-  }
-);
+
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -128,21 +120,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register
-      .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-      .addCase(registerUser.rejected, (state) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-
       // Login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;

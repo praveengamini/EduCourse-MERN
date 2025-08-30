@@ -13,6 +13,8 @@ import {
 import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
 import { Button } from '@/components/ui/button';
+import SetNewPassword from '../SetNewPassword/SetNewPassword';
+
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [isSaving, setIsSaving] = useState(false);
+    const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   useEffect(() => {
     if (user?.id) {
       fetchEnrolledCourses(user.id);
@@ -250,14 +253,12 @@ const UserProfile = () => {
                     </div>
                   </div>
                   <div>
-              <div className="flex justify-center items-center  px-4">
-                <Button 
-                  onClick={() => navigate('/student/set-new-password')} 
-                  className="w-full max-w-md bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition"
-                >
-                  Set new password
-                </Button>
-              </div>
+              <Button 
+                onClick={() => setIsPasswordDialogOpen(true)} 
+                className="w-full max-w-md bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition"
+              >
+              Set new password
+            </Button>
 
               </div>
                 </div>
@@ -417,6 +418,10 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+      <SetNewPassword 
+      isOpen={isPasswordDialogOpen}
+      onClose={() => setIsPasswordDialogOpen(false)}
+    />
     </div>
   );
 };

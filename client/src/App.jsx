@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import { Route,Routes, useNavigate } from 'react-router-dom'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
-import AuthRegister from './pages/auth/register'
 import AdminLayout from './components/admin-view/layout'
 import AdminDashboard from './pages/admin-view/dashboard'
 import StudentLayout from './components/student-view/layout'
@@ -64,7 +63,6 @@ const App = () => {
           </CheckAuth>
         }>
           <Route path='login' element={<AuthLogin/>} />
-          <Route path='register' element={<AuthRegister/>}/>
         </Route>
         <Route path='/admin' element={<CheckAuth isAuthenticated={isAuthenticated} user={user} >
           <AdminLayout/>

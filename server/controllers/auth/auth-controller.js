@@ -241,4 +241,4 @@ const setNewPassword = async (req, res) => {
 };
 
 // ✅ Named exports for ESM
-module.exports = { registerUser, loginUser, logoutUser, authMiddleware,setNewPassword };
+module.exports = {  loginUser, logoutUser, authMiddleware,setNewPassword };

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Lock, Shield, AlertCircle, CheckCircle2, X } from 'lucide-react';
+import { toast } from 'sonner';
+import { setNewPassword,resetPasswordChangeState  } from '@/store/auth-slice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+const SetNewPassword = ({ isOpen, onClose }) => {
+const dispatch = useDispatch();
+const { isPasswordChanging, passwordChangeError, passwordChangeSuccess } = useSelector(state => state.auth);
 
-const SetNewPassword = () => {
-  // Mock Redux state for demo
-  const [isPasswordChanging, setIsPasswordChanging] = useState(false);
-  const [passwordChangeError, setPasswordChangeError] = useState('');
-  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
-
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -19,7 +19,13 @@ const SetNewPassword = () => {
     new: false,
     confirm: false
   });
-  
+  useEffect(() => {
+  if (passwordChangeSuccess) {
+    setTimeout(() => {
+      handleCloseDialog();
+    }, 2000);
+  }
+}, [passwordChangeSuccess]);
   const [validationError, setValidationError] = useState('');
 
   const handleInputChange = (e) => {
@@ -62,62 +68,62 @@ const SetNewPassword = () => {
     return true;
   };
 
-  const showToast = (message, type = 'success') => {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-0 ${
-      type === 'success' 
-        ? 'bg-green-500 text-white' 
-        : 'bg-red-500 text-white'
-    }`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => toast.classList.add('translate-x-0'), 10);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-      toast.classList.add('translate-x-full');
-      setTimeout(() => document.body.removeChild(toast), 300);
-    }, 3000);
-  };
+ const showToast = (message, type = 'success') => {
+  if (type === 'success') {
+    toast.success(message);
+  } else {
+    toast.error(message);
+  }
+};
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  if (!validateForm()) return;
+
+  const passwordData = {
+    currentPassword: formData.currentPassword,
+    newPassword: formData.newPassword
+  };
+
+  try {
+    const resultAction = await dispatch(setNewPassword(passwordData));
     
-    if (!validateForm()) return;
-
-    setIsPasswordChanging(true);
-    setPasswordChangeError('');
-
-    // Mock API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API delay
-      
-      // Simulate success
-      setPasswordChangeSuccess(true);
+    if (setNewPassword.fulfilled.match(resultAction)) {
       showToast('Password changed successfully!', 'success');
       setFormData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
       });
-    } catch (error) {
-      setPasswordChangeError('Failed to change password. Please try again.');
-      showToast('Failed to change password. Please try again.', 'error');
-    } finally {
-      setIsPasswordChanging(false);
+    } else {
+      const errorMessage = resultAction.payload || 'Failed to change password';
+      showToast(errorMessage, 'error');
     }
-  };
+  } catch (error) {
+    showToast('Failed to change password. Please try again.', 'error');
+  }
+};
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-    // Navigate to /student/myprofile
-    console.log('Dialog closed - would navigate to /student/myprofile');
-    // In actual implementation: navigate('/student/myprofile');
-  };
+ const handleCloseDialog = () => {
+  // Reset form state
+  setFormData({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  setValidationError('');
+  setShowPasswords({
+    current: false,
+    new: false,
+    confirm: false
+  });
+  
+  // Reset Redux password change state
+  dispatch(resetPasswordChangeState());
+  
+  onClose();
+};
 
   useEffect(() => {
     // Mock cleanup
@@ -134,10 +140,9 @@ const SetNewPassword = () => {
     }
   }, [passwordChangeSuccess]);
 
-  if (!isDialogOpen) {
-    return null;
-  }
-
+if (!isOpen) {
+  return null;
+}   
   if (passwordChangeSuccess) {
     return (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6 z-50">
@@ -161,7 +166,7 @@ const SetNewPassword = () => {
               onClick={handleCloseDialog}
               className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105"
             >
-              Close
+              Go to Profile
             </button>
           </div>
         </div>

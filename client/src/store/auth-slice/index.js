@@ -8,6 +8,10 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+  isPasswordChanging: false,
+  passwordChangeError: null,
+  passwordChangeSuccess: false,
+
 };
 
 // =======================================================

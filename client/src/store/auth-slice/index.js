@@ -79,6 +79,28 @@ export const checkAuth1 = createAsyncThunk(
   }
 );
 
+export const setNewPassword = createAsyncThunk(
+  "auth/setNewPassword",
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/auth/set-password`,
+        passwordData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to change password"
+      );
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,

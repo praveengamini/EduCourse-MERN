@@ -104,27 +104,10 @@ function AuthLogin() {
             Login
           </button>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-black text-gray-400">or</span>
-            </div>
-          </div>
+        
         </form>
 
-        <div className="text-center mt-8">
-          <p className="text-gray-400">
-            Don't have an account?{" "}
-            <Link
-              to="/auth/register"
-              className="text-purple-500 hover:text-purple-400 font-medium"
-            >
-              Sign up.
-            </Link>
-          </p>
-        </div>
+     
       </div>
     </div>
   );

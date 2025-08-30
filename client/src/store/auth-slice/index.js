@@ -110,6 +110,21 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
+    resetPasswordChangeState: (state) => {
+      state.isPasswordChanging = false;
+      state.passwordChangeError = null;
+      state.passwordChangeSuccess = false;
+    },
+    // Clear password change error
+    clearPasswordChangeError: (state) => {
+      state.passwordChangeError = null;
+    },
+    // Manual logout (for when password is changed)
+    forceLogout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.isLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder

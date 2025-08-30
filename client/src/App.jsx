@@ -36,6 +36,7 @@ import AllCoursesPage from './components/landingPage/AllCoursesPage';
 import AddNewStudent from './pages/admin-view/AddNewStudent';
 import ChangePassword from './pages/student-view/ChangePassword/ChangePassword';
 import LoadingComponent from './utils/LoadingComponent';
+import SetNewPassword from './pages/student-view/SetNewPassword/SetNewPassword';
 const App = () => {
    const { user ,isAuthenticated, isLoading } = useSelector((state)=>state.auth)   
    const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const App = () => {
             <Route path="courses/:courseId" element={<CourseDisplay />} />
             <Route path="validator" element={<CertificateValidator />} />
             <Route path='change-password' element={<ChangePassword/>} />
+            <Route path='set-new-password' element={<SetNewPassword/>}/>
         </Route>
           <Route path="/validator" element={<LandingPageValidator />} />
         <Route path='*' element={<PageNotFound/>} />

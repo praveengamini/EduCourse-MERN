@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { addStudentByAdmin } from '@/store/Admin-AddStudent';
+import { User, Mail, Phone, UserPlus, RotateCcw } from 'lucide-react';
 
 const AddNewStudent = () => {
   const dispatch = useDispatch();
@@ -51,9 +52,13 @@ const AddNewStudent = () => {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    // Phone validation (optional but if provided should be valid)
-    if (formData.phone.trim() && !/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
+    // Phone validation (now required)
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
+    } else if (formData.phone.trim().length < 10) {
+      newErrors.phone = 'Phone number must be at least 10 digits long';
     }
 
     setErrors(newErrors);
@@ -108,7 +113,10 @@ const AddNewStudent = () => {
     <div className="w-full bg-white p-4">
       <div className="w-full">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-black mb-2">Add New Student</h2>
+          <h2 className="text-2xl font-bold text-black mb-2 flex items-center gap-3">
+            <UserPlus className="w-6 h-6 text-purple-600" />
+            Add New Student
+          </h2>
           <p className="text-gray-700">
             Create a new student account. Login credentials will be automatically generated and sent via email.
           </p>
@@ -117,7 +125,8 @@ const AddNewStudent = () => {
         <form onSubmit={handleSubmit} className="w-full space-y-6">
           {/* Username Field */}
           <div className="w-full">
-            <label htmlFor="userName" className="block text-lg font-semibold text-black mb-3">
+            <label htmlFor="userName" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+              <User className="w-4 h-4 text-gray-600" />
               Username <span className="text-purple-600">*</span>
             </label>
             <input
@@ -139,7 +148,8 @@ const AddNewStudent = () => {
 
           {/* Email Field */}
           <div className="w-full">
-            <label htmlFor="email" className="block text-lg font-semibold text-black mb-3">
+            <label htmlFor="email" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+              <Mail className="w-4 h-4 text-gray-600" />
               Email Address <span className="text-purple-600">*</span>
             </label>
             <input
@@ -164,8 +174,9 @@ const AddNewStudent = () => {
 
           {/* Phone Field */}
           <div className="w-full">
-            <label htmlFor="phone" className="block text-lg font-semibold text-black mb-3">
-              Phone Number <span className="text-gray-500">(Optional)</span>
+            <label htmlFor="phone" className="block text-lg font-semibold text-black mb-3 flex items-center gap-2">
+              <Phone className="w-4 h-4 text-gray-600" />
+              Phone Number <span className="text-purple-600">*</span>
             </label>
             <input
               type="tel"
@@ -189,15 +200,15 @@ const AddNewStudent = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`flex-1 py-4 px-8 rounded-lg text-lg font-semibold transition-colors ${
+              className={`flex-1 py-4 px-8 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center gap-3 ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed text-white'
                   : 'bg-purple-600 hover:bg-purple-700 text-white'
               }`}
             >
               {isSubmitting ? (
-                <span className="flex items-center justify-center gap-3">
-                  <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
+                <>
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle
                       className="opacity-25"
                       cx="12"
@@ -214,9 +225,12 @@ const AddNewStudent = () => {
                     />
                   </svg>
                   Adding Student...
-                </span>
+                </>
               ) : (
-                'Add Student'
+                <>
+                  <UserPlus className="w-5 h-5" />
+                  Add Student
+                </>
               )}
             </button>
             
@@ -224,8 +238,9 @@ const AddNewStudent = () => {
               type="button"
               onClick={handleReset}
               disabled={isSubmitting}
-              className="px-8 py-4 border-2 border-purple-200 rounded-lg text-lg font-semibold text-black hover:bg-purple-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 border-2 border-purple-200 rounded-lg text-lg font-semibold text-black hover:bg-purple-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
             >
+              <RotateCcw className="w-4 h-4" />
               Reset
             </button>
           </div>

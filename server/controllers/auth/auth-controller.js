@@ -5,42 +5,7 @@ const User = require ("../../models/User.js");
 const { sign, verify } = jwt;
 const MAX_DEVICES = 3;
 
-// REGISTER
-const registerUser = async (req, res) => {
-  const { userName, email, password, phone } = req.body; // include phone
 
-  try {
-    const checkUser = await User.findOne({ email });
-    if (checkUser) {
-      return res.json({
-        success: false,
-        message: "User already exists with the same email! Please try again.",
-      });
-    }
-
-    const hashPassword = await hash(password, parseInt(process.env.SALT_ROUNDS));
-    const newUser = new User({ userName, email, phone, password: hashPassword }); // add phone here
-
-    await newUser.save();
-    res.status(200).json({
-      success: true,
-      message: "Registration successful",
-      user: {
-        id: newUser._id,
-        userName: newUser.userName,
-        email: newUser.email,
-        phone: newUser.phone,   // return phone
-        role: newUser.role,
-        createdAt: newUser.createdAt
-      },
-    });
-  } catch (e) {
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred during registration",
-    });
-  }
-};
 
 // LOGIN
 const loginUser = async (req, res) => {

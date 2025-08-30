@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { toast } from "react-toastify";
 import { updateUserProfile } from '@/store/auth-slice'; 
-import SetNewPassword from '../SetNewPassword/SetNewPassword';
+import { Button } from '@/components/ui/button';
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -249,79 +249,19 @@ const UserProfile = () => {
                       </p>
                     </div>
                   </div>
-                </div>
-<div className="pt-6 border-t border-gray-700">
-  <div className="flex flex-col space-y-3">
-    {/* Profile Edit Buttons */}
-    <div className="flex space-x-3">
-      {isEditing ? (
-        <>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-green-800 disabled:to-green-900 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
-          >
-            {isSaving ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4" />
-                <span>Save Changes</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={handleEditToggle}
-            disabled={isSaving}
-            className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
-          >
-            <X className="w-4 h-4" />
-            <span>Cancel</span>
-          </button>
-        </>
-      ) : (
-        <button
-          onClick={handleEditToggle}
-          className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
-        >
-          <Edit2 className="w-4 h-4" />
-          <span>Edit Profile</span>
-        </button>
-      )}
-    </div>
-
-    {/* Security Actions */}
-    {!isEditing && (
-      <div className="pt-3 border-t border-gray-700">
-        <div className="flex justify-between items-center mb-3">
-          <h4 className="text-sm font-semibold text-gray-400">Security Settings</h4>
-          <div className="w-4 h-4 bg-yellow-500/20 rounded-full flex items-center justify-center">
-            <span className="text-yellow-400 text-xs">🔒</span>
-          </div>
-        </div>
-        
-        {/* Set New Password Button */}
-        <SetNewPassword 
-          trigger={
-            <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg">
-              <div className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
-                <span className="text-xs">🔑</span>
+                  <div>
+              <div className="flex justify-center items-center  px-4">
+                <Button 
+                  onClick={() => navigate('/student/set-new-password')} 
+                  className="w-full max-w-md bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition"
+                >
+                  Set new password
+                </Button>
               </div>
-              <span>Change Password</span>
-            </button>
-          }
-        />
-        
-        <p className="text-xs text-gray-500 mt-2 text-center italic">
-          Keep your account secure with a strong password
-        </p>
-      </div>
-    )}
-  </div>
-</div>
+
+              </div>
+                </div>
+                
                 {/* <div className="mt-8 space-y-3">
                   {!isEditing ? (
                     <button

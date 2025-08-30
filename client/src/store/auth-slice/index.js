@@ -196,7 +196,27 @@ const authSlice = createSlice({
       })
       .addCase(updateUserProfile.rejected, (state) => {
         state.isLoading = false;
-      });
+      }) .addCase(setNewPassword.pending, (state) => {
+        state.isPasswordChanging = true;
+        state.passwordChangeError = null;
+        state.passwordChangeSuccess = false;
+      })
+      .addCase(setNewPassword.fulfilled, (state, action) => {
+        state.isPasswordChanging = false;
+        state.passwordChangeSuccess = true;
+        state.passwordChangeError = null;
+        
+        // If the response indicates user was logged out, update auth state
+        if (action.payload.loggedOut) {
+          state.isAuthenticated = false;
+          state.user = null;
+        }
+      })
+      .addCase(setNewPassword.rejected, (state, action) => {
+        state.isPasswordChanging = false;
+        state.passwordChangeError = action.payload;
+        state.passwordChangeSuccess = false;
+      });;
   },
 });
 

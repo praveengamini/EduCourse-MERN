@@ -255,7 +255,7 @@ const UserProfile = () => {
                   <div>
               <Button 
                 onClick={() => setIsPasswordDialogOpen(true)} 
-                className="w-full max-w-md bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition"
+                className="w-full max-w-md bg-purple-600 cursor-pointer text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition"
               >
               Set new password
             </Button>

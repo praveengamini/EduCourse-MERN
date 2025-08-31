@@ -109,9 +109,13 @@ export default function NewCourse() {
                 `}
             </style>
             <div className="relative z-10 w-full max-w-lg">
-                <div className="text-center font-bold text-violet-400 text-2xl mb-2">
+                {/* <div className="text-center font-bold text-violet-400 text-2xl mb-2">
                     Submit form to request course access
+                </div> */}
+                <div className="text-center font-bold text-violet-400 text-2xl mb-2 mt-4 sm:mt-6 md:mt-8 lg:mt-10">
+                Submit form to request course access
                 </div>
+
                 <div className="w-24 h-1 bg-violet-600 mx-auto mb-6 rounded-full"></div>
                 <div className='text-red-400 mb-3 text-sm text-center'>
                     * Please ensure the name entered below is accurate and correctly formatted, as it will appear on your official course completion certificate.

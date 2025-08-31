@@ -23,6 +23,9 @@ const generateCertificateNumber = async () => {
 
 router.post('/generate-certificate', async (req, res) => {
   try {
+
+    req.setTimeout(600000); 
+    res.setTimeout(600000);
     const { studentId, courseId, imageDataUrl } = req.body;
     
     if (!studentId || !courseId || !imageDataUrl) {

@@ -200,7 +200,7 @@ const AddNewStudent = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`flex-1 py-4 px-8 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center gap-3 ${
+              className={`flex-1 py-4 px-8 cursor-pointer rounded-lg text-lg font-semibold transition-colors flex items-center justify-center gap-3 ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed text-white'
                   : 'bg-purple-600 hover:bg-purple-700 text-white'
@@ -238,7 +238,7 @@ const AddNewStudent = () => {
               type="button"
               onClick={handleReset}
               disabled={isSubmitting}
-              className="px-8 py-4 border-2 border-purple-200 rounded-lg text-lg font-semibold text-black hover:bg-purple-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
+              className="px-8 py-4 cursor-pointer border-2 border-purple-200 rounded-lg text-lg font-semibold text-black hover:bg-purple-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
             >
               <RotateCcw className="w-4 h-4" />
               Reset

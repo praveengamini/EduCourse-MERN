@@ -225,9 +225,9 @@ const SetNewPassword = ({ isOpen, onClose }) => {
           <div className="bg-gradient-to-b from-purple-800/20 to-black/40 backdrop-blur-sm rounded-2xl border border-purple-500/30 p-6 sm:p-8 text-center relative shadow-2xl">
             <button
               onClick={handleCloseDialog}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-purple-300 hover:text-white transition-colors duration-200 p-1"
+              className="absolute top-3 cursor-pointer right-3 sm:top-4 sm:right-4 text-purple-300 hover:text-white transition-colors duration-200 p-1"
             >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer" />
             </button>
             
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
@@ -256,7 +256,7 @@ const SetNewPassword = ({ isOpen, onClose }) => {
           {/* Close Button */}
           <button
             onClick={handleCloseDialog}
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 text-purple-300 hover:text-white transition-colors duration-200 p-1 z-10"
+            className="absolute top-3 right-3 cursor-pointer sm:top-4 sm:right-4 text-purple-300 hover:text-white transition-colors duration-200 p-1 z-10"
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
@@ -305,7 +305,7 @@ const SetNewPassword = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('current')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-purple-400 hover:text-purple-300 transition-colors duration-200"
                 >
                   {showPasswords.current ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>
@@ -338,7 +338,7 @@ const SetNewPassword = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('new')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-3 cursor-pointer flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
                 >
                   {showPasswords.new ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>
@@ -416,7 +416,7 @@ const SetNewPassword = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('confirm')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-3 cursor-pointer flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-200"
                 >
                   {showPasswords.confirm ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>

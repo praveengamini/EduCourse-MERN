@@ -1,12 +1,10 @@
-import { Outlet, useLocation, Link } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import AuthLayoutImage from '../../assets/AuthLayoutImage.png';
 
 function AuthLayout() {
-  const location = useLocation();
-  const isRegister = location.pathname.includes('register');
-
   return (
     <div className="flex min-h-screen w-full">
+      {/* Back to Home */}
       <div className="absolute top-6 left-6 z-10">
         <Link 
           to="/" 
@@ -29,55 +27,21 @@ function AuthLayout() {
         </Link>
       </div>
 
-      {isRegister ? (
-        <>
-          <div className="flex flex-1 items-center justify-center bg-black">
-            <div className={`
-              w-full transition-transform duration-500 ease-in-out
-              ${isRegister ? 'transform translate-x-0' : 'transform -translate-x-full'}
-            `}>
-              <Outlet />
-            </div>
-          </div>
-          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen sticky top-0">
-            <div className={`
-              w-full h-full
-              transition-transform duration-500 ease-in-out
-              ${isRegister ? 'transform translate-x-0' : 'transform translate-x-full'}
-            `}>
-              <img 
-                src={AuthLayoutImage} 
-                alt="SkillCraft" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="hidden lg:flex items-center justify-center w-2/5 h-screen sticky top-0">
-            <div className={`
-              w-full h-full
-              transition-transform duration-500 ease-in-out
-              ${!isRegister ? 'transform translate-x-0' : 'transform -translate-x-full'}
-            `}>
-              <img 
-                src={AuthLayoutImage} 
-                alt="SkillCraft" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          <div className="flex flex-1 items-center justify-center">
-            <div className={`
-              w-full transition-transform duration-500 ease-in-out
-              ${!isRegister ? 'transform translate-x-0' : 'transform translate-x-full'}
-            `}>
-              <Outlet />
-            </div>
-          </div>
-        </>
-      )}
+      {/* Left Image Section */}
+      <div className="hidden lg:flex items-center justify-center w-2/5 h-screen sticky top-0">
+        <img 
+          src={AuthLayoutImage} 
+          alt="SkillCraft" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Right Form Section */}
+      <div className="flex flex-1 items-center justify-center">
+        <div className="w-full transition-transform duration-500 ease-in-out">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }

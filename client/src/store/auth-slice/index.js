@@ -8,6 +8,10 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+  isPasswordChanging: false,
+  passwordChangeError: null,
+  passwordChangeSuccess: false,
+
 };
 
 // =======================================================
@@ -32,15 +36,7 @@ export const updateUserProfile = createAsyncThunk(
 );
 // =======================================================
 
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async (formData) => {
-    const response = await axios.post(`${BASE_URL}/api/auth/register`, formData, {
-      withCredentials: true,
-    });
-    return response.data;
-  }
-);
+
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -75,6 +71,28 @@ export const checkAuth1 = createAsyncThunk(
   }
 );
 
+export const setNewPassword = createAsyncThunk(
+  "auth/setNewPassword",
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/auth/set-password`,
+        passwordData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to change password"
+      );
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -84,24 +102,24 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
+    resetPasswordChangeState: (state) => {
+      state.isPasswordChanging = false;
+      state.passwordChangeError = null;
+      state.passwordChangeSuccess = false;
+    },
+    // Clear password change error
+    clearPasswordChangeError: (state) => {
+      state.passwordChangeError = null;
+    },
+    // Manual logout (for when password is changed)
+    forceLogout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.isLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
-      // Register
-      .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-      .addCase(registerUser.rejected, (state) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-
       // Login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -155,9 +173,33 @@ const authSlice = createSlice({
       })
       .addCase(updateUserProfile.rejected, (state) => {
         state.isLoading = false;
-      });
+      }) .addCase(setNewPassword.pending, (state) => {
+        state.isPasswordChanging = true;
+        state.passwordChangeError = null;
+        state.passwordChangeSuccess = false;
+      })
+      .addCase(setNewPassword.fulfilled, (state, action) => {
+        state.isPasswordChanging = false;
+        state.passwordChangeSuccess = true;
+        state.passwordChangeError = null;
+        
+        // If the response indicates user was logged out, update auth state
+        if (action.payload.loggedOut) {
+          state.isAuthenticated = false;
+          state.user = null;
+        }
+      })
+      .addCase(setNewPassword.rejected, (state, action) => {
+        state.isPasswordChanging = false;
+        state.passwordChangeError = action.payload;
+        state.passwordChangeSuccess = false;
+      });;
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser,
+  resetPasswordChangeState, 
+  clearPasswordChangeError, 
+  forceLogout 
+ } = authSlice.actions;
 export default authSlice.reducer;
